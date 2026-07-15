@@ -224,6 +224,20 @@
         .link-list a:visited {
             color: #551a8b;
         }
+        /* 💡 ランダム画像表示エリアのスタイル */
+        .random-box {
+            background: #ffffff;
+            box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
+            padding: 4px;
+            margin-top: 6px;
+            text-align: center;
+        }
+        .random-box img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid #808080;
+        }
     </style>
 </head>
 <body>
@@ -340,6 +354,15 @@
             </div>
         </div>
 
+                <!-- 💡 ここを追加：本日のランダムイラストエリア -->
+                <p style="margin-top: 8px; margin-bottom: 2px; font-size: 11px; font-weight: bold; color: #800000;">🎲 今日のひと言イラスト：</p>
+                <div class="random-box">
+                    <img id="randomImage" src="" alt="ランダムイラスト" />
+                </div>
+                
+                <!-- 投稿が流れるタイムライン領域 -->
+                <div id="bbsTimeline" class="bbs-container">
+                    
         <!-- 💡 新設：コンテンツ2（リンク10個） -->
         <div class="window sidebar-window">
             <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
@@ -417,6 +440,22 @@
 
         document.getElementById('saveBtn').addEventListener('click', function() {
             this.href = canvas.toDataURL('image/png');
+        });
+    // 💡 ランダム画像表示スクリプト
+        window.addEventListener('DOMContentLoaded', () => {
+            // ランダムで流したい画像URL（自由に書き換えてね！）
+            const images = [
+                "https://picsum.photos/id/1025/240/150", 
+                "https://picsum.photos/id/1062/240/150", 
+                "https://picsum.photos/id/1074/240/150", 
+                "https://picsum.photos/id/237/240/150"
+            ];
+            
+            // ランダムに1つ選ぶ魔法
+            const randomIndex = Math.floor(Math.random() * images.length);
+            
+            // 選ばれた画像を枠にセット
+            document.getElementById('randomImage').src = images[randomIndex];
         });
     </script>
 </body>
