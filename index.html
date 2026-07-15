@@ -4,7 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aki's Digital Creations - Paint - portfolio.html</title>
-    <!-- ここにペイントの見た目を作るCSS（スタイル）が入ります -->
+    
+    <!-- 👇ここから：Windows 95/98風のデザインを呼び出すコードを追加 -->
+    <link rel="stylesheet" href="https://unpkg.com/95.css">
+    <style>
+        /* 画面全体をペイント風にレイアウトするための最低限の設定 */
+        body {
+            background-color: #55aaaa; /* あの懐かしい青緑色 */
+            padding: 10px;
+            margin: 0;
+            font-family: "MS Sans Serif", "MS Pゴシック", sans-serif;
+        }
+        .main-content {
+            display: flex;
+            background: #cbd0d4;
+            padding: 4px;
+        }
+        .toolbox {
+            width: 50px;
+            background: #cbd0d4;
+            border: 2px solid;
+            border-color: #fff #808080 #808080 #fff;
+            margin-right: 4px;
+        }
+        .canvas-container {
+            flex-grow: 1;
+            background: #808080;
+            padding: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .paint-canvas {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            min-height: 400px;
+            padding: 20px;
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+        }
+        .color-box {
+            background: #cbd0d4;
+            padding: 5px;
+            border-top: 2px solid #fff;
+            display: flex;
+        }
+    </style>
+    <!-- 👆ここまで追加・書き換え -->
+
 </head>
 <body class="paint-program">
 
