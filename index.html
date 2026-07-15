@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     
     <style>
+        /* 💡 画面全体を左右に並べる設定 */
         body {
             background-color: #55aaaa;
             padding: 20px;
@@ -17,23 +18,23 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            gap: 20px; /* 左のペイントと右のリンクの間のすき間 */
+            flex-wrap: wrap; /* 画面が狭いスマホの時は自動で縦並びにする */
         }
 
-/* ペイントのウィンドウ全体（本物の立体感を完全再現） */
+        /* 💡 左側：ペイントのウィンドウ全体（横幅を固定して左に配置） */
         .window.paint-window {
             width: 100%;
-            max-width: 600px;
+            max-width: 700px; /* リンクを置くスペースのために少しだけスリムに調整 */
             display: flex;
             flex-direction: column;
             background: #cbd0d4;
-            
-            /* 💡 元の平らな枠線を消し、Windows 95純正の強烈な凹凸感を仕込みます */
             border: none !important;
-            box-shadow: 1px 1px 0px #0a0a0a,         /* 一番外側の右下の黒影 */
-                        -1px -1px 0px #fff,          /* 一番外側の左上の白光 */
-                        2px 2px 0px #808080,         /* 内側の右下の濃いグレー */
-                        -2px -2px 0px #cbd0d4,       /* 内側の左上の薄いグレー */
-                        3px 3px 6px rgba(0,0,0,0.3); /* デスクトップに落とすうっすらとした影 */
+            box-shadow: 1px 1px 0px #0a0a0a, 
+                        -1px -1px 0px #fff, 
+                        2px 2px 0px #808080, 
+                        -2px -2px 0px #cbd0d4, 
+                        3px 3px 6px rgba(0,0,0,0.3);
         }
 
         /* メニューバー */
@@ -59,7 +60,7 @@
 
         /* 左側ツールボックス */
         .toolbox {
-            width: 60px; 
+            width: 56px; 
             background: #cbd0d4;
             padding: 2px;
             display: flex;
@@ -76,7 +77,7 @@
             gap: 1px;
         }
 
-        /* ボタンの見た目とオープンソース画像の読み込み */
+        /* ボタンの見た目 */
         .tool-btn {
             background: #cbd0d4;
             border: 1.5px solid;
@@ -92,7 +93,7 @@
             background-color: #e4e4e4;
         }
 
-        /* 各ボタンのアイコン切り出し位置（スペースなし） */
+        /* 各ボタンのアイコン切り出し位置 */
         .icon-freehand-select{background-position:3px 2px;}
         .icon-select{background-position:-13px 2px;}
         .icon-eraser{background-position:-29px 2px;}
@@ -110,16 +111,15 @@
         .icon-ellipse{background-position:-221px 2px;}
         .icon-rounded-rectangle{background-position:-237px 2px;}
 
-/* =========================================================
-           🎨 【修正】キャンバスサイズにぴったり合わせて余白を消す
-           ========================================================= */
+        /* キャンバス容器 */
         .canvas-container {
-            max-width: 100%;       /* 画面からはみ出さないようにガード */
-            height: 500px;         /* 💡 縦をキャンバスの高さ（500px）に完全一致 */
+            flex-grow: 1;
+            max-width: 100%;       
+            height: 450px;         
             background: #cbd0d4 !important;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
-            overflow: scroll;      /* 縦横のスクロールバーを常に表示 */
-            display: inline-block; /* 💡 右側に余計な広がりを作らず、中身に密着させます */
+            overflow: scroll;      
+            display: inline-block; 
         }
 
         /* 白いキャンバス本体 */
@@ -127,46 +127,7 @@
             background: #ffffff;
             display: block; 
             box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
-            flex-shrink: 0;        /* 勝手に縮まないように固定 */
-        }
-
-        /* =========================================================
-           💡 【修正】Windows 95風の凹凸（影と光）を正しく一発再現
-           ========================================================= */
-        .canvas-container::-webkit-scrollbar {
-            width: 16px !important;  
-            height: 16px !important; 
-            background: #dfdfdf !important;
-        }
-
-        /* スクロールバーの背景（ドットの効いたグレー） */
-        .canvas-container::-webkit-scrollbar-track {
-            background-image: linear-gradient(45deg, #cbd0d4 25%, transparent 25%), 
-                              linear-gradient(-45deg, #cbd0d4 25%, transparent 25%), 
-                              linear-gradient(45deg, transparent 75%, #cbd0d4 75%), 
-                              linear-gradient(-45deg, transparent 75%, #cbd0d4 75%) !important;
-            background-size: 2px 2px !important;
-            background-color: #fff !important;
-        }
-
-        /* 動かすツマミ部分（立体感を正しく修正） */
-        .canvas-container::-webkit-scrollbar-thumb {
-            background: #cbd0d4 !important;
-            border-radius: 0px !important; 
-            box-shadow: inset 1px 1px 0px #fff, 
-                        inset -1px -1px 0px #808080 !important; /* 💡 正しい凹凸の影 */
-            border: 1px solid !important;
-            border-color: #fff #0a0a0a #0a0a0a #fff !important; /* 一番外側に黒と白の枠線 */
-        }
-
-        .canvas-container::-webkit-scrollbar-corner {
-            background: #cbd0d4 !important;
-        }
-        /* 白いキャンバス本体 */
-        .paint-canvas {
-            background: #ffffff;
-            display: block; /* 描画のズレを防ぐため、flexからblockに修正 */
-            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+            flex-shrink: 0;        
         }
 
         /* 下部カラーボックス */
@@ -193,16 +154,12 @@
             box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
 
-        /* =========================================================
-           💡 【修正の要】スクロールバーをWindows 95風（四角・立体）に強制変更するCSS
-           ========================================================= */
+        /* スクロールバーのデザイン */
         .canvas-container::-webkit-scrollbar {
-            width: 17px !important;  /* バーの太さ */
-            height: 17px !important; /* 横スクロールバーの高さ */
+            width: 16px !important;  
+            height: 16px !important; 
             background: #dfdfdf !important;
         }
-
-        /* スクロールバーの背景（ドットの効いたグレー） */
         .canvas-container::-webkit-scrollbar-track {
             background-image: linear-gradient(45deg, #cbd0d4 25%, transparent 25%), 
                               linear-gradient(-45deg, #cbd0d4 25%, transparent 25%), 
@@ -211,38 +168,63 @@
             background-size: 2px 2px !important;
             background-color: #fff !important;
         }
-
-/* 動かすツマミ部分（Windows 95特有の立体的な凹凸を完全再現） */
         .canvas-container::-webkit-scrollbar-thumb {
             background: #cbd0d4 !important;
-            border-radius: 0px !important; /* 角丸を完全にゼロに */
-            
-            /* 💡 ブラウザのバグを回避し、強制的に95風の凹凸（影と光）を作る合わせ技 */
-            box-shadow: inset 1px 1px 0px #fff, 
-                        inset 2px 2px 0px #efefef, 
-                        inset -1px -1px 0px #0a0a0a, 
-                        not-inset -2px -2px 0px #808080 !important;
-            
-            /* トドメの立体ボーダー（これであのボタン感がでます） */
-            border: 2px solid !important;
-            border-color: #fff #808080 #808080 #fff !important;
+            border-radius: 0px !important; 
+            box-shadow: inset 1px 1px 0px #fff, inset -1px -1px 0px #808080 !important; 
+            border: 1px solid !important;
+            border-color: #fff #0a0a0a #0a0a0a #fff !important; 
         }
-
-        /* 交差する角の部分 */
         .canvas-container::-webkit-scrollbar-corner {
             background: #cbd0d4 !important;
+        }
+
+        /* 💡 右側：コンテンツリンク用のウィンドウ設定 */
+        .window.links-window {
+            width: 100%;
+            max-width: 240px; /* リンク集の横幅 */
+            min-width: 200px;
+            background: #cbd0d4;
+            border: none !important;
+            box-shadow: 1px 1px 0px #0a0a0a, 
+                        -1px -1px 0px #fff, 
+                        2px 2px 0px #808080, 
+                        -2px -2px 0px #cbd0d4, 
+                        3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        /* リンク用ウィンドウの中身の余白 */
+        .links-window .window-body {
+            padding: 10px;
+            margin: 0;
+        }
+
+        /* リンクの箇条書き（ドットを消してWindows 95風の青リンクに） */
+        .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .link-list a {
+            color: #0000ee;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+        .link-list a:visited {
+            color: #551a8b;
         }
     </style>
 </head>
 <body>
 
-    <!-- ウィンドウ全体 -->
+    <!-- 左側：ペイントウィンドウ -->
     <div class="window paint-window">
-
-<!-- 1. タイトルバー -->
+        <!-- 1. タイトルバー -->
         <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
-            <!-- 💡 scrollamount="4" で流れるスピードをレトロで心地いい速さに調整しています -->
-            <marquee class="title-bar-text" scrollamount="5" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
+            <marquee class="title-bar-text" scrollamount="3" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
                 🎨  You can draw and save your artwork. お絵描きして保存できます。
             </marquee>
             <div class="title-bar-controls" style="flex-shrink: 0; margin-left: auto;">
@@ -254,18 +236,11 @@
 
         <!-- 2. メニューバー -->
         <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
-            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;">💾Save</a>
-            <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
-            <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
-            <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
-            <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
-            <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
+            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;">　💾Save</a>
         </div>
 
         <!-- 3. 作業エリア -->
         <div class="main-content">
-            
-            <!-- 左側：ツールボックス -->
             <div class="toolbox">
                 <div class="tool-grid">
                     <button class="tool-btn" title="自由選択">✂</button>
@@ -287,11 +262,9 @@
                 </div>
             </div>
 
-            <!-- 中央キャンバス -->
             <div class="canvas-container">
-                <canvas id="paintCanvas" class="paint-canvas" width="500" height="500"></canvas>
+                <canvas id="paintCanvas" class="paint-canvas" width="800" height="450"></canvas>
             </div>
-
         </div>
 
         <!-- 4. 下部カラーパレット -->
@@ -336,45 +309,55 @@
         <div class="status-bar">
             <p class="status-field" style="margin: 0; padding: 2px 4px; font-size: 17px;">You can draw and save your artwork.</p>
         </div>
-
     </div>
 
-    <!-- 💡 【修正の要】お絵描きのズレを防ぎ、背景を白にする正確なJavaScriptコード -->
-<!-- スマホでのタッチとお絵描きのズレを完璧に直したJavaScriptコード -->
+
+    <!-- 💡 右側：追加した「コンテンツリンク」用のウィンドウ -->
+    <div class="window links-window">
+        <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
+            <div class="title-bar-text" style="color: white; font-weight: bold;">🔗 Contents</div>
+        </div>
+        <div class="window-body">
+            <p style="margin-top: 0; font-size: 13px;">おすすめのリンク集：</p>
+            <ul class="link-list">
+                <!-- 💡 好きなリンク先（href）と文字に書き換えてください -->
+                <li><a href="https://google.com" target="_blank">🔍 Google 検索</a></li>
+                <li><a href="https://yahoo.co.jp" target="_blank">🇯🇵 Yahoo! JAPAN</a></li>
+                <li><a href="#" target="_blank">📝 マイプロフィール</a></li>
+                <li><a href="#" target="_blank">📬 お問い合わせ</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- JavaScriptコード -->
     <script>
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
 
-        // 最初から背景を白で塗りつぶしておく
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 線の初期設定
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
-        // マウスや指の正確な座標を計算する関数
         function getEventPos(e) {
             const rect = canvas.getBoundingClientRect();
-            
-            // スマホのタッチ操作の場合
             if (e.touches && e.touches.length > 0) {
                 return {
                     x: e.touches[0].clientX - rect.left,
                     y: e.touches[0].clientY - rect.top
                 };
             }
-            // パソコンのマウス操作の場合
             return {
                 x: e.clientX - rect.left,
                 y: e.clientY - rect.top
             };
         }
 
-        // 描画を開始する共通の関数
         function startDrawing(e) {
             isDrawing = true;
             ctx.beginPath();
@@ -382,35 +365,28 @@
             ctx.moveTo(pos.x, pos.y);
         }
 
-        // 線を描く共通の関数
         function draw(e) {
             if (!isDrawing) return;
-            // スマホで画面スクロール（縦揺れ）してしまうのを防ぐ
             if (e.cancelable) e.preventDefault(); 
-            
             const pos = getEventPos(e);
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
         }
 
-        // 描画を終了する関数
         function stopDrawing() {
             isDrawing = false;
         }
 
-        /* 🖱 パソコン用のイベント（マウス） */
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseleave', stopDrawing);
 
-        /* 📱 スマホ・タブレット用のイベント（タッチ） */
         canvas.addEventListener('touchstart', startDrawing, { passive: false });
         canvas.addEventListener('touchmove', draw, { passive: false });
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchcancel', stopDrawing);
 
-        // 保存ボタンの動作
         document.getElementById('saveBtn').addEventListener('click', function() {
             this.href = canvas.toDataURL('image/png');
         });
