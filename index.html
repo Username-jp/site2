@@ -340,49 +340,75 @@
     </div>
 
     <!-- 💡 【修正の要】お絵描きのズレを防ぎ、背景を白にする正確なJavaScriptコード -->
+<!-- スマホでのタッチとお絵描きのズレを完璧に直したJavaScriptコード -->
     <script>
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
 
-        // 最初から背景を白で塗りつぶしておく（保存時の背景透過を防ぐため）
+        // 最初から背景を白で塗りつぶしておく
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 線の初期設定（黒色、太さ2px、綺麗なドット感）
+        // 線の初期設定
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
-        // スクロールしても描画位置が絶対にズレないようにマウスの座標を精密計算する関数
-        function getMousePos(e) {
+        // マウスや指の正確な座標を計算する関数
+        function getEventPos(e) {
             const rect = canvas.getBoundingClientRect();
+            
+            // スマホのタッチ操作の場合
+            if (e.touches && e.touches.length > 0) {
+                return {
+                    x: e.touches[0].clientX - rect.left,
+                    y: e.touches[0].clientY - rect.top
+                };
+            }
+            // パソコンのマウス操作の場合
             return {
                 x: e.clientX - rect.left,
                 y: e.clientY - rect.top
             };
         }
 
-        // マウスを押したとき（描画開始）
-        canvas.addEventListener('mousedown', (e) => {
+        // 描画を開始する共通の関数
+        function startDrawing(e) {
             isDrawing = true;
             ctx.beginPath();
-            const pos = getMousePos(e);
+            const pos = getEventPos(e);
             ctx.moveTo(pos.x, pos.y);
-        });
+        }
 
-        // マウスを動かしたとき（線を引く）
-        canvas.addEventListener('mousemove', (e) => {
+        // 線を描く共通の関数
+        function draw(e) {
             if (!isDrawing) return;
-            const pos = getMousePos(e);
+            // スマホで画面スクロール（縦揺れ）してしまうのを防ぐ
+            if (e.cancelable) e.preventDefault(); 
+            
+            const pos = getEventPos(e);
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
-        });
+        }
 
-        // 描画終了
-        canvas.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('mouseleave', () => isDrawing = false);
+        // 描画を終了する関数
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        /* 🖱 パソコン用のイベント（マウス） */
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        /* 📱 スマホ・タブレット用のイベント（タッチ） */
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchcancel', stopDrawing);
 
         // 保存ボタンの動作
         document.getElementById('saveBtn').addEventListener('click', function() {
