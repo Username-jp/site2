@@ -259,7 +259,7 @@
 
         <!-- 2. メニューバー -->
 <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
-    <a href="#" id="saveBtn" target="_blank" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;"> 💾Save (別タブで開く)</a>
+    <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; line-height: 1; user-select: none;">💾Save</span>
 </div>
 
         <!-- 3. 作業エリア -->
@@ -436,13 +436,30 @@
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchcancel', stopDrawing);
 
-document.getElementById('saveBtn').addEventListener('click', function(e) {
-    // キャンバスをPNGのデータURL（画像データ）に変換
-    const imgData = canvas.toDataURL('image/png');
-    
-    // リンクのジャンプ先（href）にその画像データをセット
-    this.href = imgData;
-});
+document.getElementById('saveBtn').addEventListener('click', function() {
+            // 1. キャンバスの絵をPNG画像（データ）に変換
+            const imgData = canvas.toDataURL('image/png');
+            
+            // 2. 先に新しいタブ（ウィンドウ）を開く
+            const newWindow = window.open();
+            
+            // 3. 開いた新しいタブに、画像を表示するためのHTMLを直接書き込む
+            newWindow.document.write(`
+                <html>
+                    <head>
+                        <title>paint-art.png</title>
+                        <style>
+                            body { margin: 0; background: #55aaaa; display: flex; justify-content: center; align-items: center; height: 100vh; }
+                            img { max-width: 100%; max-height: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: #fff; }
+                        </style>
+                    </head>
+                    <body>
+                        <img src="${imgData}" alt="画廊">
+                    </body>
+                </html>
+            `);
+            newWindow.document.close();
+        });
         
         // 🎨 パレットの色をクリックしたときに描画色を変える処理
         document.querySelectorAll('.color-swatch').forEach(swatch => {
