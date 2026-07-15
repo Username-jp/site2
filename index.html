@@ -166,18 +166,14 @@
             </div>
         </div>
 
-        <!-- 2. メニューバー -->
-        <div class="menu-bar">
-<div class="menu-bar">
-    <!-- 💡 ファイル(F) をクリックすると、画像をダウンロードするボタン（リンク）にします -->
-    <a href="#" id="saveBtn" download="paint-art.png" class="menu-item" style="text-decoration: none; color: black;">ファイル(F)</a>
-    <div class="menu-item">編集(E)</div>
-...
-            <div class="menu-item">編集(E)</div>
-            <div class="menu-item">表示(V)</div>
-            <div class="menu-item">変形(I)</div>
-            <div class="menu-item">色(C)</div>
-            <div class="menu-item">ヘルプ(H)</div>
+     <!-- 2. メニューバー（崩れないように調整） -->
+        <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
+            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 12px; text-decoration: none; color: #000; line-height: 1;">ファイル(F)</a>
+            <div class="menu-item" style="cursor: pointer; font-size: 12px; line-height: 1;">編集(E)</div>
+            <div class="menu-item" style="cursor: pointer; font-size: 12px; line-height: 1;">表示(V)</div>
+            <div class="menu-item" style="cursor: pointer; font-size: 12px; line-height: 1;">変形(I)</div>
+            <div class="menu-item" style="cursor: pointer; font-size: 12px; line-height: 1;">色(C)</div>
+            <div class="menu-item" style="cursor: pointer; font-size: 12px; line-height: 1;">ヘルプ(H)</div>
         </div>
 
         <!-- 3. 作業エリア -->
