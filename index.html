@@ -102,42 +102,22 @@
         .icon-ellipse{background-position:-221px 2px;}
         .icon-rounded-rectangle{background-position:-237px 2px;}
 
-/* キャンバス容器 */
+        /* キャンバス容器 */
         .canvas-container {
             flex-grow: 1;
-            background: #cbd0d4 !important; /* 強制的にグレーにします */
+            background: #cbd0d4 !important;
             padding: 4px;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
             display: flex;
             overflow: scroll; 
             height: 460px;   
-            
-            /* 💡 Google Chromeやエッジ用のスクロールバー色設定 */
-            scrollbar-color: #cbd0d4 #efefef; 
+            scrollbar-color: #cbd0d4 #dfdfdf; /* Firefox用の設定 */
         }
 
-        /* 💡 治らない場合のトドメ：WEBKITブラウザ用の強制グレー化 */
-        .canvas-container::-webkit-scrollbar {
-            background-color: #cbd0d4 !important;
-        }
-        .canvas-container::-webkit-scrollbar-track {
-            background-color: #cbd0d4 !important;
-        }
-        .canvas-container::-webkit-scrollbar-thumb {
-            background-color: #cbd0d4 !important;
-            border: 2px solid #fff;
-        }
         /* 白いキャンバス本体 */
         .paint-canvas {
             background: #ffffff;
-            width: 100%;
-            min-height: 450px;
-            padding: 30px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: block; /* 描画のズレを防ぐため、flexからblockに修正 */
             box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
         }
 
@@ -164,7 +144,10 @@
             height: 13px;
             box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
-        /* 💡 スクロールバーのデザインをWindows 95風（四角・立体的）に強制変更 */
+
+        /* =========================================================
+           💡 【修正の要】スクロールバーをWindows 95風（四角・立体）に強制変更するCSS
+           ========================================================= */
         .canvas-container::-webkit-scrollbar {
             width: 16px !important;  /* バーの太さ */
             height: 16px !important; /* 横スクロールバーの高さ */
@@ -181,12 +164,12 @@
             background-color: #fff !important;
         }
 
-        /* 動かすツマミ部分（グレーの四角いボタン） */
+        /* 動かすツマミ部分（グレーの四角い立体ボタン） */
         .canvas-container::-webkit-scrollbar-thumb {
             background: #cbd0d4 !important;
-            border-radius: 0px !important; /* 💡 角丸を完全にゼロにして四角くします */
+            border-radius: 0px !important; /* 丸みを完全にゼロにして四角く */
             border: 2px solid !important;
-            /* Windows特有の立体的な影（左上白、右下グレー） */
+            /* 左上白、右下グレーのWindows立体影 */
             border-color: #fff #808080 #808080 #fff !important; 
         }
 
@@ -198,7 +181,7 @@
 </head>
 <body>
 
-    <!-- ウィンドウ全体（これがあると95.cssの立体感が効くようになります） -->
+    <!-- ウィンドウ全体 -->
     <div class="window paint-window">
 
         <!-- 1. タイトルバー -->
@@ -213,7 +196,7 @@
             </div>
         </div>
 
-        <!-- 2. メニューバー（崩れないように調整） -->
+        <!-- 2. メニューバー -->
         <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
             <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;">💾Save</a>
             <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
@@ -250,13 +233,12 @@
 
             <!-- 中央キャンバス -->
             <div class="canvas-container">
-                <!-- 💡 div から canvas タグに変更し、id とサイズを追加します -->
                 <canvas id="paintCanvas" class="paint-canvas" width="800" height="450"></canvas>
             </div>
 
         </div>
 
-        <!-- 4. 下部カラーパレット（実物と同じ2段の並びに修正） -->
+        <!-- 4. 下部カラーパレット -->
         <div class="color-box">
             <div class="color-palette">
                 <div class="palette-row">
@@ -299,40 +281,54 @@
             <p class="status-field" style="margin: 0; padding: 2px 4px; font-size: 17px;">You can draw and save your artwork.</p>
         </div>
 
-    </div> <!-- 💡 ここに足りなかった </div> を足してウィンドウを綺麗に閉じました -->
+    </div>
 
-    <!-- 💡 ここから動かすためのJavaScriptコード -->
+    <!-- 💡 【修正の要】お絵描きのズレを防ぎ、背景を白にする正確なJavaScriptコード -->
     <script>
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
 
-        // 線の設定（黒色、太さ2ピクセル、ドット感を出すために角を四角に）
+        // 最初から背景を白で塗りつぶしておく（保存時の背景透過を防ぐため）
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 線の初期設定（黒色、太さ2px、綺麗なドット感）
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 1;
-        ctx.lineCap = 'square';
-        ctx.lineJoin = 'miter';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // スクロールしても描画位置が絶対にズレないようにマウスの座標を精密計算する関数
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
 
         // マウスを押したとき（描画開始）
         canvas.addEventListener('mousedown', (e) => {
             isDrawing = true;
             ctx.beginPath();
-            // キャンバス内での正確なマウス位置を計算
-            const rect = canvas.getBoundingClientRect();
-            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            const pos = getMousePos(e);
+            ctx.moveTo(pos.x, pos.y);
         });
 
         // マウスを動かしたとき（線を引く）
         canvas.addEventListener('mousemove', (e) => {
             if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            const pos = getMousePos(e);
+            ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
         });
 
-        // マウスを離したとき・キャンバスから外れたとき（描画終了）
+        // 描画終了
         canvas.addEventListener('mouseup', () => isDrawing = false);
         canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+        // 保存ボタンの動作
         document.getElementById('saveBtn').addEventListener('click', function() {
             this.href = canvas.toDataURL('image/png');
         });
