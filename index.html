@@ -258,9 +258,9 @@
         </div>
 
         <!-- 2. メニューバー -->
-        <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
-            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;"> 💾Save</a>
-        </div>
+<div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
+    <a href="#" id="saveBtn" target="_blank" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;"> 💾Save (別タブで開く)</a>
+</div>
 
         <!-- 3. 作業エリア -->
         <div class="main-content">
@@ -436,9 +436,13 @@
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchcancel', stopDrawing);
 
-        document.getElementById('saveBtn').addEventListener('click', function() {
-            this.href = canvas.toDataURL('image/png');
-        });
+document.getElementById('saveBtn').addEventListener('click', function(e) {
+    // キャンバスをPNGのデータURL（画像データ）に変換
+    const imgData = canvas.toDataURL('image/png');
+    
+    // リンクのジャンプ先（href）にその画像データをセット
+    this.href = imgData;
+});
         
         // 🎨 パレットの色をクリックしたときに描画色を変える処理
         document.querySelectorAll('.color-swatch').forEach(swatch => {
