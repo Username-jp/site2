@@ -258,7 +258,7 @@
 
         <!-- 2. メニューバー -->
         <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
-            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;">　💾Save</a>
+            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;"> 💾Save</a>
         </div>
 
         <!-- 3. 作業エリア -->
@@ -334,7 +334,7 @@
     </div>
 
 
-    <!-- 💡 右側サイドバーエリア（縦に並ぶ場所） -->
+    <!-- 右側サイドバーエリア（縦に並ぶ場所） -->
     <div class="sidebar">
         
         <!-- コンテンツ1（元のリンク集） -->
@@ -354,16 +354,20 @@
             </div>
         </div>
 
-                <!-- 💡 ここを追加：本日のランダムイラストエリア -->
-                <p style="margin-top: 8px; margin-bottom: 2px; font-size: 11px; font-weight: bold; color: #800000;">🎲 今日のひと言イラスト：</p>
+        <!-- 💡 修正箇所：独立した「今日のイラストウィンドウ」にしました -->
+        <div class="window sidebar-window">
+            <div class="title-bar" style="background: linear-gradient(90deg, #800000, #ff0000);">
+                <div class="title-bar-text" style="color: white; font-weight: bold;">🎲 Daily Illustration</div>
+            </div>
+            <div class="window-body">
+                <p style="margin-top: 0; margin-bottom: 6px; font-size: 12px; font-weight: bold;">本日のランダムイラスト：</p>
                 <div class="random-box">
                     <img id="randomImage" src="" alt="ランダムイラスト" />
                 </div>
+            </div>
+        </div>
                 
-                <!-- 投稿が流れるタイムライン領域 -->
-                <div id="bbsTimeline" class="bbs-container">
-                    
-        <!-- 💡 新設：コンテンツ2（リンク10個） -->
+        <!-- 新設：コンテンツ2 -->
         <div class="window sidebar-window">
             <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
                 <div class="title-bar-text" style="color: white; font-weight: bold;">📁 Contents 2</div>
@@ -379,7 +383,7 @@
         </div>
 
     </div>
-
+</body>
 
     <!-- JavaScriptコード -->
     <script>
@@ -458,5 +462,4 @@
             document.getElementById('randomImage').src = images[randomIndex];
         });
     </script>
-</body>
 </html>
