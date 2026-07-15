@@ -439,6 +439,20 @@
         document.getElementById('saveBtn').addEventListener('click', function() {
             this.href = canvas.toDataURL('image/png');
         });
+        
+        // 🎨 パレットの色をクリックしたときに描画色を変える処理
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', function() {
+                // クリックされたマスの背景色（RGB形式など）を取得
+                const selectedColor = this.style.backgroundColor;
+                
+                // 描画色（線の色）にセット
+                ctx.strokeStyle = selectedColor;
+            });
+            
+            // マウスカーソルをポインター（手の形）にして、クリックできることをわかりやすくする
+            swatch.style.cursor = 'pointer';
+        });
 
         // 💡 ランダム画像表示スクリプト
         window.addEventListener('DOMContentLoaded', () => {
