@@ -237,6 +237,7 @@
             height: auto;
             display: block;
             border: 1px solid #808080;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -337,37 +338,30 @@
     <!-- 右側サイドバーエリア（縦に並ぶ場所） -->
     <div class="sidebar">
         
-        <!-- コンテンツ1（元のリンク集） -->
+        <!-- コンテンツ1（イラスト表示枠を追加） -->
         <div class="window sidebar-window">
             <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
                 <div class="title-bar-text" style="color: white; font-weight: bold;">🔗 Contents 1</div>
             </div>
             <div class="window-body">
                 <p style="margin-top: 0; font-size: 13px;">個人 / 趣味リンク：</p>
-                <ul class="link-list">
+                <ul class="link-list" style="margin-bottom: 15px;">
                     <li><a href="https://x.com/____mana" target="_blank">Twitter</a></li>
                     <li><a href="https://www.instagram.com/cha_n_ma_na" target="_blank">Instagram</a></li>
                     <li><a href="https://harsh-hoverfly-c37.notion.site/Picture-OC-369e5e2365cd800c81f6deed16857eb9" target="_blank">趣味OC</a></li>
                     <li><a href="https://harsh-hoverfly-c37.notion.site/Picture-2-9179bfb10aa6468981f24580557e928a" target="_blank">趣味イラスト</a></li>
                     <li><a href="https://harsh-hoverfly-c37.notion.site/FA-blender-164e5e2365cd80e2a5bbc89242e73e2e" target="_blank">趣味blender</a></li>
                 </ul>
-            </div>
-        </div>
 
-        <!-- 💡 修正箇所：独立した「今日のイラストウィンドウ」にしました -->
-        <div class="window sidebar-window">
-            <div class="title-bar" style="background: linear-gradient(90deg, #800000, #ff0000);">
-                <div class="title-bar-text" style="color: white; font-weight: bold;">🎲 Daily Illustration</div>
-            </div>
-            <div class="window-body">
-                <p style="margin-top: 0; margin-bottom: 6px; font-size: 12px; font-weight: bold;">本日のランダムイラスト：</p>
+                <!-- 💡 ここに本日のランダムイラスト枠を追加しました -->
+                <p style="margin-top: 10px; margin-bottom: 4px; font-size: 13px;">本日のランダムイラスト：</p>
                 <div class="random-box">
-                    <img id="randomImage" src="" alt="ランダムイラスト" />
+                    <img id="randomImage" src="" alt="本日のイラスト">
                 </div>
             </div>
         </div>
-                
-        <!-- 新設：コンテンツ2 -->
+        
+        <!-- コンテンツ2 -->
         <div class="window sidebar-window">
             <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
                 <div class="title-bar-text" style="color: white; font-weight: bold;">📁 Contents 2</div>
@@ -445,9 +439,11 @@
         document.getElementById('saveBtn').addEventListener('click', function() {
             this.href = canvas.toDataURL('image/png');
         });
-    // 💡 ランダム画像表示スクリプト
+
+        // 💡 ランダム画像表示スクリプト
         window.addEventListener('DOMContentLoaded', () => {
-            // ランダムで流したい画像URL（自由に書き換えてね！）
+            // ランダムで流したい画像URLリスト
+            // ※Notionからコピーした画像のURLをこの中にカンマ(,)区切りで入れてください！
             const images = [
                 "https://picsum.photos/id/1025/240/150", 
                 "https://picsum.photos/id/1062/240/150", 
