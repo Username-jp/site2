@@ -156,15 +156,18 @@
     <!-- ウィンドウ全体（これがあると95.cssの立体感が効くようになります） -->
     <div class="window paint-window">
 
-        <!-- 1. タイトルバー（文字は削除して青いバーのみに） -->
-        <div class="title-bar">
-            <div class="title-bar-text"></div>
-            <div class="title-bar-controls">
-                <button aria-label="Minimize"></button>
-                <button aria-label="Maximize"></button>
-                <button aria-label="Close"></button>
-            </div>
-        </div>
+<!-- 1. タイトルバー（見本通りの青いグラデーションバーになります） -->
+<div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
+    <div class="title-bar-text" style="color: white; font-weight: bold; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+        <!-- 💡見本の左上にある小さなアイコンを文字で代用 -->
+        🎨 - You can draw and save your artwork.
+    </div>
+    <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close"></button>
+    </div>
+</div>
 
      <!-- 2. メニューバー（崩れないように調整） -->
         <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
