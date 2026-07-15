@@ -164,13 +164,20 @@
             background-color: #fff !important;
         }
 
-        /* 動かすツマミ部分（グレーの四角い立体ボタン） */
+/* 動かすツマミ部分（Windows 95特有の立体的な凹凸を完全再現） */
         .canvas-container::-webkit-scrollbar-thumb {
             background: #cbd0d4 !important;
-            border-radius: 0px !important; /* 丸みを完全にゼロにして四角く */
+            border-radius: 0px !important; /* 角丸を完全にゼロに */
+            
+            /* 💡 ブラウザのバグを回避し、強制的に95風の凹凸（影と光）を作る合わせ技 */
+            box-shadow: inset 1px 1px 0px #fff, 
+                        inset 2px 2px 0px #efefef, 
+                        inset -1px -1px 0px #0a0a0a, 
+                        not-inset -2px -2px 0px #808080 !important;
+            
+            /* トドメの立体ボーダー（これであのボタン感がでます） */
             border: 2px solid !important;
-            /* 左上白、右下グレーのWindows立体影 */
-            border-color: #fff #808080 #808080 #fff !important; 
+            border-color: #fff #808080 #808080 #fff !important;
         }
 
         /* 交差する角の部分 */
