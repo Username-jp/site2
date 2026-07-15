@@ -102,16 +102,17 @@
         .icon-ellipse{background-position:-221px 2px;}
         .icon-rounded-rectangle{background-position:-237px 2px;}
 
-        /* キャンバス容器（グレーの背景部分） */
-        .canvas-container {
-            flex-grow: 1;
-            background: #808080;
-            padding: 4px;
-            box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
-            display: flex;
-            overflow: auto;
-        }
-
+/* キャンバス容器（見本のようなレトロなスクロールバーを右と下に出します） */
+.canvas-container {
+    flex-grow: 1;
+    background: #808080;
+    padding: 4px;
+    box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
+    display: flex;
+    
+    /* 💡ここが重要：はみ出たときにスクロールバーを出す設定 */
+    overflow: scroll; 
+}
         /* 白いキャンバス本体 */
         .paint-canvas {
             background: #ffffff;
