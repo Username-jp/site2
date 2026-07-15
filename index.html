@@ -496,7 +496,7 @@
             swatch.style.cursor = 'pointer';
         });
 
-        // ランダム画像表示スクリプト（エンコード済み完全版）
+// ランダム画像表示スクリプト（エラー修復版）
         window.addEventListener('DOMContentLoaded', () => {
             const images = [
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/neko0001-0030.gif",
@@ -508,7 +508,7 @@
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya2.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya3.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/ymmt_all.gif"
-            ];
+            ]; // ← ここから下が切れてしまっていました！
             
             const randomIndex = Math.floor(Math.random() * images.length);
             document.getElementById('randomImage').src = images[randomIndex];
