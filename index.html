@@ -19,13 +19,21 @@
             align-items: flex-start;
         }
 
-        /* ペイントのウィンドウ全体 */
+/* ペイントのウィンドウ全体（本物の立体感を完全再現） */
         .window.paint-window {
             width: 100%;
             max-width: 800px;
             display: flex;
             flex-direction: column;
             background: #cbd0d4;
+            
+            /* 💡 元の平らな枠線を消し、Windows 95純正の強烈な凹凸感を仕込みます */
+            border: none !important;
+            box-shadow: 1px 1px 0px #0a0a0a,         /* 一番外側の右下の黒影 */
+                        -1px -1px 0px #fff,          /* 一番外側の左上の白光 */
+                        2px 2px 0px #808080,         /* 内側の右下の濃いグレー */
+                        -2px -2px 0px #cbd0d4,       /* 内側の左上の薄いグレー */
+                        3px 3px 6px rgba(0,0,0,0.3); /* デスクトップに落とすうっすらとした影 */
         }
 
         /* メニューバー */
