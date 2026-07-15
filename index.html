@@ -8,6 +8,30 @@
     <!-- 👇ここから：Windows 95/98風のデザインを呼び出すコードを追加 -->
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     <style>
+        /* ツールボタンの共通設定（画像を読み込む） */
+.tool-btn {
+    background-image: url('https://win98icons.alexmeub.com/images/paint-sprites.png'); /* ファンコミュニティが提供するオープンソースのペイントアイコン画像 */
+    background-repeat: no-repeat;
+    background-size: auto; /* 元のドット絵のサイズで表示 */
+}
+
+/* 各ボタンに表示するドット絵の位置をずらして指定（切り抜き） */
+.icon-freehand-select    { background-position: 0px 0px; }
+.icon-select             { background-position: -16px 0px; }
+.icon-eraser             { background-position: -32px 0px; }
+.icon-fill               { background-position: -48px 0px; }
+.icon-dropper            { background-position: -64px 0px; }
+.icon-magnifier          { background-position: -80px 0px; }
+.icon-pencil             { background-position: -96px 0px; }
+.icon-brush              { background-position: -112px 0px; }
+.icon-airbrush           { background-position: -128px 0px; }
+.icon-text               { background-position: -144px 0px; }
+.icon-line               { background-position: -160px 0px; }
+.icon-curve              { background-position: -176px 0px; }
+.icon-rectangle          { background-position: -192px 0px; }
+.icon-polygon            { background-position: -208px 0px; }
+.icon-ellipse            { background-position: -224px 0px; }
+.icon-rounded-rectangle  { background-position: -240px 0px; }
         /* ツールボックス全体のデザイン */
 .toolbox {
     width: 56px; /* 2列が綺麗に収まる幅 */
