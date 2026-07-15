@@ -8,7 +8,29 @@
     <!-- 👇ここから：Windows 95/98風のデザインを呼び出すコードを追加 -->
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     <style>
-        /* ツールボタンの共通設定（画像を読み込む） */
+        /* ツールボックス全体のデザイン */
+.toolbox {
+    width: 56px; /* 2列が綺麗に収まる幅 */
+    background: #cbd0d4;
+    border: 2px solid;
+    border-color: #fff #808080 #808080 #fff;
+    padding: 2px;
+    margin-right: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 16個のボタンを2列に並べる */
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 25px);
+    grid-auto-rows: 22px;
+    gap: 1px;
+}
+
+/* ペイントのボタン1個ずつの立体感 */
+.tool-btn {
+    /* ツールボタンの共通設定（画像を読み込む） */
 .tool-btn {
     background-image: url('https://win98icons.alexmeub.com/images/paint-sprites.png'); /* ファンコミュニティが提供するオープンソースのペイントアイコン画像 */
     background-repeat: no-repeat;
@@ -32,28 +54,6 @@
 .icon-polygon            { background-position: -208px 0px; }
 .icon-ellipse            { background-position: -224px 0px; }
 .icon-rounded-rectangle  { background-position: -240px 0px; }
-        /* ツールボックス全体のデザイン */
-.toolbox {
-    width: 56px; /* 2列が綺麗に収まる幅 */
-    background: #cbd0d4;
-    border: 2px solid;
-    border-color: #fff #808080 #808080 #fff;
-    padding: 2px;
-    margin-right: 4px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* 16個のボタンを2列に並べる */
-.tool-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 25px);
-    grid-auto-rows: 22px;
-    gap: 1px;
-}
-
-/* ペイントのボタン1個ずつの立体感 */
-.tool-btn {
     background: #cbd0d4;
     border: 1.5px solid;
     border-color: #fff #808080 #808080 #fff; /* 凸型の立体感 */
