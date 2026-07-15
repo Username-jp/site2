@@ -168,7 +168,11 @@
 
         <!-- 2. メニューバー -->
         <div class="menu-bar">
-            <div class="menu-item">ファイル(F)</div>
+<div class="menu-bar">
+    <!-- 💡 ファイル(F) をクリックすると、画像をダウンロードするボタン（リンク）にします -->
+    <a href="#" id="saveBtn" download="paint-art.png" class="menu-item" style="text-decoration: none; color: black;">ファイル(F)</a>
+    <div class="menu-item">編集(E)</div>
+...
             <div class="menu-item">編集(E)</div>
             <div class="menu-item">表示(V)</div>
             <div class="menu-item">変形(I)</div>
@@ -285,6 +289,9 @@
         // マウスを離したとき・キャンバスから外れたとき（描画終了）
         canvas.addEventListener('mouseup', () => isDrawing = false);
         canvas.addEventListener('mouseleave', () => isDrawing = false);
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            this.href = canvas.toDataURL('image/png');
+        });
     </script>
 </body>
 </body>
