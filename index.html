@@ -8,6 +8,45 @@
     <!-- 👇ここから：Windows 95/98風のデザインを呼び出すコードを追加 -->
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     <style>
+        /* ツールボックス全体のデザイン */
+.toolbox {
+    width: 56px; /* 2列が綺麗に収まる幅 */
+    background: #cbd0d4;
+    border: 2px solid;
+    border-color: #fff #808080 #808080 #fff;
+    padding: 2px;
+    margin-right: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 16個のボタンを2列に並べる */
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 25px);
+    grid-auto-rows: 22px;
+    gap: 1px;
+}
+
+/* ペイントのボタン1個ずつの立体感 */
+.tool-btn {
+    background: #cbd0d4;
+    border: 1.5px solid;
+    border-color: #fff #808080 #808080 #fff; /* 凸型の立体感 */
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ボタンがクリックされた（選択された）時、凹むようにする */
+.tool-btn:active, .tool-btn.selected {
+    border-color: #808080 #fff #fff #808080; /* 凹型の立体感 */
+    background-color: #e4e4e4; /* ちょっと明るく */
+}
         /* 画面全体をペイント風にレイアウトするための最低限の設定 */
         body {
             background-color: #55aaaa; /* あの懐かしい青緑色 */
