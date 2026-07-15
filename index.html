@@ -102,7 +102,7 @@
         .icon-ellipse{background-position:-221px 2px;}
         .icon-rounded-rectangle{background-position:-237px 2px;}
 
-/* キャンバス容器 */
+        /* キャンバス容器 */
         .canvas-container {
             flex-grow: 1;
             background: #808080;
@@ -155,10 +155,10 @@
     <!-- ウィンドウ全体（これがあると95.cssの立体感が効くようになります） -->
     <div class="window paint-window">
 
-<!-- 1. タイトルバー -->
+        <!-- 1. タイトルバー -->
         <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
             <div class="title-bar-text" style="color: white; font-weight: bold; font-size: 17px; display: flex; align-items: center; gap: 4px;">
-                🎨 　You can draw and save your artwork. お絵描きして保存できます。
+                🎨  You can draw and save your artwork. お絵描きして保存できます。
             </div>
             <div class="title-bar-controls">
                 <button aria-label="Minimize"></button>
@@ -167,12 +167,12 @@
             </div>
         </div>
 
-     <!-- 2. メニューバー（崩れないように調整） -->
+        <!-- 2. メニューバー（崩れないように調整） -->
         <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
             <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;">💾Save</a>
             <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
             <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
-            <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;">　</div>
+            <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
             <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
             <div class="menu-item" style="cursor: pointer; font-size: 20px; line-height: 1;"> </div>
         </div>
@@ -180,33 +180,33 @@
         <!-- 3. 作業エリア -->
         <div class="main-content">
             
-<!-- 左側：ツールボックス -->
-        <div class="toolbox">
-            <div class="tool-grid">
-                <button class="tool-btn" title="自由選択">✂</button>
-                <button class="tool-btn" title="選択">⚿</button>
-                <button class="tool-btn" title="消しゴム">▰</button>
-                <button class="tool-btn" title="塗りつぶし">🪣</button>
-                <button class="tool-btn" title="色の選択">🧪</button>
-                <button class="tool-btn" title="虫眼鏡">🔍</button>
-                <button class="tool-btn" title="鉛筆">✎</button>
-                <button class="tool-btn" title="ブラシ">🖌</button>
-                <button class="tool-btn" title="エアブラシ">░</button>
-                <button class="tool-btn" title="テキスト" style="font-family:'Times New Roman'; font-size:14px;">A</button>
-                <button class="tool-btn" title="直線">╱</button>
-                <button class="tool-btn" title="曲線">～</button>
-                <button class="tool-btn" title="長方形">▭</button>
-                <button class="tool-btn" title="多角形" style="font-size:8px;">多角</button>
-                <button class="tool-btn" title="楕円">◯</button>
-                <button class="tool-btn" title="角丸長方形">▢</button>
+            <!-- 左側：ツールボックス -->
+            <div class="toolbox">
+                <div class="tool-grid">
+                    <button class="tool-btn" title="自由選択">✂</button>
+                    <button class="tool-btn" title="選択">⚿</button>
+                    <button class="tool-btn" title="消しゴム">▰</button>
+                    <button class="tool-btn" title="塗りつぶし">🪣</button>
+                    <button class="tool-btn" title="色の選択">🧪</button>
+                    <button class="tool-btn" title="虫眼鏡">🔍</button>
+                    <button class="tool-btn" title="鉛筆">✎</button>
+                    <button class="tool-btn" title="ブラシ">🖌</button>
+                    <button class="tool-btn" title="エアブラシ">░</button>
+                    <button class="tool-btn" title="テキスト" style="font-family:'Times New Roman'; font-size:14px;">A</button>
+                    <button class="tool-btn" title="直線">╱</button>
+                    <button class="tool-btn" title="曲線">～</button>
+                    <button class="tool-btn" title="長方形">▭</button>
+                    <button class="tool-btn" title="多角形" style="font-size:8px;">多角</button>
+                    <button class="tool-btn" title="楕円">◯</button>
+                    <button class="tool-btn" title="角丸長方形">▢</button>
+                </div>
             </div>
-        </div>
 
-<!-- 中央キャンバス -->
-<div class="canvas-container">
-    <!-- 💡 div から canvas タグに変更し、id とサイズを追加します -->
-    <canvas id="paintCanvas" class="paint-canvas" width="800" height="450"></canvas>
-</div>
+            <!-- 中央キャンバス -->
+            <div class="canvas-container">
+                <!-- 💡 div から canvas タグに変更し、id とサイズを追加します -->
+                <canvas id="paintCanvas" class="paint-canvas" width="800" height="450"></canvas>
+            </div>
 
         </div>
 
@@ -253,9 +253,9 @@
             <p class="status-field" style="margin: 0; padding: 2px 4px; font-size: 17px;">You can draw and save your artwork.</p>
         </div>
 
-    </div>
-    
-<!-- 💡 ここから動かすためのJavaScriptコード -->
+    </div> <!-- 💡 ここに足りなかった </div> を足してウィンドウを綺麗に閉じました -->
+
+    <!-- 💡 ここから動かすためのJavaScriptコード -->
     <script>
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
