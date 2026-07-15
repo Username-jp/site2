@@ -164,6 +164,36 @@
             height: 13px;
             box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
+        /* 💡 スクロールバーのデザインをWindows 95風（四角・立体的）に強制変更 */
+        .canvas-container::-webkit-scrollbar {
+            width: 16px !important;  /* バーの太さ */
+            height: 16px !important; /* 横スクロールバーの高さ */
+            background: #dfdfdf !important;
+        }
+
+        /* スクロールバーの背景（ドットの効いたグレー） */
+        .canvas-container::-webkit-scrollbar-track {
+            background-image: linear-gradient(45deg, #cbd0d4 25%, transparent 25%), 
+                              linear-gradient(-45deg, #cbd0d4 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #cbd0d4 75%), 
+                              linear-gradient(-45deg, transparent 75%, #cbd0d4 75%) !important;
+            background-size: 2px 2px !important;
+            background-color: #fff !important;
+        }
+
+        /* 動かすツマミ部分（グレーの四角いボタン） */
+        .canvas-container::-webkit-scrollbar-thumb {
+            background: #cbd0d4 !important;
+            border-radius: 0px !important; /* 💡 角丸を完全にゼロにして四角くします */
+            border: 2px solid !important;
+            /* Windows特有の立体的な影（左上白、右下グレー） */
+            border-color: #fff #808080 #808080 #fff !important; 
+        }
+
+        /* 交差する角の部分 */
+        .canvas-container::-webkit-scrollbar-corner {
+            background: #cbd0d4 !important;
+        }
     </style>
 </head>
 <body>
