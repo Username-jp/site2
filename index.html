@@ -201,16 +201,11 @@
             </div>
         </div>
 
-            <!-- 中央キャンバス -->
-            <div class="canvas-container">
-                <div class="paint-canvas">
-                    <div style="text-align: center;">
-                        <h2 style="margin: 0; font-size: 24px; font-family: sans-serif; font-weight: bold; letter-spacing: 1px;">CHANMANA'S DIGITAL CREATIONS</h2>
-                        <h1 style="margin: 5px 0 20px 0; font-size: 36px; font-family: sans-serif; font-weight: bold; letter-spacing: 2px;">PORTFOLIO</h1>
-                        <p style="color: #666; font-size: 12px;">（ここにあなたのイラストなどの画像が表示されます）</p>
-                    </div>
-                </div>
-            </div>
+<!-- 中央キャンバス -->
+<div class="canvas-container">
+    <!-- 💡 div から canvas タグに変更し、id とサイズを追加します -->
+    <canvas id="paintCanvas" class="paint-canvas" width="800" height="450"></canvas>
+</div>
 
         </div>
 
@@ -258,6 +253,39 @@
         </div>
 
     </div>
+<!-- 💡 ここから動かすためのJavaScriptコード -->
+    <script>
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
 
+        // 線の設定（黒色、太さ2ピクセル、ドット感を出すために角を四角に）
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'square';
+        ctx.lineJoin = 'miter';
+
+        // マウスを押したとき（描画開始）
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            ctx.beginPath();
+            // キャンバス内での正確なマウス位置を計算
+            const rect = canvas.getBoundingClientRect();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        });
+
+        // マウスを動かしたとき（線を引く）
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        });
+
+        // マウスを離したとき・キャンバスから外れたとき（描画終了）
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseleave', () => isDrawing = false);
+    </script>
+</body>
 </body>
 </html>
