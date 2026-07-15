@@ -102,18 +102,58 @@
         .icon-ellipse{background-position:-221px 2px;}
         .icon-rounded-rectangle{background-position:-237px 2px;}
 
-        /* キャンバス容器 */
+/* =========================================================
+           🎨 【修正】キャンバスサイズにぴったり合わせて余白を消す
+           ========================================================= */
         .canvas-container {
-            flex-grow: 1;
+            max-width: 100%;       /* 画面からはみ出さないようにガード */
+            height: 450px;         /* 💡 縦をキャンバスの高さ（450px）に完全一致 */
             background: #cbd0d4 !important;
-            padding: 4px;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
-            display: flex;
-            overflow: scroll; 
-            height: 460px;   
-            scrollbar-color: #cbd0d4 #dfdfdf; /* Firefox用の設定 */
+            overflow: scroll;      /* 縦横のスクロールバーを常に表示 */
+            display: inline-block; /* 💡 右側に余計な広がりを作らず、中身に密着させます */
         }
 
+        /* 白いキャンバス本体 */
+        .paint-canvas {
+            background: #ffffff;
+            display: block; 
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+            flex-shrink: 0;        /* 勝手に縮まないように固定 */
+        }
+
+        /* =========================================================
+           💡 【修正】Windows 95風の凹凸（影と光）を正しく一発再現
+           ========================================================= */
+        .canvas-container::-webkit-scrollbar {
+            width: 16px !important;  
+            height: 16px !important; 
+            background: #dfdfdf !important;
+        }
+
+        /* スクロールバーの背景（ドットの効いたグレー） */
+        .canvas-container::-webkit-scrollbar-track {
+            background-image: linear-gradient(45deg, #cbd0d4 25%, transparent 25%), 
+                              linear-gradient(-45deg, #cbd0d4 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #cbd0d4 75%), 
+                              linear-gradient(-45deg, transparent 75%, #cbd0d4 75%) !important;
+            background-size: 2px 2px !important;
+            background-color: #fff !important;
+        }
+
+        /* 動かすツマミ部分（立体感を正しく修正） */
+        .canvas-container::-webkit-scrollbar-thumb {
+            background: #cbd0d4 !important;
+            border-radius: 0px !important; 
+            box-shadow: inset 1px 1px 0px #fff, 
+                        inset -1px -1px 0px #808080 !important; /* 💡 正しい凹凸の影 */
+            border: 1px solid !important;
+            border-color: #fff #0a0a0a #0a0a0a #fff !important; /* 一番外側に黒と白の枠線 */
+        }
+
+        .canvas-container::-webkit-scrollbar-corner {
+            background: #cbd0d4 !important;
+        }
         /* 白いキャンバス本体 */
         .paint-canvas {
             background: #ffffff;
