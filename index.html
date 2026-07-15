@@ -239,12 +239,13 @@
     <!-- ウィンドウ全体 -->
     <div class="window paint-window">
 
-        <!-- 1. タイトルバー -->
+<!-- 1. タイトルバー -->
         <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
-            <div class="title-bar-text" style="color: white; font-weight: bold; font-size: 17px; display: flex; align-items: center; gap: 4px;">
+            <!-- 💡 scrollamount="4" で流れるスピードをレトロで心地いい速さに調整しています -->
+            <marquee class="title-bar-text" scrollamount="4" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
                 🎨  You can draw and save your artwork. お絵描きして保存できます。
-            </div>
-            <div class="title-bar-controls">
+            </marquee>
+            <div class="title-bar-controls" style="flex-shrink: 0; margin-left: auto;">
                 <button aria-label="Minimize"></button>
                 <button aria-label="Maximize"></button>
                 <button aria-label="Close"></button>
