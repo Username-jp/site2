@@ -22,7 +22,7 @@
 /* ペイントのウィンドウ全体（本物の立体感を完全再現） */
         .window.paint-window {
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
             background: #cbd0d4;
@@ -59,7 +59,7 @@
 
         /* 左側ツールボックス */
         .toolbox {
-            width: 56px; 
+            width: 60px; 
             background: #cbd0d4;
             padding: 2px;
             display: flex;
@@ -197,8 +197,8 @@
            💡 【修正の要】スクロールバーをWindows 95風（四角・立体）に強制変更するCSS
            ========================================================= */
         .canvas-container::-webkit-scrollbar {
-            width: 16px !important;  /* バーの太さ */
-            height: 16px !important; /* 横スクロールバーの高さ */
+            width: 17px !important;  /* バーの太さ */
+            height: 17px !important; /* 横スクロールバーの高さ */
             background: #dfdfdf !important;
         }
 
@@ -242,7 +242,7 @@
 <!-- 1. タイトルバー -->
         <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
             <!-- 💡 scrollamount="4" で流れるスピードをレトロで心地いい速さに調整しています -->
-            <marquee class="title-bar-text" scrollamount="4" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
+            <marquee class="title-bar-text" scrollamount="5" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
                 🎨  You can draw and save your artwork. お絵描きして保存できます。
             </marquee>
             <div class="title-bar-controls" style="flex-shrink: 0; margin-left: auto;">
