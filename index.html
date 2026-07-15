@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     
     <style>
-        /* 💡 画面全体を左右に並べる設定 */
+        /* 画面全体を左右に並べる設定 */
         body {
             background-color: #55aaaa;
             padding: 20px;
@@ -18,14 +18,14 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            gap: 20px; /* 左のペイントと右のリンクの間のすき間 */
+            gap: 20px; /* 左のペイントと右のサイドバーのすき間 */
             flex-wrap: wrap; /* 画面が狭いスマホの時は自動で縦並びにする */
         }
 
-        /* 💡 左側：ペイントのウィンドウ全体（横幅を固定して左に配置） */
+        /* 左側：ペイントのウィンドウ全体 */
         .window.paint-window {
             width: 100%;
-            max-width: 700px; /* リンクを置くスペースのために少しだけスリムに調整 */
+            max-width: 700px;
             display: flex;
             flex-direction: column;
             background: #cbd0d4;
@@ -179,11 +179,19 @@
             background: #cbd0d4 !important;
         }
 
-        /* 💡 右側：コンテンツリンク用のウィンドウ設定 */
-        .window.links-window {
+        /* 💡 右側サイドバー（ウィンドウを縦に積み重ねるコンテナ） */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             width: 100%;
-            max-width: 240px; /* リンク集の横幅 */
+            max-width: 240px;
             min-width: 200px;
+        }
+
+        /* 右側：各ウィンドウの共通設定 */
+        .window.sidebar-window {
+            width: 100%;
             background: #cbd0d4;
             border: none !important;
             box-shadow: 1px 1px 0px #0a0a0a, 
@@ -193,20 +201,20 @@
                         3px 3px 6px rgba(0,0,0,0.3);
         }
 
-        /* リンク用ウィンドウの中身の余白 */
-        .links-window .window-body {
+        /* ウィンドウの中身の余白 */
+        .sidebar-window .window-body {
             padding: 10px;
             margin: 0;
         }
 
-        /* リンクの箇条書き（ドットを消してWindows 95風の青リンクに） */
+        /* リンクの箇条書き */
         .link-list {
             list-style: none;
             padding: 0;
             margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         .link-list a {
             color: #0000ee;
@@ -224,7 +232,7 @@
     <div class="window paint-window">
         <!-- 1. タイトルバー -->
         <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
-            <marquee class="title-bar-text" scrollamount="3" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
+            <marquee class="title-bar-text" scrollamount="4" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
                 🎨  You can draw and save your artwork. お絵描きして保存できます。
             </marquee>
             <div class="title-bar-controls" style="flex-shrink: 0; margin-left: auto;">
@@ -236,7 +244,7 @@
 
         <!-- 2. メニューバー -->
         <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
-            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;">　💾Save</a>
+            <a href="#" id="saveBtn" download="paint-art.png" style="cursor: pointer; font-size: 17px; text-decoration: none; color: #000; line-height: 1;">💾Save</a>
         </div>
 
         <!-- 3. 作業エリア -->
@@ -312,21 +320,47 @@
     </div>
 
 
-    <!-- 💡 右側：追加した「コンテンツリンク」用のウィンドウ -->
-    <div class="window links-window">
-        <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
-            <div class="title-bar-text" style="color: white; font-weight: bold;">🔗 Contents</div>
+    <!-- 💡 右側サイドバーエリア（縦に並ぶ場所） -->
+    <div class="sidebar">
+        
+        <!-- コンテンツ1（元のリンク集） -->
+        <div class="window sidebar-window">
+            <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
+                <div class="title-bar-text" style="color: white; font-weight: bold;">🔗 Contents 1</div>
+            </div>
+            <div class="window-body">
+                <p style="margin-top: 0; font-size: 13px;">おすすめのリンク集：</p>
+                <ul class="link-list">
+                    <li><a href="https://google.com" target="_blank">🔍 Google 検索</a></li>
+                    <li><a href="https://yahoo.co.jp" target="_blank">🇯🇵 Yahoo! JAPAN</a></li>
+                    <li><a href="#" target="_blank">📝 マイプロフィール</a></li>
+                    <li><a href="#" target="_blank">📬 お問い合わせ</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="window-body">
-            <p style="margin-top: 0; font-size: 13px;">おすすめのリンク集：</p>
-            <ul class="link-list">
-                <!-- 💡 好きなリンク先（href）と文字に書き換えてください -->
-                <li><a href="https://google.com" target="_blank">🔍 Google 検索</a></li>
-                <li><a href="https://yahoo.co.jp" target="_blank">🇯🇵 Yahoo! JAPAN</a></li>
-                <li><a href="#" target="_blank">📝 マイプロフィール</a></li>
-                <li><a href="#" target="_blank">📬 お問い合わせ</a></li>
-            </ul>
+
+        <!-- 💡 新設：コンテンツ2（リンク10個） -->
+        <div class="window sidebar-window">
+            <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
+                <div class="title-bar-text" style="color: white; font-weight: bold;">📁 Contents 2</div>
+            </div>
+            <div class="window-body">
+                <p style="margin-top: 0; font-size: 13px;">お気に入り・その他リンク：</p>
+                <ul class="link-list">
+                    <li><a href="#" target="_blank">🌐 リンクアイテム 1</a></li>
+                    <li><a href="#" target="_blank">✨ リンクアイテム 2</a></li>
+                    <li><a href="#" target="_blank">🚀 リンクアイテム 3</a></li>
+                    <li><a href="#" target="_blank">👾 リンクアイテム 4</a></li>
+                    <li><a href="#" target="_blank">🎵 リンクアイテム 5</a></li>
+                    <li><a href="#" target="_blank">📸 リンクアイテム 6</a></li>
+                    <li><a href="#" target="_blank">🎮 リンクアイテム 7</a></li>
+                    <li><a href="#" target="_blank">📚 リンクアイテム 8</a></li>
+                    <li><a href="#" target="_blank">💎 リンクアイテム 9</a></li>
+                    <li><a href="#" target="_blank">⚙️ リンクアイテム 10</a></li>
+                </ul>
+            </div>
         </div>
+
     </div>
 
 
@@ -340,7 +374,7 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
