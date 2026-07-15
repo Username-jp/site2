@@ -410,7 +410,7 @@
     </div>
 </body>
 
-    <!-- JavaScriptコード -->
+<!-- JavaScriptコード（ここから丸ごと差し替え） -->
     <script>
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
@@ -468,13 +468,8 @@
         canvas.addEventListener('touchcancel', stopDrawing);
 
         document.getElementById('saveBtn').addEventListener('click', function() {
-            // 1. キャンバスの絵をPNG画像（データ）に変換
             const imgData = canvas.toDataURL('image/png');
-            
-            // 2. 先に新しいタブ（ウィンドウ）を開く
             const newWindow = window.open();
-            
-            // 3. 開いた新しいタブに、画像を表示するためのHTMLを直接書き込む
             newWindow.document.write(`
                 <html>
                     <head>
@@ -495,35 +490,21 @@
         // 🎨 パレットの色をクリックしたときに描画色を変える処理
         document.querySelectorAll('.color-swatch').forEach(swatch => {
             swatch.addEventListener('click', function() {
-                // クリックされたマスの背景色（RGB形式など）を取得
                 const selectedColor = this.style.backgroundColor;
-                
-                // 描画色（線の色）にセット
                 ctx.strokeStyle = selectedColor;
             });
-            
-            // マウスカーソルをポインター（手の形）にして、クリックできることをわかりやすくする
             swatch.style.cursor = 'pointer';
         });
 
-// ランダム画像表示スクリプト
+        // ランダム画像表示スクリプト（エンコード済み完全版）
         window.addEventListener('DOMContentLoaded', () => {
             const images = [
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/neko0001-0030.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/_0001-0250.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/orikya0001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E3%82%BB%E3%83%B3%E3%83%80%E3%83%BC%E3%83%AB20001-0100.gif", // 「セブンゼル2」をURL用に変換
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E3%82%BB%E3%83%B3%E3%83%80%E3%83%BC%E3%83%AB30001-0100.gif", // 「セブンゼル3」をURL用に変換
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E3%82%BB%E3%83%B3%E3%83%80%E3%83%BC%E3%83%AB40001-0100.gif", // 「セブンゼル4」をURL用に変換
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E8%8A%B1%E8%AD%9C0001-0200.gif", // 「花譜」をURL用に変換
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/rensyu33_001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E8%9F%B9%E3%81%95%E3%82%930001-0200.gif", // 「蟹さん」をURL用に変換
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/ymmt_all.gif"
             ];
-            
-            const randomIndex = Math.floor(Math.random() * images.length);
-            document.getElementById('randomImage').src = images[randomIndex];
-        });
             
             const randomIndex = Math.floor(Math.random() * images.length);
             document.getElementById('randomImage').src = images[randomIndex];
