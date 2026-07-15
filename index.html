@@ -506,20 +506,24 @@
             swatch.style.cursor = 'pointer';
         });
 
-        // ランダム画像表示スクリプト
+// ランダム画像表示スクリプト
         window.addEventListener('DOMContentLoaded', () => {
             const images = [
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/neko0001-0030.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/_0001-0250.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/orikya0001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル20001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル30001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル40001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/花譜0001-0200.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E3%82%BB%E3%83%B3%E3%83%80%E3%83%BC%E3%83%AB20001-0100.gif", // 「セブンゼル2」をURL用に変換
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E3%82%BB%E3%83%B3%E3%83%80%E3%83%BC%E3%83%AB30001-0100.gif", // 「セブンゼル3」をURL用に変換
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E3%82%BB%E3%83%B3%E3%83%80%E3%83%BC%E3%83%AB40001-0100.gif", // 「セブンゼル4」をURL用に変換
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E8%8A%B1%E8%AD%9C0001-0200.gif", // 「花譜」をURL用に変換
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/rensyu33_001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/蟹さん0001-0200.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/%E8%9F%B9%E3%81%95%E3%82%930001-0200.gif", // 「蟹さん」をURL用に変換
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/ymmt_all.gif"
             ];
+            
+            const randomIndex = Math.floor(Math.random() * images.length);
+            document.getElementById('randomImage').src = images[randomIndex];
+        });
             
             const randomIndex = Math.floor(Math.random() * images.length);
             document.getElementById('randomImage').src = images[randomIndex];
