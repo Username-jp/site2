@@ -20,6 +20,7 @@
             align-items: flex-start;
             gap: 20px; /* 左のペイントと右のサイドバーのすき間 */
             flex-wrap: wrap; /* 画面が狭いスマホの時は自動で縦並びにする */
+            padding-bottom: 60px; /* 💡 カウンターバーに被らないように余白を作る */
         }
 
         /* 左側：ペイントのウィンドウ全体 */
@@ -258,9 +259,9 @@
         </div>
 
         <!-- 2. メニューバー -->
-<div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
-    <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; line-height: 1; user-select: none;">💾Save</span>
-</div>
+        <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
+            <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; line-height: 1; user-select: none;">💾Save</span>
+        </div>
 
         <!-- 3. 作業エリア -->
         <div class="main-content">
@@ -353,7 +354,7 @@
                     <li><a href="https://harsh-hoverfly-c37.notion.site/FA-blender-164e5e2365cd80e2a5bbc89242e73e2e" target="_blank">趣味blender</a></li>
                 </ul>
 
-                <!-- 💡 ここに本日のランダムイラスト枠を追加しました -->
+                <!-- 本日のランダムイラスト枠 -->
                 <p style="margin-top: 10px; margin-bottom: 4px; font-size: 13px;">本日のランダムイラスト：</p>
                 <div class="random-box">
                     <img id="randomImage" src="" alt="本日のイラスト">
@@ -376,6 +377,43 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- 💡 最下部固定アクセスカウンター（フッターバー） -->
+    <div class="window" style="
+        position: fixed; 
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        z-index: 9999; 
+        background: #cbd0d4; 
+        border-radius: 0; 
+        box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+        border-top: 2.5px solid #fff !important; /* Windows95風の3D枠線 */
+    ">
+        <div class="window-body" style="
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 5px 12px; 
+            margin: 0;
+        ">
+            <!-- 左端：ウェルカムテキスト -->
+            <span style="font-size: 12px; font-weight: bold; color: #000; text-shadow: 1px 1px 0px #fff;">
+                📟 WELCOME TO MY WEBSITE...
+            </span>
+            
+            <!-- 中央：アクセスカウンター表示部 -->
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 11px; font-weight: bold; color: #404040;">ACCESS COUNTER:</span>
+                <img src="https://www.f-counter.net/ico/45/1234567890/" alt="アクセスカウンター" style="height: 18px; border: 1.5px solid #808080; display: block;">
+            </div>
+
+            <!-- 右端：キリ番アピール -->
+            <span style="font-size: 11px; color: #000; font-family: 'MS Pゴシック', sans-serif; font-weight: bold;">
+                since 2026 / 踏み逃げ禁止
+            </span>
+        </div>
     </div>
 </body>
 
@@ -436,7 +474,7 @@
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchcancel', stopDrawing);
 
-document.getElementById('saveBtn').addEventListener('click', function() {
+        document.getElementById('saveBtn').addEventListener('click', function() {
             // 1. キャンバスの絵をPNG画像（データ）に変換
             const imgData = canvas.toDataURL('image/png');
             
@@ -475,25 +513,20 @@ document.getElementById('saveBtn').addEventListener('click', function() {
             swatch.style.cursor = 'pointer';
         });
 
-// 💡 ランダム画像表示スクリプト
+        // ランダム画像表示スクリプト
         window.addEventListener('DOMContentLoaded', () => {
-            // ランダムで流したい画像URLリスト
-            // 💡 github.com/〜/blob/〜 を raw.githubusercontent.com/〜/main/〜 に書き換えました！
             const images = [
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/neko0001-0030.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/_0001-0250.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/orikya0001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル20001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル30001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル40001-0100.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル20001-0100.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル30001-0100.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/セブンゼル40001-0100.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/花譜0001-0200.gif",
                 "https://raw.githubusercontent.com/Username-jp/image-stocker/main/ymmt_all.gif"
             ];
             
-            // ランダムに1つ選ぶ魔法
             const randomIndex = Math.floor(Math.random() * images.length);
-            
-            // 選ばれた画像を枠にセット
             document.getElementById('randomImage').src = images[randomIndex];
         });
     </script>
