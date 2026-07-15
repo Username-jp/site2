@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>チャンマナ</title>
+    <title>Paint</title>
     
-    <!-- Windows 95/98風のデザインシステムを読み込み -->
+    <!-- Windows 95/98風のデザインシステム -->
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     
     <style>
-        /* 画面全体の設定 */
         body {
-            background-color: #55aaaa; /* あの懐かしい青緑色 */
+            background-color: #55aaaa;
             padding: 20px;
             margin: 0;
             font-family: "MS Sans Serif", "MS Pゴシック", sans-serif;
@@ -20,48 +19,48 @@
             align-items: flex-start;
         }
 
-        /* ペイントのウィンドウ全体のサイズと見た目 */
+        /* ペイントのウィンドウ全体 */
         .window.paint-window {
             width: 100%;
-            max-width: 900px;
+            max-width: 960px;
             display: flex;
             flex-direction: column;
+            background: #cbd0d4;
         }
 
-        /* メニューバー（横並びにする） */
+        /* メニューバー */
         .menu-bar {
             display: flex;
             background: #cbd0d4;
             padding: 2px 6px;
-            gap: 10px;
+            gap: 12px;
+            border-bottom: 1px solid #808080;
         }
         .menu-item {
             cursor: pointer;
-            padding: 2px 4px;
+            font-size: 12px;
         }
 
-        /* メインの作業領域（ツールBOX ＋ キャンバス）を横並びに */
+        /* メインエリア */
         .main-content {
             display: flex;
             background: #cbd0d4;
-            padding: 4px;
+            padding: 3px;
+            gap: 2px;
         }
 
-        /* ツールボックス全体の枠組み */
+        /* 左側ツールボックス */
         .toolbox {
             width: 56px; 
             background: #cbd0d4;
-            border: 2px solid;
-            border-color: #fff #808080 #808080 #fff;
             padding: 2px;
-            margin-right: 4px;
             display: flex;
             flex-direction: column;
-            box-sizing: border-box;
             flex-shrink: 0;
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
 
-        /* 16個のボタンをきれいな2列のグリッドにする */
+        /* 16個のボタンをきれいな2列グリッドにする */
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(2, 24px);
@@ -69,22 +68,23 @@
             gap: 1px;
         }
 
-        /* ツールボタンの立体感とコミュニティのオープンソース画像をセット */
+        /* ボタンの見た目とオープンソース画像の読み込み */
         .tool-btn {
             background: #cbd0d4;
             border: 1.5px solid;
             border-color: #fff #808080 #808080 #fff;
             padding: 0;
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background-image: url('https://win98icons.alexmeub.com/images/paint-sprites.png');
             background-repeat: no-repeat;
-            background-size: auto;
         }
 
-        /* 各ボタンに表示するドット絵の位置（隙間なし） */
+        .tool-btn:active, .tool-btn.selected {
+            border-color: #808080 #fff #fff #808080;
+            background-color: #e4e4e4;
+        }
+
+        /* 各ボタンのアイコン切り出し位置（スペースなし） */
         .icon-freehand-select{background-position:3px 2px;}
         .icon-select{background-position:-13px 2px;}
         .icon-eraser{background-position:-29px 2px;}
@@ -102,57 +102,63 @@
         .icon-ellipse{background-position:-221px 2px;}
         .icon-rounded-rectangle{background-position:-237px 2px;}
 
-        /* キャンバス（作品エリア）の背景グレー部分 */
+        /* キャンバス容器（グレーの背景部分） */
         .canvas-container {
             flex-grow: 1;
             background: #808080;
             padding: 4px;
+            box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
             display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: auto;
         }
 
-        /* 白いキャンバスそのものの立体感 */
+        /* 白いキャンバス本体 */
         .paint-canvas {
-            background: white;
+            background: #ffffff;
             width: 100%;
-            min-height: 400px;
-            padding: 20px;
-            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+            min-height: 450px;
+            padding: 30px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
         }
 
-        /* 下部：カラーパレット */
+        /* 下部カラーボックス */
         .color-box {
             background: #cbd0d4;
-            padding: 5px;
-            border-top: 2px solid #fff;
+            padding: 4px;
+            border-top: 1px solid #808080;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
         .color-palette {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 1px;
+            margin-left: 5px;
         }
         .palette-row {
             display: flex;
-            gap: 2px;
+            gap: 1px;
+        }
+        .color-swatch {
+            width: 13px;
+            height: 13px;
+            box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
     </style>
 </head>
 <body>
 
-    <!-- 👇全体を「.window」というクラスで囲むことで95.cssを強制発動させます -->
+    <!-- ウィンドウ全体（これがあると95.cssの立体感が効くようになります） -->
     <div class="window paint-window">
 
-        <!-- 1. 最上部：タイトルバー -->
+        <!-- 1. タイトルバー（文字は削除して青いバーのみに） -->
         <div class="title-bar">
-            <div class="title-bar-text">
-                チャンマナ's Digital Creations - Paint - portfolio.html
-            </div>
+            <div class="title-bar-text"></div>
             <div class="title-bar-controls">
                 <button aria-label="Minimize"></button>
                 <button aria-label="Maximize"></button>
@@ -170,10 +176,10 @@
             <div class="menu-item">ヘルプ(H)</div>
         </div>
 
-        <!-- 3. メイン作業エリア（ツールBOX ＋ キャンバス） -->
+        <!-- 3. 作業エリア -->
         <div class="main-content">
             
-            <!-- 左側：ツールボックス（16個のアイコン） -->
+            <!-- 左側ツールボックス -->
             <div class="toolbox">
                 <div class="tool-grid">
                     <button class="tool-btn icon-freehand-select" title="自由選択"></button>
@@ -195,42 +201,60 @@
                 </div>
             </div>
 
-            <!-- 中央：キャンバス -->
+            <!-- 中央キャンバス -->
             <div class="canvas-container">
                 <div class="paint-canvas">
-                    <div class="portfolio-content">
-                        <div class="canvas-title">
-                            <h2 style="margin: 0; font-size: 1.5rem;">チャンマナ'S DIGITAL CREATIONS</h2>
-                            <h1 style="margin: 10px 0; font-size: 2.5rem; letter-spacing: 2px;">PORTFOLIO</h1>
-                        </div>
-                        <p style="color: #666;">（ここにあなたのイラストなどの画像が表示されます）</p>
+                    <div style="text-align: center;">
+                        <h2 style="margin: 0; font-size: 24px; font-family: sans-serif; font-weight: bold; letter-spacing: 1px;">CHANMANA'S DIGITAL CREATIONS</h2>
+                        <h1 style="margin: 5px 0 20px 0; font-size: 36px; font-family: sans-serif; font-weight: bold; letter-spacing: 2px;">PORTFOLIO</h1>
+                        <p style="color: #666; font-size: 12px;">（ここにあなたのイラストなどの画像が表示されます）</p>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- 4. 下部：カラーパレット -->
+        <!-- 4. 下部カラーパレット（実物と同じ2段の並びに修正） -->
         <div class="color-box">
             <div class="color-palette">
                 <div class="palette-row">
-                    <div class="color-swatch" style="background: #000000; width:14px; height:14px; border:1px solid #808080;"></div>
-                    <div class="color-swatch" style="background: #808080; width:14px; height:14px; border:1px solid #808080;"></div>
-                    <div class="color-swatch" style="background: #800000; width:14px; height:14px; border:1px solid #808080;"></div>
-                    <div class="color-swatch" style="background: #808000; width:14px; height:14px; border:1px solid #808080;"></div>
+                    <div class="color-swatch" style="background: #000000;"></div>
+                    <div class="color-swatch" style="background: #808080;"></div>
+                    <div class="color-swatch" style="background: #800000;"></div>
+                    <div class="color-swatch" style="background: #808000;"></div>
+                    <div class="color-swatch" style="background: #008000;"></div>
+                    <div class="color-swatch" style="background: #008080;"></div>
+                    <div class="color-swatch" style="background: #000080;"></div>
+                    <div class="color-swatch" style="background: #800080;"></div>
+                    <div class="color-swatch" style="background: #808040;"></div>
+                    <div class="color-swatch" style="background: #004040;"></div>
+                    <div class="color-swatch" style="background: #0080ff;"></div>
+                    <div class="color-swatch" style="background: #004080;"></div>
+                    <div class="color-swatch" style="background: #400080;"></div>
+                    <div class="color-swatch" style="background: #804000;"></div>
                 </div>
                 <div class="palette-row">
-                    <div class="color-swatch" style="background: #ffffff; width:14px; height:14px; border:1px solid #808080;"></div>
-                    <div class="color-swatch" style="background: #c0c0c0; width:14px; height:14px; border:1px solid #808080;"></div>
-                    <div class="color-swatch" style="background: #ff0000; width:14px; height:14px; border:1px solid #808080;"></div>
-                    <div class="color-swatch" style="background: #ffff00; width:14px; height:14px; border:1px solid #808080;"></div>
+                    <div class="color-swatch" style="background: #ffffff;"></div>
+                    <div class="color-swatch" style="background: #c0c0c0;"></div>
+                    <div class="color-swatch" style="background: #ff0000;"></div>
+                    <div class="color-swatch" style="background: #ffff00;"></div>
+                    <div class="color-swatch" style="background: #00ff00;"></div>
+                    <div class="color-swatch" style="background: #00ffff;"></div>
+                    <div class="color-swatch" style="background: #0000ff;"></div>
+                    <div class="color-swatch" style="background: #ff00ff;"></div>
+                    <div class="color-swatch" style="background: #ffff80;"></div>
+                    <div class="color-swatch" style="background: #00ff80;"></div>
+                    <div class="color-swatch" style="background: #80ffff;"></div>
+                    <div class="color-swatch" style="background: #8080ff;"></div>
+                    <div class="color-swatch" style="background: #ff8000;"></div>
+                    <div class="color-swatch" style="background: #ff8080;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- 5. 最下部：ステータスバー -->
+        <!-- 5. ステータスバー -->
         <div class="status-bar">
-            <p class="status-field" style="margin: 0; padding: 2px 4px;">Ready. Click an icon to explore.</p>
+            <p class="status-field" style="margin: 0; padding: 2px 4px; font-size: 12px;">Ready. Click an icon to explore.</p>
         </div>
 
     </div>
