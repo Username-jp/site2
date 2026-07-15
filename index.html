@@ -102,14 +102,30 @@
         .icon-ellipse{background-position:-221px 2px;}
         .icon-rounded-rectangle{background-position:-237px 2px;}
 
-        /* キャンバス容器 */
+/* キャンバス容器 */
         .canvas-container {
             flex-grow: 1;
-            background: #808080;
+            background: #cbd0d4 !important; /* 強制的にグレーにします */
             padding: 4px;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
             display: flex;
-            overflow: scroll; /* 💡 ここを scroll に書き換える */
+            overflow: scroll; 
+            height: 460px;   
+            
+            /* 💡 Google Chromeやエッジ用のスクロールバー色設定 */
+            scrollbar-color: #cbd0d4 #efefef; 
+        }
+
+        /* 💡 治らない場合のトドメ：WEBKITブラウザ用の強制グレー化 */
+        .canvas-container::-webkit-scrollbar {
+            background-color: #cbd0d4 !important;
+        }
+        .canvas-container::-webkit-scrollbar-track {
+            background-color: #cbd0d4 !important;
+        }
+        .canvas-container::-webkit-scrollbar-thumb {
+            background-color: #cbd0d4 !important;
+            border: 2px solid #fff;
         }
         /* 白いキャンバス本体 */
         .paint-canvas {
