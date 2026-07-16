@@ -494,28 +494,29 @@
             swatch.style.cursor = 'pointer';
         });
 
-        // ランダム画像表示スクリプト（GitHub直リンク + キャッシュ強制回避処理）
+// ランダム画像表示スクリプト（相対パス版）
         window.addEventListener('DOMContentLoaded', () => {
             const images = [
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/_0001-0250.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/kahu.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/kanisan0001-0200.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/neko0001-0030.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/orikya0001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/rensyu33_001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya1.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya2.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya3.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/ymmt_all.gif"
+                "_0001-0250.gif",
+                "kahu.gif",
+                "kanisan0001-0200.gif",
+                "neko0001-0030.gif",
+                "orikya0001-0100.gif",
+                "rensyu33_001-0100.gif",
+                "tokiya1.gif",
+                "tokiya2.gif",
+                "tokiya3.gif",
+                "ymmt_all.gif"
             ];
             
             const randomIndex = Math.floor(Math.random() * images.length);
             const targetImg = document.getElementById('randomImage');
             if (targetImg) {
-                // 💡 末尾に時刻パラメータを付けてブラウザに「常に新しい画像」と認識させます
+                // ファイル名だけで直接読み込みます
                 targetImg.src = images[randomIndex] + '?t=' + new Date().getTime();
             }
         });
+        
     </script>
 </body>
 </html>
