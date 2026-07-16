@@ -496,23 +496,24 @@
             swatch.style.cursor = 'pointer';
         });
 
-// ランダム画像表示スクリプト（GitHub完全同期版）
+// ランダム画像表示スクリプト（CDN配信対応版）
         window.addEventListener('DOMContentLoaded', () => {
             const images = [
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/_0001-0250.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/kahu.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/kanisan0001-0200.gif", // 🆕 英語名に修正完了！
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/neko0001-0030.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/orikya0001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/rensyu33_001-0100.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya1.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya2.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya3.gif",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/ymmt_all.gif"
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/_0001-0250.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/kahu.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/kanisan0001-0200.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/neko0001-0030.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/orikya0001-0100.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/rensyu33_001-0100.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/tokiya1.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/tokiya2.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/tokiya3.gif",
+                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/ymmt_all.gif"
             ];
             
             const randomIndex = Math.floor(Math.random() * images.length);
             document.getElementById('randomImage').src = images[randomIndex];
         });
+        
     </script>
 </html>
