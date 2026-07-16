@@ -408,9 +408,7 @@
             </span>
         </div>
     </div>
-</body>
 
-<!-- JavaScriptコード（ここから丸ごと差し替え） -->
     <script>
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
@@ -496,24 +494,28 @@
             swatch.style.cursor = 'pointer';
         });
 
-// ランダム画像表示スクリプト（CDN配信対応版）
+        // ランダム画像表示スクリプト（GitHub直リンク + キャッシュ強制回避処理）
         window.addEventListener('DOMContentLoaded', () => {
             const images = [
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/_0001-0250.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/kahu.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/kanisan0001-0200.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/neko0001-0030.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/orikya0001-0100.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/rensyu33_001-0100.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/tokiya1.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/tokiya2.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/tokiya3.gif",
-                "https://cdn.statically.io/gh/Username-jp/image-stocker/main/ymmt_all.gif"
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/_0001-0250.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/kahu.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/kanisan0001-0200.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/neko0001-0030.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/orikya0001-0100.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/rensyu33_001-0100.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya1.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya2.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/tokiya3.gif",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/ymmt_all.gif"
             ];
             
             const randomIndex = Math.floor(Math.random() * images.length);
-            document.getElementById('randomImage').src = images[randomIndex];
+            const targetImg = document.getElementById('randomImage');
+            if (targetImg) {
+                // 💡 末尾に時刻パラメータを付けてブラウザに「常に新しい画像」と認識させます
+                targetImg.src = images[randomIndex] + '?t=' + new Date().getTime();
+            }
         });
-        
     </script>
+</body>
 </html>
