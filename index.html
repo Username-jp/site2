@@ -175,14 +175,18 @@
             font-size: 14px;
         }
         
-        /* 画像表示エリア */
+/* 画像表示エリア */
         .random-box {
             background: #ffffff;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
-            padding: 0; /* 💡 4px だった余白を 0 に変更 */
+            padding: 0;
             margin-top: 6px;
             text-align: center;
-            overflow: hidden; /* 💡 画像が枠からはみ出るのを防ぐ */
+            overflow: hidden;
+            
+            /* 💡 左右の隙間を無視して、ウィンドウの端まで広げる魔法の命令 */
+            margin-left: -10px;
+            margin-right: -10px;
         }
         .random-box img {
             max-width: 100%;
