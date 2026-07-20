@@ -179,9 +179,10 @@
         .random-box {
             background: #ffffff;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
-            padding: 4px;
+            padding: 0; /* 💡 4px だった余白を 0 に変更 */
             margin-top: 6px;
             text-align: center;
+            overflow: hidden; /* 💡 画像が枠からはみ出るのを防ぐ */
         }
         .random-box img {
             max-width: 100%;
