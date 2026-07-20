@@ -282,11 +282,12 @@
                     <li><a href="https://harsh-hoverfly-c37.notion.site/FA-blender-164e5e2365cd80e2a5bbc89242e73e2e" target="_blank">趣味blender</a></li>
                 </ul>
 
-                <!-- 💡 100%確実に高安定URLで画像を表示させる枠 -->
-                <p style="margin-top: 10px; margin-bottom: 4px; font-size: 13px;">本日のランダムgif：</p>
-                <div class="random-box">
-                    <img src="https://picsum.photos/200/200?random=1" alt="本日の画像" width="200" height="200">
-                </div>
+<!-- 💡 自分の複数画像をランダムに表示させる枠 -->
+<p style="margin-top: 10px; margin-bottom: 4px; font-size: 13px;">本日のランダムgif：</p>
+<div class="random-box">
+    <!-- 初期状態は空にして、下のスクリプトでURLを流し込みます -->
+    <img id="randomGifImage" src="" alt="本日のgif" width="200" height="200">
+</div>
             </div>
         </div>
         
@@ -391,6 +392,31 @@
         });
 
         // 💡 以前バグの原因になっていたランダム画像用の古いJavaScript命令は完全に削除しました。
+    // 💡 自分のリポジトリ(site2)の複数画像をランダム表示する処理
+        window.addEventListener('DOMContentLoaded', () => {
+            const imgElement = document.getElementById('randomGifImage');
+            if (!imgElement) return;
+
+            // 【重要】ここにランダムで流したい画像ファイル名をすべてカンマ(,)区切りで入れてください
+            // 例として今回教えていただいたファイル名を入れています。他にあれば追加してください。
+            const imageList = [
+                "7sel3_1.gif"
+                "7sel3_2.gif"
+            "7sel3_3.gif"
+            "kahu.gif"
+            "kani3.gif"
+            "neko0001-0030.gif"
+            "orikya0001-0100.gif"
+            "rensyu33_001-0100.gif"
+            ];
+
+            // ランダムに1枚選出
+            const randomIndex = Math.floor(Math.random() * imageList.length);
+            const selectedImage = imageList[randomIndex];
+
+            // GitHub Pagesの正しい公開URLを組み立てて画像タグに挿入（キャッシュ対策付き）
+            imgElement.src = `https://Username-jp.github.io/site2/${selectedImage}?t=${new Date().getTime()}`;
+        });
     </script>
 </body>
 </html>
