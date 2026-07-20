@@ -494,25 +494,31 @@
             swatch.style.cursor = 'pointer';
         });
 
-// ランダム画像表示スクリプト（相対パス版）
+// 💡 完全に別リポジトリ(image-stocker)の画像をURLで読み込む確実な処理
         window.addEventListener('DOMContentLoaded', () => {
+            // 画像が保管されているリポジトリのベースURL（jsDelivr CDN経由でCORSを完全回避）
+            const baseUrl = "https://cdn.jsdelivr.net/gh/Username-jp/image-stocker@main/";
+
+            // 表示させたい画像ファイル名のリスト
             const images = [
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/89e17f33-66ed-4adb-85fd-bd2c280aede6/%E3%82%BB%E3%83%95%E3%82%99%E3%83%B3%E3%82%BB%E3%82%99%E3%83%AB20001-0100.gif?table=block&id=39ee5e23-65cd-8006-b71a-f52c09d8749b&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=MnLD8147iKeLLUgc4biaKGrWPXB8InoGqEM-9P6IUG8",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/268b4ad6-330b-4f6e-a8d7-7e7bc6533427/%E3%82%BB%E3%83%95%E3%82%99%E3%83%B3%E3%82%BB%E3%82%99%E3%83%AB30001-0100.gif?table=block&id=39ee5e23-65cd-8017-9f1d-e5a64244a4bc&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=oloZGVWLANn56x0a2l4zrjt6D-KWbqcx7K8uRL7kXyQ",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/03f3e5aa-7854-4c7a-b1af-55e004d34873/%E3%82%BB%E3%83%95%E3%82%99%E3%83%B3%E3%82%BB%E3%82%99%E3%83%AB40001-0100.gif?table=block&id=39ee5e23-65cd-806e-a496-e829a80fe94b&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=MRqbEX8dubkl_TmzflQ78mm3p3oQPxkPaqMkwLQw2sU",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/9cba7f51-cd60-46c4-90c0-07a4493cecfb/rensyu33_001-0100.gif?table=block&id=39ee5e23-65cd-80a5-8607-f0bfb1e8791a&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=KkAi8MSk4-0qxVvPmIYJWWy6asCtKZX47telKMfXmV8",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/128132ce-6306-4b5f-ab70-6d7a61ef1540/%E8%9F%B9%E3%81%95%E3%82%930001-0200.gif?table=block&id=39ee5e23-65cd-80df-b605-dfb0602af659&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=E_rZvOGdIW8Ps0D31f0mUjqBxCH22io1diLo6JEgAU4",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/85d29e7b-ce37-4d6e-92b9-11ed68128793/njJlpUKSY5F8YSuW0Xkh1783513804-1783515515.gif?table=block&id=397e5e23-65cd-8068-b03a-ceee841bd281&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=zznETd2uKSmjG0sd8sjg9t1LhbXJPLm8koyKajdnRTg",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://harsh-hoverfly-c37.notion.site/image/attachment%3Ac8d2bb47-efef-4297-a364-d6c186d7c70c%3Aymmt_all_%E5%A4%A7.jpeg?table=block&id=397e5e23-65cd-8005-b960-f51483ec5f73&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&width=1020&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://harsh-hoverfly-c37.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbd896a29-9c54-4406-a4ab-06448db9f3b8%2Ff834c808-aa23-4d11-beba-c7b43f9207d4%2Fpekora3.png?table=block&id=164e5e23-65cd-80f9-be38-e46e4a738a4e&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&width=570&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl",
-                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://harsh-hoverfly-c37.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbd896a29-9c54-4406-a4ab-06448db9f3b8%2F1bb84ea8-af69-4820-850e-d16a97fc1905%2Fpaswg0.png?table=block&id=164e5e23-65cd-804a-91c1-e808c1269479&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&width=570&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"
+                "_0001-0250.gif",
+                "kahu.gif",
+                "kanisan0001-0200.gif",
+                "neko0001-0030.gif",
+                "orikya0001-0100.gif",
+                "rensyu33_001-0100.gif",
+                "tokiya1.gif",
+                "tokiya2.gif",
+                "tokiya3.gif",
+                "ymmt_all.gif"
             ];
             
             const randomIndex = Math.floor(Math.random() * images.length);
             const targetImg = document.getElementById('randomImage');
+            
             if (targetImg) {
-                // ファイル名だけで直接読み込みます
-                targetImg.src = images[randomIndex] + '?t=' + new Date().getTime();
+                // URLを結合し、さらに末尾に時間を付与してブラウザの古いキャッシュを強制破壊します
+                targetImg.src = baseUrl + images[randomIndex] + '?t=' + new Date().getTime();
             }
         });
         
