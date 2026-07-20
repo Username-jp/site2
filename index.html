@@ -182,19 +182,26 @@
             padding: 0;
             margin-top: 6px;
             text-align: center;
-            overflow: hidden; /* 💡 はみ出た白い余白をここでカットする */
-            height: 200px;    /* 💡 高さを200pxに固定 */
+            overflow: hidden; /* 💡 はみ出た白い余白をここで綺麗にカット */
+            
+            /* 💡 枠のサイズは200pxの正方形を維持 */
+            width: 200px;
+            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .random-box img {
-            width: 110%;      /* 💡 画像をあえて横に大きく引き伸ばす（白余白を枠外に追いやる） */
-            height: 100%;     /* 💡 縦の比率は100%を維持 */
-            object-fit: cover; /* 💡 画像の比率を崩さずに、中央を基準に枠いっぱいに広げる */
+            /* 💡 縦横比を100%崩さず、枠の『高さ(200px)』に合わせて画像をフィットさせる */
+            width: auto;
+            height: 100%;
+            object-fit: contain; 
+            
+            /* 💡 縦横比を完全に保ったまま、少しだけ全体を均等拡大して左右の白を外に押し出す */
+            transform: scale(1.35); 
+            
             display: block;
             border: none;
-            margin: 0 auto;
         }
     </style>
 </head>
