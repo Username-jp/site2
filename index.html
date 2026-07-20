@@ -174,34 +174,33 @@
             text-decoration: underline;
             font-size: 14px;
         }
-        
-/* 画像表示エリア */
+        /* 画像表示エリア */
         .random-box {
             background: #ffffff;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
             padding: 0;
             margin-top: 6px;
             text-align: center;
-            overflow: hidden; /* 💡 はみ出た白い余白をここで綺麗にカット */
+            overflow: hidden;
             
-            /* 💡 枠のサイズは200pxの正方形を維持 */
-            width: 200px;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            /* 💡 枠の高さ自体を最大200pxに制限する */
+            max-height: 200px; 
+            width: 100%;
         }
         .random-box img {
-            /* 💡 縦横比を100%崩さず、枠の『高さ(200px)』に合わせて画像をフィットさせる */
+            /* 💡 縦横比を絶対に維持したまま、高さを最大200px以内に収める */
             width: auto;
-            height: 100%;
-            object-fit: contain; 
-            
-            /* 💡 縦横比を完全に保ったまま、少しだけ全体を均等拡大して左右の白を外に押し出す */
-            transform: scale(1.35); 
+            max-width: 100%;
+            height: auto;
+            max-height: 200px; 
             
             display: block;
             border: none;
+            margin: 0 auto;
+            
+            /* 不要な変形・ズーム命令を完全リセット */
+            object-fit: contain;
+            transform: none;
         }
     </style>
 </head>
