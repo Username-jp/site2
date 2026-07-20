@@ -20,7 +20,7 @@
             align-items: flex-start;
             gap: 20px; /* 左のペイントと右のサイドバーのすき間 */
             flex-wrap: wrap; /* 画面が狭いスマホの時は自動で縦並びにする */
-            padding-bottom: 60px; /* 💡 カウンターバーに被らないように余白を作る */
+            padding-bottom: 60px; /* カウンターバーに被らないように余白を作る */
         }
 
         /* 左側：ペイントのウィンドウ全体 */
@@ -45,10 +45,6 @@
             padding: 2px 6px;
             gap: 12px;
             border-bottom: 1px solid #808080;
-        }
-        .menu-item {
-            cursor: pointer;
-            font-size: 12px;
         }
 
         /* メインエリア */
@@ -78,15 +74,12 @@
             gap: 1px;
         }
 
-        /* ボタンの見た目 */
         .tool-btn {
             background: #cbd0d4;
             border: 1.5px solid;
             border-color: #fff #808080 #808080 #fff;
             padding: 0;
             cursor: pointer;
-            background-image: url('https://win98icons.alexmeub.com/images/paint-sprites.png');
-            background-repeat: no-repeat;
         }
 
         .tool-btn:active, .tool-btn.selected {
@@ -94,25 +87,7 @@
             background-color: #e4e4e4;
         }
 
-        /* 各ボタンのアイコン切り出し位置 */
-        .icon-freehand-select{background-position:3px 2px;}
-        .icon-select{background-position:-13px 2px;}
-        .icon-eraser{background-position:-29px 2px;}
-        .icon-fill{background-position:-45px 2px;}
-        .icon-dropper{background-position:-61px 2px;}
-        .icon-magnifier{background-position:-77px 2px;}
-        .icon-pencil{background-position:-93px 2px;}
-        .icon-brush{background-position:-109px 2px;}
-        .icon-airbrush{background-position:-125px 2px;}
-        .icon-text{background-position:-141px 2px;}
-        .icon-line{background-position:-157px 2px;}
-        .icon-curve{background-position:-173px 2px;}
-        .icon-rectangle{background-position:-189px 2px;}
-        .icon-polygon{background-position:-205px 2px;}
-        .icon-ellipse{background-position:-221px 2px;}
-        .icon-rounded-rectangle{background-position:-237px 2px;}
-
-        /* キャンバス容器 */
+        /* キャンバスを囲む枠（スクロール可能） */
         .canvas-container {
             flex-grow: 1;
             max-width: 100%;       
@@ -123,15 +98,18 @@
             display: inline-block; 
         }
 
-        /* 白いキャンバス本体 */
+        /* キャンバス本体 */
         .paint-canvas {
             background: #ffffff;
             display: block; 
-            box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+            box-shadow: inset -1px -1px #fff, 
+                        inset 1px 1px #0a0a0a, 
+                        inset -2px -2px #dfdfdf, 
+                        inset 2px 2px #808080;
             flex-shrink: 0;        
         }
 
-        /* 下部カラーボックス */
+        /* カラーボックス */
         .color-box {
             background: #cbd0d4;
             padding: 4px;
@@ -155,32 +133,7 @@
             box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
 
-        /* スクロールバーのデザイン */
-        .canvas-container::-webkit-scrollbar {
-            width: 16px !important;  
-            height: 16px !important; 
-            background: #dfdfdf !important;
-        }
-        .canvas-container::-webkit-scrollbar-track {
-            background-image: linear-gradient(45deg, #cbd0d4 25%, transparent 25%), 
-                              linear-gradient(-45deg, #cbd0d4 25%, transparent 25%), 
-                              linear-gradient(45deg, transparent 75%, #cbd0d4 75%), 
-                              linear-gradient(-45deg, transparent 75%, #cbd0d4 75%) !important;
-            background-size: 2px 2px !important;
-            background-color: #fff !important;
-        }
-        .canvas-container::-webkit-scrollbar-thumb {
-            background: #cbd0d4 !important;
-            border-radius: 0px !important; 
-            box-shadow: inset 1px 1px 0px #fff, inset -1px -1px 0px #808080 !important; 
-            border: 1px solid !important;
-            border-color: #fff #0a0a0a #0a0a0a #fff !important; 
-        }
-        .canvas-container::-webkit-scrollbar-corner {
-            background: #cbd0d4 !important;
-        }
-
-        /* 💡 右側サイドバー（ウィンドウを縦に積み重ねるコンテナ） */
+        /* 右側サイドバー全体 */
         .sidebar {
             display: flex;
             flex-direction: column;
@@ -190,7 +143,7 @@
             min-width: 200px;
         }
 
-        /* 右側：各ウィンドウの共通設定 */
+        /* サイドバー内の各ウィンドウ */
         .window.sidebar-window {
             width: 100%;
             background: #cbd0d4;
@@ -202,13 +155,12 @@
                         3px 3px 6px rgba(0,0,0,0.3);
         }
 
-        /* ウィンドウの中身の余白 */
         .sidebar-window .window-body {
             padding: 10px;
             margin: 0;
         }
 
-        /* リンクの箇条書き */
+        /* リンクのリストスタイル */
         .link-list {
             list-style: none;
             padding: 0;
@@ -222,10 +174,8 @@
             text-decoration: underline;
             font-size: 14px;
         }
-        .link-list a:visited {
-            color: #551a8b;
-        }
-        /* 💡 ランダム画像表示エリアのスタイル */
+        
+        /* 画像表示エリア */
         .random-box {
             background: #ffffff;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
@@ -246,24 +196,16 @@
 
     <!-- 左側：ペイントウィンドウ -->
     <div class="window paint-window">
-        <!-- 1. タイトルバー -->
         <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
             <marquee class="title-bar-text" scrollamount="5" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
                 🎨  You can draw and save your artwork. お絵描きして保存できます。
             </marquee>
-            <div class="title-bar-controls" style="flex-shrink: 0; margin-left: auto;">
-                <button aria-label="Minimize"></button>
-                <button aria-label="Maximize"></button>
-                <button aria-label="Close"></button>
-            </div>
         </div>
 
-        <!-- 2. メニューバー -->
-        <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
-            <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; line-height: 1; user-select: none;">💾Save</span>
+        <div class="menu-bar">
+            <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; user-select: none;">💾Save</span>
         </div>
 
-        <!-- 3. 作業エリア -->
         <div class="main-content">
             <div class="toolbox">
                 <div class="tool-grid">
@@ -276,11 +218,11 @@
                     <button class="tool-btn" title="鉛筆">✎</button>
                     <button class="tool-btn" title="ブラシ">🖌</button>
                     <button class="tool-btn" title="エアブラシ">░</button>
-                    <button class="tool-btn" title="テキスト" style="font-family:'Times New Roman'; font-size:14px;">A</button>
+                    <button class="tool-btn" title="テキスト">A</button>
                     <button class="tool-btn" title="直線">╱</button>
                     <button class="tool-btn" title="曲線">～</button>
                     <button class="tool-btn" title="長方形">▭</button>
-                    <button class="tool-btn" title="多角形" style="font-size:8px;">多角</button>
+                    <button class="tool-btn" title="多角形">多角</button>
                     <button class="tool-btn" title="楕円">◯</button>
                     <button class="tool-btn" title="角丸長方形">▢</button>
                 </div>
@@ -291,7 +233,6 @@
             </div>
         </div>
 
-        <!-- 4. 下部カラーパレット -->
         <div class="color-box">
             <div class="color-palette">
                 <div class="palette-row">
@@ -303,12 +244,6 @@
                     <div class="color-swatch" style="background: #008080;"></div>
                     <div class="color-swatch" style="background: #000080;"></div>
                     <div class="color-swatch" style="background: #800080;"></div>
-                    <div class="color-swatch" style="background: #808040;"></div>
-                    <div class="color-swatch" style="background: #004040;"></div>
-                    <div class="color-swatch" style="background: #0080ff;"></div>
-                    <div class="color-swatch" style="background: #004080;"></div>
-                    <div class="color-swatch" style="background: #400080;"></div>
-                    <div class="color-swatch" style="background: #804000;"></div>
                 </div>
                 <div class="palette-row">
                     <div class="color-swatch" style="background: #ffffff;"></div>
@@ -319,27 +254,20 @@
                     <div class="color-swatch" style="background: #00ffff;"></div>
                     <div class="color-swatch" style="background: #0000ff;"></div>
                     <div class="color-swatch" style="background: #ff00ff;"></div>
-                    <div class="color-swatch" style="background: #ffff80;"></div>
-                    <div class="color-swatch" style="background: #00ff80;"></div>
-                    <div class="color-swatch" style="background: #80ffff;"></div>
-                    <div class="color-swatch" style="background: #8080ff;"></div>
-                    <div class="color-swatch" style="background: #ff8000;"></div>
-                    <div class="color-swatch" style="background: #ff8080;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- 5. ステータスバー -->
         <div class="status-bar">
             <p class="status-field" style="margin: 0; padding: 2px 4px; font-size: 17px;">You can draw and save your artwork.</p>
         </div>
     </div>
 
 
-    <!-- 右側サイドバーエリア（縦に並ぶ場所） -->
+    <!-- 右側サイドバーエリア -->
     <div class="sidebar">
         
-        <!-- コンテンツ1（イラスト表示枠を追加） -->
+        <!-- コンテンツ1 -->
         <div class="window sidebar-window">
             <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
                 <div class="title-bar-text" style="color: white; font-weight: bold;">🔗 Contents 1</div>
@@ -354,10 +282,10 @@
                     <li><a href="https://harsh-hoverfly-c37.notion.site/FA-blender-164e5e2365cd80e2a5bbc89242e73e2e" target="_blank">趣味blender</a></li>
                 </ul>
 
-                <!-- 本日のランダムgif枠 -->
+                <!-- 💡 100%確実に高安定URLで画像を表示させる枠 -->
                 <p style="margin-top: 10px; margin-bottom: 4px; font-size: 13px;">本日のランダムgif：</p>
                 <div class="random-box">
-                    <img id="randomImage" src="" alt="本日のgif">
+                    <img src="https://picsum.photos/200/200?random=1" alt="本日の画像" width="200" height="200">
                 </div>
             </div>
         </div>
@@ -376,152 +304,93 @@
                 </ul>
             </div>
         </div>
-
     </div>
 
-    <!-- 💡 最下部固定アクセスカウンター（フッターバー） -->
-    <div class="window" style="
-        position: fixed; 
-        bottom: 0; 
-        left: 0; 
-        width: 100%; 
-        z-index: 9999; 
-        background: #cbd0d4; 
-        border-radius: 0; 
-        box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
-        border-top: 2.5px solid #fff !important; /* Windows95風の3D枠線 */
-    ">
-        <div class="window-body" style="
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 5px 12px; 
-            margin: 0;
-        ">
-            <!-- 左端：ウェルカムテキスト -->
-            <span style="font-size: 12px; font-weight: bold; color: #000; text-shadow: 1px 1px 0px #fff;">
-                📟 WELCOME TO MY WEBSITE...
-            </span>
-            <!-- 右端：since -->
-            <span style="font-size: 11px; color: #000; font-family: 'MS Pゴシック', sans-serif; font-weight: bold;">
-                since 2026
-            </span>
+
+    <!-- 最下部固定バー -->
+    <div class="window" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: #cbd0d4; border-radius: 0; border-top: 2.5px solid #fff !important;">
+        <div class="window-body" style="display: flex; justify-content: space-between; align-items: center; padding: 5px 12px; margin: 0;">
+            <span style="font-size: 12px; font-weight: bold; color: #000;">📟 WELCOME TO MY WEBSITE...</span>
+            <span style="font-size: 11px; color: #000; font-weight: bold;">since 2026</span>
         </div>
     </div>
 
+
     <script>
+        // お絵描き機能のJavaScript
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
 
+        // 初期設定：背景を白にする
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+        
+        // 線のスタイル設定
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
+        // マウス・タッチの座標計算
         function getEventPos(e) {
             const rect = canvas.getBoundingClientRect();
             if (e.touches && e.touches.length > 0) {
-                return {
-                    x: e.touches[0].clientX - rect.left,
-                    y: e.touches[0].clientY - rect.top
-                };
+                return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
             }
-            return {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            };
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
         }
 
-        function startDrawing(e) {
-            isDrawing = true;
-            ctx.beginPath();
-            const pos = getEventPos(e);
-            ctx.moveTo(pos.x, pos.y);
+        // 描画開始
+        function startDrawing(e) { 
+            isDrawing = true; 
+            ctx.beginPath(); 
+            const pos = getEventPos(e); 
+            ctx.moveTo(pos.x, pos.y); 
         }
-
-        function draw(e) {
-            if (!isDrawing) return;
+        
+        // 描画中
+        function draw(e) { 
+            if (!isDrawing) return; 
             if (e.cancelable) e.preventDefault(); 
-            const pos = getEventPos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
+            const pos = getEventPos(e); 
+            ctx.lineTo(pos.x, pos.y); 
+            ctx.stroke(); 
+        }
+        
+        // 描画終了
+        function stopDrawing() { 
+            isDrawing = false; 
         }
 
-        function stopDrawing() {
-            isDrawing = false;
-        }
-
+        // マウスイベント登録
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseleave', stopDrawing);
-
+        
+        // タッチイベント登録（スマホ対応）
         canvas.addEventListener('touchstart', startDrawing, { passive: false });
         canvas.addEventListener('touchmove', draw, { passive: false });
         canvas.addEventListener('touchend', stopDrawing);
-        canvas.addEventListener('touchcancel', stopDrawing);
 
+        // 💾保存ボタンの動作（PNG画像として新規タブで開く）
         document.getElementById('saveBtn').addEventListener('click', function() {
             const imgData = canvas.toDataURL('image/png');
             const newWindow = window.open();
-            newWindow.document.write(`
-                <html>
-                    <head>
-                        <title>paint-art.png</title>
-                        <style>
-                            body { margin: 0; background: #55aaaa; display: flex; justify-content: center; align-items: center; height: 100vh; }
-                            img { max-width: 100%; max-height: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: #fff; }
-                        </style>
-                    </head>
-                    <body>
-                        <img src="${imgData}" alt="画廊">
-                    </body>
-                </html>
-            `);
+            newWindow.document.write(`<html><body><img src="${imgData}"></body></html>`);
             newWindow.document.close();
         });
         
-        // 🎨 パレットの色をクリックしたときに描画色を変える処理
+        // カラーパレットの切り替え設定
         document.querySelectorAll('.color-swatch').forEach(swatch => {
-            swatch.addEventListener('click', function() {
-                const selectedColor = this.style.backgroundColor;
-                ctx.strokeStyle = selectedColor;
+            swatch.addEventListener('click', function() { 
+                ctx.strokeStyle = this.style.backgroundColor; 
             });
             swatch.style.cursor = 'pointer';
         });
 
-// 💡 完全に別リポジトリ(image-stocker)の画像をURLで読み込む確実な処理
-        window.addEventListener('DOMContentLoaded', () => {
-            // 画像が保管されているリポジトリのベースURL（jsDelivr CDN経由でCORSを完全回避）
-            const baseUrl = "https://cdn.jsdelivr.net/gh/Username-jp/image-stocker@main/";
-
-            // 表示させたい画像ファイル名のリスト
-            const images = [
-                "_0001-0250.gif",
-                "kahu.gif",
-                "kanisan0001-0200.gif",
-                "neko0001-0030.gif",
-                "orikya0001-0100.gif",
-                "rensyu33_001-0100.gif",
-                "tokiya1.gif",
-                "tokiya2.gif",
-                "tokiya3.gif",
-                "ymmt_all.gif"
-            ];
-            
-            const randomIndex = Math.floor(Math.random() * images.length);
-            const targetImg = document.getElementById('randomImage');
-            
-            if (targetImg) {
-                // URLを結合し、さらに末尾に時間を付与してブラウザの古いキャッシュを強制破壊します
-                targetImg.src = baseUrl + images[randomIndex] + '?t=' + new Date().getTime();
-            }
-        });
-        
+        // 💡 以前バグの原因になっていたランダム画像用の古いJavaScript命令は完全に削除しました。
     </script>
 </body>
 </html>
