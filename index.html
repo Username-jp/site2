@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     
     <style>
+        /* 画面全体を左右に並べる設定 */
         body {
             background-color: #55aaaa;
             padding: 20px;
@@ -17,11 +18,12 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            gap: 20px;
-            flex-wrap: wrap;
-            padding-bottom: 60px;
+            gap: 20px; /* 左のペイントと右のサイドバーのすき間 */
+            flex-wrap: wrap; /* 画面が狭いスマホの時は自動で縦並びにする */
+            padding-bottom: 60px; /* 💡 カウンターバーに被らないように余白を作る */
         }
 
+        /* 左側：ペイントのウィンドウ全体 */
         .window.paint-window {
             width: 100%;
             max-width: 700px;
@@ -29,9 +31,14 @@
             flex-direction: column;
             background: #cbd0d4;
             border: none !important;
-            box-shadow: 1px 1px 0px #0a0a0a, -1px -1px 0px #fff, 2px 2px 0px #808080, -2px -2px 0px #cbd0d4, 3px 3px 6px rgba(0,0,0,0.3);
+            box-shadow: 1px 1px 0px #0a0a0a, 
+                        -1px -1px 0px #fff, 
+                        2px 2px 0px #808080, 
+                        -2px -2px 0px #cbd0d4, 
+                        3px 3px 6px rgba(0,0,0,0.3);
         }
 
+        /* メニューバー */
         .menu-bar {
             display: flex;
             background: #cbd0d4;
@@ -39,7 +46,12 @@
             gap: 12px;
             border-bottom: 1px solid #808080;
         }
+        .menu-item {
+            cursor: pointer;
+            font-size: 12px;
+        }
 
+        /* メインエリア */
         .main-content {
             display: flex;
             background: #cbd0d4;
@@ -47,6 +59,7 @@
             gap: 2px;
         }
 
+        /* 左側ツールボックス */
         .toolbox {
             width: 56px; 
             background: #cbd0d4;
@@ -57,6 +70,7 @@
             box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
 
+        /* 16個のボタンをきれいな2列グリッドにする */
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(2, 24px);
@@ -64,12 +78,15 @@
             gap: 1px;
         }
 
+        /* ボタンの見た目 */
         .tool-btn {
             background: #cbd0d4;
             border: 1.5px solid;
             border-color: #fff #808080 #808080 #fff;
             padding: 0;
             cursor: pointer;
+            background-image: url('https://win98icons.alexmeub.com/images/paint-sprites.png');
+            background-repeat: no-repeat;
         }
 
         .tool-btn:active, .tool-btn.selected {
@@ -77,6 +94,25 @@
             background-color: #e4e4e4;
         }
 
+        /* 各ボタンのアイコン切り出し位置 */
+        .icon-freehand-select{background-position:3px 2px;}
+        .icon-select{background-position:-13px 2px;}
+        .icon-eraser{background-position:-29px 2px;}
+        .icon-fill{background-position:-45px 2px;}
+        .icon-dropper{background-position:-61px 2px;}
+        .icon-magnifier{background-position:-77px 2px;}
+        .icon-pencil{background-position:-93px 2px;}
+        .icon-brush{background-position:-109px 2px;}
+        .icon-airbrush{background-position:-125px 2px;}
+        .icon-text{background-position:-141px 2px;}
+        .icon-line{background-position:-157px 2px;}
+        .icon-curve{background-position:-173px 2px;}
+        .icon-rectangle{background-position:-189px 2px;}
+        .icon-polygon{background-position:-205px 2px;}
+        .icon-ellipse{background-position:-221px 2px;}
+        .icon-rounded-rectangle{background-position:-237px 2px;}
+
+        /* キャンバス容器 */
         .canvas-container {
             flex-grow: 1;
             max-width: 100%;       
@@ -87,6 +123,7 @@
             display: inline-block; 
         }
 
+        /* 白いキャンバス本体 */
         .paint-canvas {
             background: #ffffff;
             display: block; 
@@ -94,6 +131,7 @@
             flex-shrink: 0;        
         }
 
+        /* 下部カラーボックス */
         .color-box {
             background: #cbd0d4;
             padding: 4px;
@@ -117,6 +155,32 @@
             box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
         }
 
+        /* スクロールバーのデザイン */
+        .canvas-container::-webkit-scrollbar {
+            width: 16px !important;  
+            height: 16px !important; 
+            background: #dfdfdf !important;
+        }
+        .canvas-container::-webkit-scrollbar-track {
+            background-image: linear-gradient(45deg, #cbd0d4 25%, transparent 25%), 
+                              linear-gradient(-45deg, #cbd0d4 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #cbd0d4 75%), 
+                              linear-gradient(-45deg, transparent 75%, #cbd0d4 75%) !important;
+            background-size: 2px 2px !important;
+            background-color: #fff !important;
+        }
+        .canvas-container::-webkit-scrollbar-thumb {
+            background: #cbd0d4 !important;
+            border-radius: 0px !important; 
+            box-shadow: inset 1px 1px 0px #fff, inset -1px -1px 0px #808080 !important; 
+            border: 1px solid !important;
+            border-color: #fff #0a0a0a #0a0a0a #fff !important; 
+        }
+        .canvas-container::-webkit-scrollbar-corner {
+            background: #cbd0d4 !important;
+        }
+
+        /* 💡 右側サイドバー（ウィンドウを縦に積み重ねるコンテナ） */
         .sidebar {
             display: flex;
             flex-direction: column;
@@ -126,18 +190,25 @@
             min-width: 200px;
         }
 
+        /* 右側：各ウィンドウの共通設定 */
         .window.sidebar-window {
             width: 100%;
             background: #cbd0d4;
             border: none !important;
-            box-shadow: 1px 1px 0px #0a0a0a, -1px -1px 0px #fff, 2px 2px 0px #808080, -2px -2px 0px #cbd0d4, 3px 3px 6px rgba(0,0,0,0.3);
+            box-shadow: 1px 1px 0px #0a0a0a, 
+                        -1px -1px 0px #fff, 
+                        2px 2px 0px #808080, 
+                        -2px -2px 0px #cbd0d4, 
+                        3px 3px 6px rgba(0,0,0,0.3);
         }
 
+        /* ウィンドウの中身の余白 */
         .sidebar-window .window-body {
             padding: 10px;
             margin: 0;
         }
 
+        /* リンクの箇条書き */
         .link-list {
             list-style: none;
             padding: 0;
@@ -151,7 +222,10 @@
             text-decoration: underline;
             font-size: 14px;
         }
-        
+        .link-list a:visited {
+            color: #551a8b;
+        }
+        /* 💡 ランダム画像表示エリアのスタイル */
         .random-box {
             background: #ffffff;
             box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
@@ -172,16 +246,24 @@
 
     <!-- 左側：ペイントウィンドウ -->
     <div class="window paint-window">
+        <!-- 1. タイトルバー -->
         <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
             <marquee class="title-bar-text" scrollamount="5" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
                 🎨  You can draw and save your artwork. お絵描きして保存できます。
             </marquee>
+            <div class="title-bar-controls" style="flex-shrink: 0; margin-left: auto;">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close"></button>
+            </div>
         </div>
 
-        <div class="menu-bar">
-            <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; user-select: none;">💾Save</span>
+        <!-- 2. メニューバー -->
+        <div class="menu-bar" style="display: flex; background: #cbd0d4; padding: 2px 6px; gap: 12px; border-bottom: 1px solid #808080; align-items: center;">
+            <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; line-height: 1; user-select: none;">💾Save</span>
         </div>
 
+        <!-- 3. 作業エリア -->
         <div class="main-content">
             <div class="toolbox">
                 <div class="tool-grid">
@@ -194,11 +276,11 @@
                     <button class="tool-btn" title="鉛筆">✎</button>
                     <button class="tool-btn" title="ブラシ">🖌</button>
                     <button class="tool-btn" title="エアブラシ">░</button>
-                    <button class="tool-btn" title="テキスト">A</button>
+                    <button class="tool-btn" title="テキスト" style="font-family:'Times New Roman'; font-size:14px;">A</button>
                     <button class="tool-btn" title="直線">╱</button>
                     <button class="tool-btn" title="曲線">～</button>
                     <button class="tool-btn" title="長方形">▭</button>
-                    <button class="tool-btn" title="多角形">多角</button>
+                    <button class="tool-btn" title="多角形" style="font-size:8px;">多角</button>
                     <button class="tool-btn" title="楕円">◯</button>
                     <button class="tool-btn" title="角丸長方形">▢</button>
                 </div>
@@ -209,6 +291,7 @@
             </div>
         </div>
 
+        <!-- 4. 下部カラーパレット -->
         <div class="color-box">
             <div class="color-palette">
                 <div class="palette-row">
@@ -220,6 +303,12 @@
                     <div class="color-swatch" style="background: #008080;"></div>
                     <div class="color-swatch" style="background: #000080;"></div>
                     <div class="color-swatch" style="background: #800080;"></div>
+                    <div class="color-swatch" style="background: #808040;"></div>
+                    <div class="color-swatch" style="background: #004040;"></div>
+                    <div class="color-swatch" style="background: #0080ff;"></div>
+                    <div class="color-swatch" style="background: #004080;"></div>
+                    <div class="color-swatch" style="background: #400080;"></div>
+                    <div class="color-swatch" style="background: #804000;"></div>
                 </div>
                 <div class="palette-row">
                     <div class="color-swatch" style="background: #ffffff;"></div>
@@ -230,20 +319,27 @@
                     <div class="color-swatch" style="background: #00ffff;"></div>
                     <div class="color-swatch" style="background: #0000ff;"></div>
                     <div class="color-swatch" style="background: #ff00ff;"></div>
+                    <div class="color-swatch" style="background: #ffff80;"></div>
+                    <div class="color-swatch" style="background: #00ff80;"></div>
+                    <div class="color-swatch" style="background: #80ffff;"></div>
+                    <div class="color-swatch" style="background: #8080ff;"></div>
+                    <div class="color-swatch" style="background: #ff8000;"></div>
+                    <div class="color-swatch" style="background: #ff8080;"></div>
                 </div>
             </div>
         </div>
 
+        <!-- 5. ステータスバー -->
         <div class="status-bar">
             <p class="status-field" style="margin: 0; padding: 2px 4px; font-size: 17px;">You can draw and save your artwork.</p>
         </div>
     </div>
 
 
-    <!-- 右側サイドバーエリア -->
+    <!-- 右側サイドバーエリア（縦に並ぶ場所） -->
     <div class="sidebar">
         
-        <!-- コンテンツ1 -->
+        <!-- コンテンツ1（イラスト表示枠を追加） -->
         <div class="window sidebar-window">
             <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
                 <div class="title-bar-text" style="color: white; font-weight: bold;">🔗 Contents 1</div>
@@ -258,11 +354,10 @@
                     <li><a href="https://harsh-hoverfly-c37.notion.site/FA-blender-164e5e2365cd80e2a5bbc89242e73e2e" target="_blank">趣味blender</a></li>
                 </ul>
 
-                <!-- 💡 本日のランダムgif枠（HTMLに直接画像リストを持たせる綺麗な設計） -->
+                <!-- 本日のランダムgif枠 -->
                 <p style="margin-top: 10px; margin-bottom: 4px; font-size: 13px;">本日のランダムgif：</p>
                 <div class="random-box">
-                    <img id="randomImage" src="" alt="本日のgif" 
-                         data-images="_0001-0250.gif,kahu.gif,kanisan0001-0200.gif,neko0001-0030.gif,orikya0001-0100.gif,rensyu33_001-0100.gif,tokiya1.gif,tokiya2.gif,tokiya3.gif,ymmt_all.gif">
+                    <img id="randomImage" src="" alt="本日のgif">
                 </div>
             </div>
         </div>
@@ -281,24 +376,47 @@
                 </ul>
             </div>
         </div>
+
     </div>
 
-    <!-- 最下部固定バー -->
-    <div class="window" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: #cbd0d4; border-radius: 0; border-top: 2.5px solid #fff !important;">
-        <div class="window-body" style="display: flex; justify-content: space-between; align-items: center; padding: 5px 12px; margin: 0;">
-            <span style="font-size: 12px; font-weight: bold; color: #000;">📟 WELCOME TO MY WEBSITE...</span>
-            <span style="font-size: 11px; color: #000; font-weight: bold;">since 2026</span>
+    <!-- 💡 最下部固定アクセスカウンター（フッターバー） -->
+    <div class="window" style="
+        position: fixed; 
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        z-index: 9999; 
+        background: #cbd0d4; 
+        border-radius: 0; 
+        box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+        border-top: 2.5px solid #fff !important; /* Windows95風の3D枠線 */
+    ">
+        <div class="window-body" style="
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 5px 12px; 
+            margin: 0;
+        ">
+            <!-- 左端：ウェルカムテキスト -->
+            <span style="font-size: 12px; font-weight: bold; color: #000; text-shadow: 1px 1px 0px #fff;">
+                📟 WELCOME TO MY WEBSITE...
+            </span>
+            <!-- 右端：since -->
+            <span style="font-size: 11px; color: #000; font-family: 'MS Pゴシック', sans-serif; font-weight: bold;">
+                since 2026
+            </span>
         </div>
     </div>
 
     <script>
-        // お絵描き機能のJavaScript
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
 
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
         ctx.lineCap = 'round';
@@ -307,48 +425,97 @@
         function getEventPos(e) {
             const rect = canvas.getBoundingClientRect();
             if (e.touches && e.touches.length > 0) {
-                return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+                return {
+                    x: e.touches[0].clientX - rect.left,
+                    y: e.touches[0].clientY - rect.top
+                };
             }
-            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
         }
 
-        function startDrawing(e) { isDrawing = true; ctx.beginPath(); const pos = getEventPos(e); ctx.moveTo(pos.x, pos.y); }
-        function draw(e) { if (!isDrawing) return; if (e.cancelable) e.preventDefault(); const pos = getEventPos(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
-        function stopDrawing() { isDrawing = false; }
+        function startDrawing(e) {
+            isDrawing = true;
+            ctx.beginPath();
+            const pos = getEventPos(e);
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            if (e.cancelable) e.preventDefault(); 
+            const pos = getEventPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
 
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseleave', stopDrawing);
+
         canvas.addEventListener('touchstart', startDrawing, { passive: false });
         canvas.addEventListener('touchmove', draw, { passive: false });
         canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchcancel', stopDrawing);
 
         document.getElementById('saveBtn').addEventListener('click', function() {
             const imgData = canvas.toDataURL('image/png');
             const newWindow = window.open();
-            newWindow.document.write(`<html><body><img src="${imgData}"></body></html>`);
+            newWindow.document.write(`
+                <html>
+                    <head>
+                        <title>paint-art.png</title>
+                        <style>
+                            body { margin: 0; background: #55aaaa; display: flex; justify-content: center; align-items: center; height: 100vh; }
+                            img { max-width: 100%; max-height: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); background: #fff; }
+                        </style>
+                    </head>
+                    <body>
+                        <img src="${imgData}" alt="画廊">
+                    </body>
+                </html>
+            `);
             newWindow.document.close();
         });
         
+        // 🎨 パレットの色をクリックしたときに描画色を変える処理
         document.querySelectorAll('.color-swatch').forEach(swatch => {
-            swatch.addEventListener('click', function() { ctx.strokeStyle = this.style.backgroundColor; });
+            swatch.addEventListener('click', function() {
+                const selectedColor = this.style.backgroundColor;
+                ctx.strokeStyle = selectedColor;
+            });
             swatch.style.cursor = 'pointer';
         });
 
-        // 💡 確実に外部連携して画像を表示させるシンプルな仕組み
+// ランダム画像表示スクリプト（相対パス版）
         window.addEventListener('DOMContentLoaded', () => {
-            const imgEl = document.getElementById('randomImage');
-            if (!imgEl) return;
+            const images = [
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/89e17f33-66ed-4adb-85fd-bd2c280aede6/%E3%82%BB%E3%83%95%E3%82%99%E3%83%B3%E3%82%BB%E3%82%99%E3%83%AB20001-0100.gif?table=block&id=39ee5e23-65cd-8006-b71a-f52c09d8749b&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=MnLD8147iKeLLUgc4biaKGrWPXB8InoGqEM-9P6IUG8",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/268b4ad6-330b-4f6e-a8d7-7e7bc6533427/%E3%82%BB%E3%83%95%E3%82%99%E3%83%B3%E3%82%BB%E3%82%99%E3%83%AB30001-0100.gif?table=block&id=39ee5e23-65cd-8017-9f1d-e5a64244a4bc&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=oloZGVWLANn56x0a2l4zrjt6D-KWbqcx7K8uRL7kXyQ",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/03f3e5aa-7854-4c7a-b1af-55e004d34873/%E3%82%BB%E3%83%95%E3%82%99%E3%83%B3%E3%82%BB%E3%82%99%E3%83%AB40001-0100.gif?table=block&id=39ee5e23-65cd-806e-a496-e829a80fe94b&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=MRqbEX8dubkl_TmzflQ78mm3p3oQPxkPaqMkwLQw2sU",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/9cba7f51-cd60-46c4-90c0-07a4493cecfb/rensyu33_001-0100.gif?table=block&id=39ee5e23-65cd-80a5-8607-f0bfb1e8791a&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=KkAi8MSk4-0qxVvPmIYJWWy6asCtKZX47telKMfXmV8",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/128132ce-6306-4b5f-ab70-6d7a61ef1540/%E8%9F%B9%E3%81%95%E3%82%930001-0200.gif?table=block&id=39ee5e23-65cd-80df-b605-dfb0602af659&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=E_rZvOGdIW8Ps0D31f0mUjqBxCH22io1diLo6JEgAU4",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://file.notion.so/f/f/bd896a29-9c54-4406-a4ab-06448db9f3b8/85d29e7b-ce37-4d6e-92b9-11ed68128793/njJlpUKSY5F8YSuW0Xkh1783513804-1783515515.gif?table=block&id=397e5e23-65cd-8068-b03a-ceee841bd281&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&expirationTimestamp=1784563200000&signature=zznETd2uKSmjG0sd8sjg9t1LhbXJPLm8koyKajdnRTg",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://harsh-hoverfly-c37.notion.site/image/attachment%3Ac8d2bb47-efef-4297-a364-d6c186d7c70c%3Aymmt_all_%E5%A4%A7.jpeg?table=block&id=397e5e23-65cd-8005-b960-f51483ec5f73&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&width=1020&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://harsh-hoverfly-c37.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbd896a29-9c54-4406-a4ab-06448db9f3b8%2Ff834c808-aa23-4d11-beba-c7b43f9207d4%2Fpekora3.png?table=block&id=164e5e23-65cd-80f9-be38-e46e4a738a4e&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&width=570&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl",
+                "https://raw.githubusercontent.com/Username-jp/image-stocker/main/https://harsh-hoverfly-c37.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbd896a29-9c54-4406-a4ab-06448db9f3b8%2F1bb84ea8-af69-4820-850e-d16a97fc1905%2Fpaswg0.png?table=block&id=164e5e23-65cd-804a-91c1-e808c1269479&spaceId=bd896a29-9c54-4406-a4ab-06448db9f3b8&width=570&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"
+            ];
             
-            // HTML内のリストを読み込んでバラバラにする
-            const list = imgEl.getAttribute('data-images').split(',');
-            const chosen = list[Math.floor(Math.random() * list.length)];
-            
-            // 最も安全なGitHub公開URL（GitHub Pages経由）を自動で作成して貼り付けます
-            const currentUrl = window.location.href.split('index.html')[0];
-            imgEl.src = currentUrl + chosen + '?t=' + new Date().getTime();
+            const randomIndex = Math.floor(Math.random() * images.length);
+            const targetImg = document.getElementById('randomImage');
+            if (targetImg) {
+                // ファイル名だけで直接読み込みます
+                targetImg.src = images[randomIndex] + '?t=' + new Date().getTime();
+            }
         });
+        
     </script>
 </body>
 </html>
