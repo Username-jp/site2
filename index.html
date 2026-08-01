@@ -42,7 +42,7 @@
             min-height: 500px;
         }
 
-        /* 左側メインエリア */
+        /* 左側メインエリア (Contents 2) */
         .main-content {
             flex: 1;
             padding: 15px 20px;
@@ -50,7 +50,7 @@
             border-right: 2px solid #000000;
         }
 
-        /* 右側サイドバー */
+        /* 右側サイドバー (Contents 1 & 3) */
         .sidebar {
             width: 220px;
             padding: 10px;
@@ -97,14 +97,13 @@
             position: absolute;
             top: 80px;
             right: 40px;
-            width: 320px; /* 300pxのキャンバス + 余白 */
+            width: 320px;
             background-color: #c0c0c0;
             border: 2px solid #000000;
             box-shadow: 4px 4px 0px #000;
             z-index: 1000;
         }
 
-        /* ウィンドウのタイトルバー（ここをドラッグで移動） */
         .paint-header {
             background-color: #000080;
             color: #ffffff;
@@ -125,7 +124,6 @@
             text-align: center;
         }
 
-        /* ツールバー（実効機能のみに整理） */
         .paint-tools {
             display: flex;
             gap: 6px;
@@ -142,7 +140,7 @@
             padding: 2px 6px;
         }
 
-        /* 300*300 のキャンバス */
+        /* 300*300 キャンバス */
         #paintCanvas {
             background-color: #ffffff;
             border: 1px solid #000000;
@@ -169,20 +167,23 @@
     <!-- メインフレーム構造 -->
     <div class="site-container">
 
-        <!-- 左側メインコンテンツ -->
+        <!-- 左側メインコンテンツ（Contents 2 を配置） -->
         <div class="main-content">
             <h2>The Main Menu</h2>
             <p>Welcome to chanmana.com</p>
             
             <div class="sidebar-window" style="margin-top: 20px;">
-                <h3>Contents 3</h3>
+                <h3>Contents 2</h3>
                 <div class="window-body">
-                    <p>ここにメインコンテンツや本文を記述します。</p>
+                    <ul>
+                        <li><a href="#" target="_blank">Twitter</a></li>
+                        <li><a href="#" target="_blank">Instagram</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <!-- 右側サイドバー -->
+        <!-- 右側サイドバー（Contents 1 & Contents 3 を配置） -->
         <div class="sidebar">
             <div class="sidebar-window">
                 <h3>Contents 1</h3>
@@ -195,12 +196,9 @@
             </div>
 
             <div class="sidebar-window">
-                <h3>Contents 2</h3>
+                <h3>Contents 3</h3>
                 <div class="window-body">
-                    <ul>
-                        <li><a href="#" target="_blank">Twitter</a></li>
-                        <li><a href="#" target="_blank">Instagram</a></li>
-                    </ul>
+                    <p>ここにメインコンテンツや本文を記述します。</p>
                 </div>
             </div>
         </div>
@@ -223,7 +221,6 @@
                 <button id="eraserBtn">消しゴム</button>
                 <button id="clearBtn">全消去</button>
             </div>
-            <!-- 300*300 サイズ -->
             <canvas id="paintCanvas" width="300" height="300"></canvas>
         </div>
     </div>
@@ -314,7 +311,7 @@
             if (!isDragging) return;
             paintWindow.style.left = (e.clientX - offsetX) + "px";
             paintWindow.style.top = (e.clientY - offsetY) + "px";
-            paintWindow.style.right = "auto"; /* ドラッグ開始時にright指定を解除 */
+            paintWindow.style.right = "auto";
         });
 
         document.addEventListener("mouseup", () => {
