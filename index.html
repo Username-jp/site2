@@ -8,201 +8,94 @@
     <!-- Windows 95/98風のデザインシステム -->
     <link rel="stylesheet" href="https://unpkg.com/95.css">
     
-    <style>
-        /* 画面全体を左右に並べる設定 */
-        body {
-            background-color: #55aaaa;
-            padding: 20px;
-            margin: 0;
-            font-family: "MS Sans Serif", "MS Pゴシック", sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 20px; /* 左のペイントと右のサイドバーのすき間 */
-            flex-wrap: wrap; /* 画面が狭いスマホの時は自動で縦並びにする */
-            padding-bottom: 60px; /* カウンターバーに被らないように余白を作る */
-        }
+<style>
+    /* 全体設定：鮮やかなスカイブルー背景と標準フォント */
+    body {
+        background-color: #5bb3f0; /* 画像のような鮮やかな青 */
+        color: #000000;
+        font-family: "Times New Roman", Times, serif;
+        margin: 0;
+        padding: 10px;
+    }
 
-        /* 左側：ペイントのウィンドウ全体 */
-        .window.paint-window {
-            width: 100%;
-            max-width: 700px;
-            display: flex;
-            flex-direction: column;
-            background: #cbd0d4;
-            border: none !important;
-            box-shadow: 1px 1px 0px #0a0a0a, 
-                        -1px -1px 0px #fff, 
-                        2px 2px 0px #808080, 
-                        -2px -2px 0px #cbd0d4, 
-                        3px 3px 6px rgba(0,0,0,0.3);
-        }
+    /* リンクのカラー（当時の王道ブルー＆パープル） */
+    a {
+        color: #0000ee;
+        text-decoration: underline;
+    }
+    a:visited {
+        color: #551a8b;
+    }
 
-        /* メニューバー */
-        .menu-bar {
-            display: flex;
-            background: #cbd0d4;
-            padding: 2px 6px;
-            gap: 12px;
-            border-bottom: 1px solid #808080;
-        }
+    /* ヘッダーエリア */
+    header {
+        margin-bottom: 10px;
+        color: #000;
+    }
+    header h1 {
+        font-size: 28px;
+        margin: 0 0 5px 0;
+        font-weight: bold;
+    }
 
-        /* メインエリア */
-        .main-content {
-            display: flex;
-            background: #cbd0d4;
-            padding: 3px;
-            gap: 2px;
-        }
+    /* 全体レイアウト（左サイドバー ＋ 右メインコンテンツ） */
+    .container {
+        display: flex;
+        gap: 10px;
+        background-color: #ffffff; /* 白いメインエリア */
+        border: 2px solid #000000;  /* くっきりした黒枠線 */
+        padding: 5px;
+        min-height: 500px;
+    }
 
-        /* 左側ツールボックス */
-        .toolbox {
-            width: 56px; 
-            background: #cbd0d4;
-            padding: 2px;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
-        }
+    /* 左側サイドバー（天気やランダム画像が入る場所） */
+    .sidebar {
+        width: 210px;
+        border-right: 2px solid #000000; /* サイドバーを区切る縦線 */
+        padding-right: 10px;
+        flex-shrink: 0;
+    }
 
-        /* 16個のボタンをきれいな2列グリッドにする */
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 24px);
-            grid-auto-rows: 22px;
-            gap: 1px;
-        }
+    .sidebar-window {
+        margin-bottom: 15px;
+    }
 
-        .tool-btn {
-            background: #cbd0d4;
-            border: 1.5px solid;
-            border-color: #fff #808080 #808080 #fff;
-            padding: 0;
-            cursor: pointer;
-        }
+    /* 右側メインエリア */
+    .main-content {
+        flex: 1;
+        padding-left: 5px;
+    }
 
-        .tool-btn:active, .tool-btn.selected {
-            border-color: #808080 #fff #fff #808080;
-            background-color: #e4e4e4;
-        }
+    /* ランダム画像エリア（高さを最大200pxに制限・歪みなし） */
+    .random-box {
+        background: #ffffff;
+        border: 1px solid #808080;
+        padding: 2px;
+        margin-top: 6px;
+        text-align: center;
+        overflow: hidden;
+        max-height: 200px;
+    }
+    
+    .random-box img {
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: 200px;
+        display: block;
+        margin: 0 auto;
+        object-fit: contain;
+        border: none;
+    }
 
-        /* キャンバスを囲む枠（スクロール可能） */
-        .canvas-container {
-            flex-grow: 1;
-            max-width: 100%;       
-            height: 450px;         
-            background: #cbd0d4 !important;
-            box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
-            overflow: scroll;      
-            display: inline-block; 
-        }
+    /* フッターエリア */
+    footer {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #000000;
+    }
+</style>
 
-        /* キャンバス本体 */
-        .paint-canvas {
-            background: #ffffff;
-            display: block; 
-            box-shadow: inset -1px -1px #fff, 
-                        inset 1px 1px #0a0a0a, 
-                        inset -2px -2px #dfdfdf, 
-                        inset 2px 2px #808080;
-            flex-shrink: 0;        
-        }
-
-        /* カラーボックス */
-        .color-box {
-            background: #cbd0d4;
-            padding: 4px;
-            border-top: 1px solid #808080;
-            display: flex;
-            align-items: center;
-        }
-        .color-palette {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            margin-left: 5px;
-        }
-        .palette-row {
-            display: flex;
-            gap: 1px;
-        }
-        .color-swatch {
-            width: 13px;
-            height: 13px;
-            box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
-        }
-
-        /* 右側サイドバー全体 */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            max-width: 240px;
-            min-width: 200px;
-        }
-
-        /* サイドバー内の各ウィンドウ */
-        .window.sidebar-window {
-            width: 100%;
-            background: #cbd0d4;
-            border: none !important;
-            box-shadow: 1px 1px 0px #0a0a0a, 
-                        -1px -1px 0px #fff, 
-                        2px 2px 0px #808080, 
-                        -2px -2px 0px #cbd0d4, 
-                        3px 3px 6px rgba(0,0,0,0.3);
-        }
-
-        .sidebar-window .window-body {
-            padding: 10;
-            margin: 10;
-        }
-
-        /* リンクのリストスタイル */
-        .link-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .link-list a {
-            color: #0000ee;
-            text-decoration: underline;
-            font-size: 14px;
-        }
-        /* 画像表示エリア */
-        .random-box {
-            background: #ffffff;
-            box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff;
-            padding: 0;
-            margin-top: 6px;
-            text-align: center;
-            overflow: hidden;
-            
-            /* 💡 枠の高さ自体を最大200pxに制限する */
-            max-height: 200px; 
-            width: 100%;
-        }
-        .random-box img {
-            /* 💡 縦横比を絶対に維持したまま、高さを最大200px以内に収める */
-            width: auto;
-            max-width: 100%;
-            height: auto;
-            max-height: 200px; 
-            
-            display: block;
-            border: none;
-            margin: 0 auto;
-            
-            /* 不要な変形・ズーム命令を完全リセット */
-            object-fit: contain;
-            transform: none;
-        }
-    </style>
 </head>
 <body>
 
