@@ -23,32 +23,44 @@
             color: #551a8b;
         }
 
-        /* ヘッダー */
+        /* 💡 ヘッダー（タイトルの左右に画像を配置） */
         header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* 画像とタイトルの間の隙間 */
         }
         header h1 {
             font-size: 32px;
             font-weight: bold;
-            margin: 0 0 5px 0;
+            margin: 0;
+        }
+        /* ヘッダー画像のサイズ調整 */
+        header img {
+            height: 40px; /* お好みの高さに調整してください */
+            width: auto;
         }
 
-        /* 外枠フレーム（全体を囲む黒枠） */
+        /* 💡 外枠フレーム（画面端から引っ込めて中央寄せ） */
         .site-container {
             display: flex;
             background-color: #ffffff;
             border: 2px solid #000000;
             min-height: 500px;
+            
+            max-width: 900px; /* 幅を制限して端から引っ込める */
+            margin: 0 auto;  /* 左右均等に配置 */
         }
 
-        /* 👈 左側サイドバー（仕切り枠を左側へ移動） */
+        /* 👈 左側サイドバー（仕切られたエリア） */
         .sidebar {
             width: 220px;
             padding: 10px;
             box-sizing: border-box;
             flex-shrink: 0;
-            border-right: 2px solid #000000; /* 右側に縦の区切り線 */
+            border-right: 2px solid #000000;
         }
 
         .sidebar-window {
@@ -151,7 +163,8 @@
 
         /* フッター */
         footer {
-            margin-top: 10px;
+            margin-top: 15px;
+            text-align: center;
             font-size: 12px;
             color: #000000;
         }
@@ -159,9 +172,15 @@
 </head>
 <body>
 
-    <!-- ヘッダー -->
+    <!-- 💡 ヘッダー（タイトルの左右に画像配置） -->
     <header>
+        <!-- 左側画像（※画像名はお手持ちのGIF等に変更してください） -->
+        <img src="header_left.gif" alt="左アイコン">
+        
         <h1>chanmana.com</h1>
+        
+        <!-- 右側画像（※画像名はお手持ちのGIF等に変更してください） -->
+        <img src="header_right.gif" alt="右アイコン">
     </header>
 
     <!-- メインフレーム構造 -->
@@ -198,11 +217,10 @@
             <div class="sidebar-window" style="margin-top: 20px;">
                 <h3>Contents 3</h3>
                 <div class="window-body">
-                    <p>ここにメインコンテンツや本文を記述します。
+                    <p>ここにメインコンテンツや本文を記述します。<br>
+                    あ<br>
+                    （ ´∀｀）ｵﾏｴﾓﾅｰ<br>
                     あ
-                    （　´∀｀）ｵﾏｴﾓﾅｰ
-                    あ
-                    
                     </p>
                 </div>
             </div>
