@@ -3,328 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>チャンマナ</title>
-    
-    <!-- Windows 95/98風のデザインシステム -->
-    <link rel="stylesheet" href="https://unpkg.com/95.css">
-    
-<style>
-    /* 全体設定：鮮やかなスカイブルー背景と標準フォント */
-    body {
-        background-color: #5bb3f0; /* 画像のような鮮やかな青 */
-        color: #000000;
-        font-family: "Times New Roman", Times, serif;
-        margin: 0;
-        padding: 10px;
-    }
+    <title>chanmana.com</title>
+    <style>
+        /* 90年代レトロWebスタイルの全体設定 */
+        body {
+            background-color: #5bb3f0; /* スカイブルー背景 */
+            color: #000000;
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 10px;
+        }
 
-    /* リンクのカラー（当時の王道ブルー＆パープル） */
-    a {
-        color: #0000ee;
-        text-decoration: underline;
-    }
-    a:visited {
-        color: #551a8b;
-    }
+        a {
+            color: #0000ee;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #551a8b;
+        }
 
-    /* ヘッダーエリア */
-    header {
-        margin-bottom: 10px;
-        color: #000;
-    }
-    header h1 {
-        font-size: 28px;
-        margin: 0 0 5px 0;
-        font-weight: bold;
-    }
+        /* ヘッダーエリア */
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
 
-    /* 全体レイアウト（左サイドバー ＋ 右メインコンテンツ） */
-    .container {
-        display: flex;
-        gap: 10px;
-        background-color: #ffffff; /* 白いメインエリア */
-        border: 2px solid #000000;  /* くっきりした黒枠線 */
-        padding: 5px;
-        min-height: 500px;
-    }
+        /* 外枠フレーム（全体を囲む黒枠） */
+        .site-container {
+            display: flex;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            min-height: 500px;
+        }
 
-    /* 左側サイドバー（天気やランダム画像が入る場所） */
-    .sidebar {
-        width: 210px;
-        border-right: 2px solid #000000; /* サイドバーを区切る縦線 */
-        padding-right: 10px;
-        flex-shrink: 0;
-    }
+        /* 左側フレーム風サイドバー */
+        .sidebar {
+            width: 220px;
+            border-right: 2px solid #000000;
+            padding: 10px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
 
-    .sidebar-window {
-        margin-bottom: 15px;
-    }
+        .sidebar-window {
+            margin-bottom: 20px;
+        }
 
-    /* 右側メインエリア */
-    .main-content {
-        flex: 1;
-        padding-left: 5px;
-    }
+        .sidebar-window h3 {
+            font-size: 14px;
+            margin: 0 0 8px 0;
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+        }
 
-    /* ランダム画像エリア（高さを最大200pxに制限・歪みなし） */
-    .random-box {
-        background: #ffffff;
-        border: 1px solid #808080;
-        padding: 2px;
-        margin-top: 6px;
-        text-align: center;
-        overflow: hidden;
-        max-height: 200px;
-    }
-    
-    .random-box img {
-        width: auto;
-        max-width: 100%;
-        height: auto;
-        max-height: 200px;
-        display: block;
-        margin: 0 auto;
-        object-fit: contain;
-        border: none;
-    }
+        /* 右側メインエリア */
+        .main-content {
+            flex: 1;
+            padding: 15px 20px;
+            box-sizing: border-box;
+        }
 
-    /* フッターエリア */
-    footer {
-        margin-top: 10px;
-        font-size: 12px;
-        color: #000000;
-    }
-</style>
+        /* ランダム画像エリア（高さ最大200px・比率維持・切り取りなし） */
+        .random-box {
+            background: #ffffff;
+            border: 1px solid #808080;
+            padding: 2px;
+            margin-top: 6px;
+            text-align: center;
+            overflow: hidden;
+            max-height: 200px;
+            width: 100%;
+        }
 
+        .random-box img {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            max-height: 200px;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain;
+            border: none;
+        }
+
+        /* フッターエリア */
+        footer {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #000000;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- 左側：ペイントウィンドウ -->
-    <div class="window paint-window">
-        <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0); padding: 3px 2px 3px 3px;">
-            <marquee class="title-bar-text" scrollamount="5" style="color: white; font-weight: bold; font-size: 17px; display: block; margin: 0; padding-right: 20px;">
-                🎨  You can draw and save your artwork. お絵描きして保存できます。
-            </marquee>
+    <!-- ヘッダー -->
+    <header>
+        <h1>chanmana.com</h1>
+    </header>
+
+    <!-- メインフレーム構造 -->
+    <div class="site-container">
+
+        <!-- 左サイドバー -->
+        <div class="sidebar">
+            <div class="sidebar-window">
+                <h3>Contents 1</h3>
+                <div class="window-body">
+                    <p>本日のランダムgif：</p>
+                    <div class="random-box">
+                        <img id="random-gif" src="" alt="ランダムGIF">
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-window">
+                <h3>Contents 2</h3>
+                <div class="window-body">
+                    <ul>
+                        <li><a href="#" target="_blank">Twitter</a></li>
+                        <li><a href="#" target="_blank">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="menu-bar">
-            <span id="saveBtn" style="cursor: pointer; font-size: 17px; color: #000; user-select: none;">💾Save</span>
-        </div>
-
+        <!-- 右メインコンテンツ -->
         <div class="main-content">
-            <div class="toolbox">
-                <div class="tool-grid">
-                    <button class="tool-btn" title="自由選択">✂</button>
-                    <button class="tool-btn" title="選択">⚿</button>
-                    <button class="tool-btn" title="消しゴム">▰</button>
-                    <button class="tool-btn" title="塗りつぶし">🪣</button>
-                    <button class="tool-btn" title="色の選択">🧪</button>
-                    <button class="tool-btn" title="虫眼鏡">🔍</button>
-                    <button class="tool-btn" title="鉛筆">✎</button>
-                    <button class="tool-btn" title="ブラシ">🖌</button>
-                    <button class="tool-btn" title="エアブラシ">░</button>
-                    <button class="tool-btn" title="テキスト">A</button>
-                    <button class="tool-btn" title="直線">╱</button>
-                    <button class="tool-btn" title="曲線">～</button>
-                    <button class="tool-btn" title="長方形">▭</button>
-                    <button class="tool-btn" title="多角形">多角</button>
-                    <button class="tool-btn" title="楕円">◯</button>
-                    <button class="tool-btn" title="角丸長方形">▢</button>
-                </div>
-            </div>
-
-            <div class="canvas-container">
-                <canvas id="paintCanvas" class="paint-canvas" width="800" height="450"></canvas>
-            </div>
-        </div>
-
-        <div class="color-box">
-            <div class="color-palette">
-                <div class="palette-row">
-                    <div class="color-swatch" style="background: #000000;"></div>
-                    <div class="color-swatch" style="background: #808080;"></div>
-                    <div class="color-swatch" style="background: #800000;"></div>
-                    <div class="color-swatch" style="background: #808000;"></div>
-                    <div class="color-swatch" style="background: #008000;"></div>
-                    <div class="color-swatch" style="background: #008080;"></div>
-                    <div class="color-swatch" style="background: #000080;"></div>
-                    <div class="color-swatch" style="background: #800080;"></div>
-                </div>
-                <div class="palette-row">
-                    <div class="color-swatch" style="background: #ffffff;"></div>
-                    <div class="color-swatch" style="background: #c0c0c0;"></div>
-                    <div class="color-swatch" style="background: #ff0000;"></div>
-                    <div class="color-swatch" style="background: #ffff00;"></div>
-                    <div class="color-swatch" style="background: #00ff00;"></div>
-                    <div class="color-swatch" style="background: #00ffff;"></div>
-                    <div class="color-swatch" style="background: #0000ff;"></div>
-                    <div class="color-swatch" style="background: #ff00ff;"></div>
+            <h2>The Main Menu</h2>
+            <p>Welcome to chanmana.com</p>
+            
+            <div class="sidebar-window" style="margin-top: 20px;">
+                <h3>Contents 3</h3>
+                <div class="window-body">
+                    <p>ここにメインコンテンツや本文を記述します。</p>
                 </div>
             </div>
         </div>
 
-        <div class="status-bar">
-            <p class="status-field" style="margin: 0; padding: 2px 4px; font-size: 17px;">You can draw and save your artwork.</p>
-        </div>
     </div>
 
+    <!-- フッター -->
+    <footer>
+        <p>© chanmana.com All Rights Reserved.</p>
+    </footer>
 
-    <!-- 右側サイドバーエリア -->
-    <div class="sidebar">
-        
-        <!-- コンテンツ1 -->
-        <div class="window sidebar-window">
-            <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
-                <div class="title-bar-text" style="color: white; font-weight: bold;">🔗 Contents 1</div>
-            </div>
-            <div class="window-body">
-                <p style="margin-top: 0; font-size: 13px;">個人 / 趣味リンク：</p>
-                <ul class="link-list" style="margin-bottom: 15px;">
-                    <li><a href="https://x.com/____mana" target="_blank">Twitter</a></li>
-                    <li><a href="https://www.instagram.com/cha_n_ma_na" target="_blank">Instagram</a></li>
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/Picture-OC-369e5e2365cd800c81f6deed16857eb9" target="_blank">趣味OC</a></li>
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/Picture-2-9179bfb10aa6468981f24580557e928a" target="_blank">趣味イラスト</a></li>
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/FA-blender-164e5e2365cd80e2a5bbc89242e73e2e" target="_blank">趣味blender</a></li>
-                </ul>
-
-<!-- 💡 自分の複数画像をランダムに表示させる枠 -->
-<p style="margin-top: 10px; margin-bottom: 4px; font-size: 13px;">本日のランダムgif：</p>
-<div class="random-box">
-    <!-- 初期状態は空にして、下のスクリプトでURLを流し込みます -->
-    <img id="randomGifImage" src="" alt="本日のgif" width="200" height="200">
-</div>
-            </div>
-        </div>
-        
-        <!-- コンテンツ2 -->
-        <div class="window sidebar-window">
-            <div class="title-bar" style="background: linear-gradient(90deg, #000080, #1084d0);">
-                <div class="title-bar-text" style="color: white; font-weight: bold;">📁 Contents 2</div>
-            </div>
-            <div class="window-body">
-                <p style="margin-top: 0; font-size: 13px;">仕事リンク：</p>
-                <ul class="link-list">
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/COLOR-for-MV-PV-3909dcbb61b9444a9b063763fbcb84f9" target="_blank">色彩設計 MV / PV</a></li>
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/COLOR-for-TVseries-Movie-290e5e2365cd80598c28cf53d796baa1" target="_blank">色彩設計 TV / 映画</a></li>
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/2D-WORKS-for-ANIME-24fe5e2365cd80a9b112e34e65098bcb#" target="_blank">2Dワークス</a></li>
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/Cloth-and-fashion-things-390a36d213144d209482442d6279e251" target="_blank">洋服関連</a></li>
-                    <li><a href="https://harsh-hoverfly-c37.notion.site/blender-e57fc4c4e8c2403f9229d05fe29e29f2" target="_blank">blender関連</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- 最下部固定バー -->
-    <div class="window" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; background: #cbd0d4; border-radius: 0; border-top: 2.5px solid #fff !important;">
-        <div class="window-body" style="display: flex; justify-content: space-between; align-items: center; padding: 5px 12px; margin: 0;">
-            <span style="font-size: 12px; font-weight: bold; color: #000;">📟 WELCOME TO MY WEBSITE...</span>
-            <span style="font-size: 11px; color: #000; font-weight: bold;">since 2026</span>
-        </div>
-    </div>
-
-
+    <!-- ランダム画像用JavaScript（処理内容は維持） -->
     <script>
-        // お絵描き機能のJavaScript
-        const canvas = document.getElementById('paintCanvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-
-        // 初期設定：背景を白にする
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // 線のスタイル設定
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 1;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-
-        // マウス・タッチの座標計算
-        function getEventPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            if (e.touches && e.touches.length > 0) {
-                return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-            }
-            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        }
-
-        // 描画開始
-        function startDrawing(e) { 
-            isDrawing = true; 
-            ctx.beginPath(); 
-            const pos = getEventPos(e); 
-            ctx.moveTo(pos.x, pos.y); 
-        }
-        
-        // 描画中
-        function draw(e) { 
-            if (!isDrawing) return; 
-            if (e.cancelable) e.preventDefault(); 
-            const pos = getEventPos(e); 
-            ctx.lineTo(pos.x, pos.y); 
-            ctx.stroke(); 
-        }
-        
-        // 描画終了
-        function stopDrawing() { 
-            isDrawing = false; 
-        }
-
-        // マウスイベント登録
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseleave', stopDrawing);
-        
-        // タッチイベント登録（スマホ対応）
-        canvas.addEventListener('touchstart', startDrawing, { passive: false });
-        canvas.addEventListener('touchmove', draw, { passive: false });
-        canvas.addEventListener('touchend', stopDrawing);
-
-        // 💾保存ボタンの動作（PNG画像として新規タブで開く）
-        document.getElementById('saveBtn').addEventListener('click', function() {
-            const imgData = canvas.toDataURL('image/png');
-            const newWindow = window.open();
-            newWindow.document.write(`<html><body><img src="${imgData}"></body></html>`);
-            newWindow.document.close();
-        });
-        
-        // カラーパレットの切り替え設定
-        document.querySelectorAll('.color-swatch').forEach(swatch => {
-            swatch.addEventListener('click', function() { 
-                ctx.strokeStyle = this.style.backgroundColor; 
-            });
-            swatch.style.cursor = 'pointer';
-        });
-
-        // 💡 以前バグの原因になっていたランダム画像用の古いJavaScript命令は完全に削除しました。
-    // 💡 自分のリポジトリ(site2)の複数画像をランダム表示する処理
-        window.addEventListener('DOMContentLoaded', () => {
-            const imgElement = document.getElementById('randomGifImage');
-            if (!imgElement) return;
-
-            // 【重要】ここにランダムで流したい画像ファイル名をすべてカンマ(,)区切りで入れてください
-            // 例として今回教えていただいたファイル名を入れています。他にあれば追加してください。
-            const imageList = [
-                "7sel3_1.gif",
-                "7sel3_2.gif",
-                "ymmt_all.gif",
-            "7sel3_3.gif",
-            "kahu.gif",
-            "kani3.gif",
-            "neko0001-0030.gif",
-            "orikya0001-0100.gif",
-            "rensyu33_001-0100.gif"
-            ];
-
-            // ランダムに1枚選出
-            const randomIndex = Math.floor(Math.random() * imageList.length);
-            const selectedImage = imageList[randomIndex];
-
-            // GitHub Pagesの正しい公開URLを組み立てて画像タグに挿入（キャッシュ対策付き）
-            imgElement.src = `https://Username-jp.github.io/site2/${selectedImage}?t=${new Date().getTime()}`;
-        });
+        const images = [
+            "7sel3_1.gif",
+            "7sel3_2.gif",
+            "7sel3_3.gif"
+        ];
+        const randomIndex = Math.floor(Math.random() * images.length);
+        document.getElementById("random-gif").src = images[randomIndex];
     </script>
 </body>
 </html>
