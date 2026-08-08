@@ -23,38 +23,36 @@
             color: #551a8b;
         }
 
-        /* 💡 ヘッダー（タイトルの左右に画像を配置） */
+        /* ヘッダー */
         header {
             text-align: center;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px; /* 画像とタイトルの間の隙間 */
+            gap: 15px;
         }
         header h1 {
             font-size: 32px;
             font-weight: bold;
             margin: 0;
         }
-        /* ヘッダー画像のサイズ調整 */
         header img {
-            height: 40px; /* お好みの高さに調整してください */
+            height: 40px;
             width: auto;
         }
 
-        /* 💡 外枠フレーム（画面端から引っ込めて中央寄せ） */
+        /* 外枠フレーム（中央寄せ） */
         .site-container {
             display: flex;
             background-color: #ffffff;
             border: 2px solid #000000;
             min-height: 500px;
-            
-            max-width: 900px; /* 幅を制限して端から引っ込める */
-            margin: 0 auto;  /* 左右均等に配置 */
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        /* 👈 左側サイドバー（仕切られたエリア） */
+        /* 👈 左側サイドバー */
         .sidebar {
             width: 220px;
             padding: 10px;
@@ -81,7 +79,7 @@
             box-sizing: border-box;
         }
 
-        /* ランダム画像エリア（高さ最大200px・比率維持・切らない） */
+        /* ランダム画像エリア */
         .random-box {
             background: #ffffff;
             border: 1px solid #808080;
@@ -104,63 +102,6 @@
             border: none;
         }
 
-        /* 🎨 可動式（ドラッグ可能）ペイントウィンドウ */
-        .paint-window {
-            position: absolute;
-            top: 80px;
-            right: 40px;
-            width: 320px;
-            background-color: #c0c0c0;
-            border: 2px solid #000000;
-            box-shadow: 4px 4px 0px #000;
-            z-index: 1000;
-        }
-
-        .paint-header {
-            background-color: #000080;
-            color: #ffffff;
-            padding: 4px 8px;
-            font-size: 14px;
-            font-weight: bold;
-            font-family: sans-serif;
-            cursor: move;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-        }
-
-        .paint-body {
-            padding: 8px;
-            background-color: #c0c0c0;
-            text-align: center;
-        }
-
-        .paint-tools {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 8px;
-            font-family: sans-serif;
-            font-size: 12px;
-        }
-
-        .paint-tools button {
-            font-size: 12px;
-            cursor: pointer;
-            padding: 2px 6px;
-        }
-
-        /* 300*300 キャンバス */
-        #paintCanvas {
-            background-color: #ffffff;
-            border: 1px solid #000000;
-            cursor: crosshair;
-            display: block;
-            margin: 0 auto;
-        }
-
         /* フッター */
         footer {
             margin-top: 15px;
@@ -172,21 +113,17 @@
 </head>
 <body>
 
-    <!-- 💡 ヘッダー（タイトルの左右に画像配置） -->
+    <!-- ヘッダー -->
     <header>
-        <!-- 左側画像（※画像名はお手持ちのGIF等に変更してください） -->
-        <img src="header_left.gif" alt="左アイコン">
-        
+        <img src="header_left.gif" alt="" onerror="this.style.display='none'">
         <h1>chanmana.com</h1>
-        
-        <!-- 右側画像（※画像名はお手持ちのGIF等に変更してください） -->
-        <img src="header_right.gif" alt="右アイコン">
+        <img src="header_right.gif" alt="" onerror="this.style.display='none'">
     </header>
 
     <!-- メインフレーム構造 -->
     <div class="site-container">
 
-        <!-- 👈 左側サイドバー（仕切られたエリア） -->
+        <!-- 👈 左側サイドバー -->
         <div class="sidebar">
             <div class="sidebar-window">
                 <h3>Contents 1</h3>
@@ -202,6 +139,7 @@
                 <h3>Contents 2</h3>
                 <div class="window-body">
                     <ul>
+                        <li><a href="color_rensyu.html">色の考察練習ツール</a></li>
                         <li><a href="#" target="_blank">Twitter</a></li>
                         <li><a href="#" target="_blank">Instagram</a></li>
                     </ul>
@@ -228,33 +166,13 @@
 
     </div>
 
-    <!-- 🎨 移動できるペイントウィンドウ (300*300) -->
-    <div class="paint-window" id="paintWindow">
-        <div class="paint-header" id="paintHeader">
-            <span>Paint.exe</span>
-        </div>
-        <div class="paint-body">
-            <div class="paint-tools">
-                <input type="color" id="colorPicker" value="#000000">
-                <select id="lineWidth">
-                    <option value="2">細</option>
-                    <option value="5" selected>中</option>
-                    <option value="10">太</option>
-                </select>
-                <button id="eraserBtn">消しゴム</button>
-                <button id="clearBtn">全消去</button>
-            </div>
-            <canvas id="paintCanvas" width="300" height="300"></canvas>
-        </div>
-    </div>
-
     <!-- フッター -->
     <footer>
         <p>© chanmana.com All Rights Reserved.</p>
     </footer>
 
     <script>
-        /* 1. ランダム画像処理 */
+        /* ランダム画像処理 */
         const images = [
             "7sel3_1.gif",
             "7sel3_2.gif",
@@ -262,84 +180,6 @@
         ];
         const randomIndex = Math.floor(Math.random() * images.length);
         document.getElementById("random-gif").src = images[randomIndex];
-
-        /* 2. ペイント機能 */
-        const canvas = document.getElementById("paintCanvas");
-        const ctx = canvas.getContext("2d");
-        const colorPicker = document.getElementById("colorPicker");
-        const lineWidth = document.getElementById("lineWidth");
-        const eraserBtn = document.getElementById("eraserBtn");
-        const clearBtn = document.getElementById("clearBtn");
-
-        let isDrawing = false;
-        let isEraser = false;
-
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-
-        function startDrawing(e) {
-            isDrawing = true;
-            draw(e);
-        }
-
-        function stopDrawing() {
-            isDrawing = false;
-            ctx.beginPath();
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            ctx.lineWidth = lineWidth.value;
-            ctx.strokeStyle = isEraser ? "#ffffff" : colorPicker.value;
-
-            ctx.lineTo(x, y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-
-        canvas.addEventListener("mousedown", startDrawing);
-        canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseleave", stopDrawing);
-
-        eraserBtn.addEventListener("click", () => {
-            isEraser = !isEraser;
-            eraserBtn.style.background = isEraser ? "#aaa" : "";
-        });
-
-        clearBtn.addEventListener("click", () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        });
-
-        /* 3. ウィンドウのドラッグ移動機能 */
-        const paintWindow = document.getElementById("paintWindow");
-        const paintHeader = document.getElementById("paintHeader");
-
-        let isDragging = false;
-        let offsetX = 0;
-        let offsetY = 0;
-
-        paintHeader.addEventListener("mousedown", (e) => {
-            isDragging = true;
-            offsetX = e.clientX - paintWindow.offsetLeft;
-            offsetY = e.clientY - paintWindow.offsetTop;
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            if (!isDragging) return;
-            paintWindow.style.left = (e.clientX - offsetX) + "px";
-            paintWindow.style.top = (e.clientY - offsetY) + "px";
-            paintWindow.style.right = "auto";
-        });
-
-        document.addEventListener("mouseup", () => {
-            isDragging = false;
-        });
     </script>
 </body>
 </html>
