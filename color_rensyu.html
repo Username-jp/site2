@@ -66,7 +66,7 @@
             background: #cccccc;
             border: 1px solid #000000;
             width: 100%;
-            height: 440px;
+            height: 480px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -121,21 +121,29 @@
             align-items: flex-start;
         }
 
-        /* 4×4 グリッド */
+        /* 9×16 グリッド (標準720×1280比率・表示サイズ 270px × 480px) */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            width: 420px;
-            height: 420px;
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(16, 1fr);
+            width: 270px;
+            height: 480px;
             background-color: #d8d8d8;
+            border: 1px solid #000000;
             flex-shrink: 0;
         }
 
         .grid-cell {
             background-color: #d8d8d8;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
             cursor: pointer;
             outline: none !important;
+        }
+
+        .grid-cell.selected {
+            outline: 2px solid #000000 !important;
+            z-index: 2;
         }
 
         /* 🎨 カラーパレットエリア */
@@ -227,7 +235,7 @@
 
     <div class="site-container">
 
-        <!-- 👈 左側：参照画像エリア（ジブリ作品 ＋ 名画） -->
+        <!-- 👈 左側：参照画像エリア -->
         <div class="sidebar">
             <div class="window-title">参照画像</div>
             
@@ -241,18 +249,20 @@
             </div>
 
             <div class="credit-info">
-                <div><span id="image-counter">1 / 23</span>: <strong id="image-caption">-</strong></div>
+                <div><span id="image-counter">1 / 8</span>: <strong id="image-caption">-</strong></div>
                 <div>引用元: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">-</a></div>
             </div>
         </div>
 
         <!-- 👉 右側メインエリア -->
         <div class="main-content">
-            <div class="window-title" style="width: 100%;">4×4 色彩単純化グリッド</div>
+            <div class="window-title" style="width: 100%;">9×16 色彩単純化グリッド (標準: 720×1280px比率)</div>
 
             <div class="workspace">
+                <!-- 9×16 グリッド -->
                 <div class="grid-container" id="gridContainer"></div>
 
+                <!-- 右：カラーパレット類 -->
                 <div class="palette-panel">
                     <div style="font-weight: bold; font-size: 11px;">カラーパレット</div>
                     
@@ -310,69 +320,47 @@
     </footer>
 
     <script>
-        /* 1. 参照画像データ（ジブリ作品場面写真 ＋ パブリックドメイン名画） */
+        /* 1. 参照画像リスト (プロキシ経由で直リンクブロックを回避) */
         const sampleImages = [
-            // スタジオジブリ作品
             {
                 title: "『思い出のマーニー』",
-                url: "https://www.ghibli.jp/images/marnie018.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/marnie018.jpg",
                 source: "https://www.ghibli.jp/works/marnie/#frame"
             },
             {
                 title: "『かぐや姫の物語』",
-                url: "https://www.ghibli.jp/images/kaguyahime024.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/kaguyahime024.jpg",
                 source: "https://www.ghibli.jp/works/kaguyahime/#frame"
             },
             {
                 title: "『風立ちぬ』",
-                url: "https://www.ghibli.jp/images/kazetachinu024.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/kazetachinu024.jpg",
                 source: "https://www.ghibli.jp/works/kazetachinu/#frame"
             },
             {
                 title: "『コクリコ坂から』",
-                url: "https://www.ghibli.jp/images/kokurikozaka022.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/kokurikozaka022.jpg",
                 source: "https://www.ghibli.jp/works/kokurikozaka/#frame"
             },
             {
                 title: "『借りぐらしのアリエッティ』",
-                url: "https://www.ghibli.jp/images/karigurashi022.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/karigurashi022.jpg",
                 source: "https://www.ghibli.jp/works/karigurashi/#frame"
             },
             {
                 title: "『崖の上のポニョ』",
-                url: "https://www.ghibli.jp/images/ponyo012.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/ponyo012.jpg",
                 source: "https://www.ghibli.jp/works/ponyo/#frame"
             },
             {
                 title: "『ゲド戦記』",
-                url: "https://www.ghibli.jp/images/ged009.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/ged009.jpg",
                 source: "https://www.ghibli.jp/works/ged/#frame"
             },
             {
                 title: "『千と千尋の神隠し』",
-                url: "https://www.ghibli.jp/images/chihiro043.jpg",
+                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/chihiro043.jpg",
                 source: "https://www.ghibli.jp/works/chihiro/#frame"
-            },
-            // 名画リスト
-            {
-                title: "クロード・モネ『印象・日の出』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/800px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg",
-                source: "Wikimedia Commons (Public Domain)"
-            },
-            {
-                title: "フィンセント・ファン・ゴッホ『星月夜』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/VanGogh-starry_night.jpg/800px-VanGogh-starry_night.jpg",
-                source: "Wikimedia Commons (Public Domain)"
-            },
-            {
-                title: "葛飾北斎『神奈川沖浪裏』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tsunami_by_hokusai_19th_century.jpg/800px-Tsunami_by_hokusai_19th_century.jpg",
-                source: "Wikimedia Commons (Public Domain)"
-            },
-            {
-                title: "ヨハネス・フェルメール『真珠の耳飾りの少女』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg",
-                source: "Wikimedia Commons (Public Domain)"
             }
         ];
 
@@ -412,19 +400,25 @@
             updateImage();
         });
 
-        /* 2. グリッド生成 & パレットロジック */
+        /* 2. 9×16 (計144マス) グリッド生成 */
         const gridContainer = document.getElementById("gridContainer");
         let selectedCell = null;
 
-        for (let i = 0; i < 16; i++) {
+        for (let i = 0; i < 144; i++) {
             const cell = document.createElement("div");
             cell.classList.add("grid-cell");
             cell.dataset.color = "#d8d8d8";
-            cell.addEventListener("click", () => { selectedCell = cell; });
+            cell.addEventListener("click", () => {
+                if (selectedCell) selectedCell.classList.remove("selected");
+                selectedCell = cell;
+                selectedCell.classList.add("selected");
+            });
             gridContainer.appendChild(cell);
         }
         selectedCell = gridContainer.children[0];
+        selectedCell.classList.add("selected");
 
+        /* 3. カラーパレット制御 */
         const canvas = document.getElementById("pickerCanvas");
         const ctx = canvas.getContext("2d");
         const size = canvas.width, center = size / 2, outerRadius = 85, innerRadius = 68, boxSize = 80;
