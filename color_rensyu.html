@@ -250,7 +250,7 @@
 
             <div class="credit-info">
                 <div><span id="image-counter">1 / 100</span>: <strong id="image-caption">-</strong></div>
-                <div>提供: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">Unsplash (Free Photos)</a></div>
+                <div>提供: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">Unsplash (Anime Layout References)</a></div>
             </div>
         </div>
 
@@ -320,26 +320,24 @@
     </footer>
 
     <script>
-        /* 1. 植物・料理・自然のクローズアップ等を含む100枚の参照画像リスト */
+        /* アニメLO（レイアウト）の構図作成に役立つ「風景写真」カテゴリー100選 */
         const sampleImages = [];
-        const categories = [
-            { name: "植物・花（接写）", keyword: "flower,close-up" },
-            { name: "料理・スイーツ", keyword: "food,dish,close-up" },
-            { name: "フレッシュフルーツ", keyword: "fruit,macro" },
-            { name: "新緑・葉（接写）", keyword: "leaf,nature,macro" },
-            { name: "風景・自然", keyword: "landscape,nature" },
-            { name: "テクスチャ・素材", keyword: "texture,color" }
+        const animeLayoutCategories = [
+            { name: "一点透視・奥行き（道路/線路/橋）", keyword: "straight-road,railway,perspective,highway" },
+            { name: "地平線・アイレベル（広大な広場/平野/海）", keyword: "horizon,desert,flat-field,ocean-horizon" },
+            { name: "三景（近景・中景・遠景のレイヤー構成）", keyword: "mountain-range,misty-forest,valley,landscape-layers" },
+            { name: "フレーム構図（木々や門越しに見る風景）", keyword: "framed-landscape,trees-frame,arch-view" },
+            { name: "街並み・坂道（立体感とパース）", keyword: "sloping-street,alley,cityscape,rooftops" },
+            { name: "夕景・逆光（明暗シルエッティン）", keyword: "sunset-silhouette,backlight-landscape,dusk-sky" }
         ];
 
         for (let i = 1; i <= 100; i++) {
-            const cat = categories[i % categories.length];
+            const cat = animeLayoutCategories[i % animeLayoutCategories.length];
             sampleImages.push({
-                title: `参照画像 #${i} - ${cat.name}`,
-                // Source Unsplash API からキーワード・IDごとに1600x900の画像を取得
-                url: `https://source.unsplash.com/1600x900/?${cat.keyword}&sig=${i}`,
-                // バックアップ用（Source Unsplash停止時の汎用フォールバック）
-                fallbackUrl: `https://picsum.photos/1600/900?random=${i}`,
-                source: "Unsplash / Free Photography"
+                title: `LO参考風景 #${i} - ${cat.name}`,
+                url: `https://source.unsplash.com/1600x900/?${cat.keyword}&sig=${i + 500}`,
+                fallbackUrl: `https://picsum.photos/1600/900?random=${i + 500}`,
+                source: "Unsplash / Anime LO Composition Landscapes"
             });
         }
 
@@ -362,7 +360,7 @@
         function handleImgError(img) {
             const imgData = sampleImages[currentImageIndex];
             if (img.src !== imgData.fallbackUrl) {
-                img.src = imgData.fallbackUrl; // フォールバック画像へ切り替え
+                img.src = imgData.fallbackUrl;
             } else {
                 img.onerror = null;
                 img.src = "https://via.placeholder.com/1600x900/d8d8d8/000000?text=Image+Load+Error";
