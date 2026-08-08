@@ -249,8 +249,8 @@
             </div>
 
             <div class="credit-info">
-                <div><span id="image-counter">1 / 8</span>: <strong id="image-caption">-</strong></div>
-                <div>引用元: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">-</a></div>
+                <div><span id="image-counter">1 / 6</span>: <strong id="image-caption">-</strong></div>
+                <div>提供: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">-</a></div>
             </div>
         </div>
 
@@ -320,47 +320,37 @@
     </footer>
 
     <script>
-        /* 1. 参照画像リスト (プロキシ経由) */
+        /* 1. フリー素材画像リスト (Unsplash - 1600x900風景・グラデーション素材) */
         const sampleImages = [
             {
-                title: "『思い出のマーニー』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/marnie018.jpg",
-                source: "https://www.ghibli.jp/works/marnie/#frame"
+                title: "霧の森林風景",
+                url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&h=900&q=80",
+                source: "Unsplash (Photo by Bailey Zindel)"
             },
             {
-                title: "『かぐや姫の物語』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/kaguyahime024.jpg",
-                source: "https://www.ghibli.jp/works/kaguyahime/#frame"
+                title: "夕焼けの山並み",
+                url: "https://images.unsplash.com/photo-1511497584788-8767611136f0?auto=format&fit=crop&w=1600&h=900&q=80",
+                source: "Unsplash (Photo by Dawid Zawiła)"
             },
             {
-                title: "『風立ちぬ』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/kazetachinu024.jpg",
-                source: "https://www.ghibli.jp/works/kazetachinu/#frame"
+                title: "深緑の湖畔",
+                url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1600&h=900&q=80",
+                source: "Unsplash (Photo by Sergei A)"
             },
             {
-                title: "『コクリコ坂から』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/kokurikozaka022.jpg",
-                source: "https://www.ghibli.jp/works/kokurikozaka/#frame"
+                title: "幻想的な海岸の夕日",
+                url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&h=900&q=80",
+                source: "Unsplash (Photo by Sean Oulashin)"
             },
             {
-                title: "『借りぐらしのアリエッティ』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/karigurashi022.jpg",
-                source: "https://www.ghibli.jp/works/karigurashi/#frame"
+                title: "新緑の草原と空",
+                url: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&h=900&q=80",
+                source: "Unsplash (Photo by Federico Respini)"
             },
             {
-                title: "『崖の上のポニョ』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/ponyo012.jpg",
-                source: "https://www.ghibli.jp/works/ponyo/#frame"
-            },
-            {
-                title: "『ゲド戦記』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/ged009.jpg",
-                source: "https://www.ghibli.jp/works/ged/#frame"
-            },
-            {
-                title: "『千と千尋の神隠し』",
-                url: "https://images.weserv.nl/?url=www.ghibli.jp/images/chihiro043.jpg",
-                source: "https://www.ghibli.jp/works/chihiro/#frame"
+                title: "静かな夜空と星々",
+                url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&h=900&q=80",
+                source: "Unsplash (Photo by Benjamin Voros)"
             }
         ];
 
@@ -376,18 +366,13 @@
             imageCaption.textContent = imgData.title;
             imageCounter.textContent = `${currentImageIndex + 1} / ${sampleImages.length}`;
 
-            if (imgData.source.startsWith("http")) {
-                imageSource.href = imgData.source;
-                imageSource.textContent = imgData.source;
-            } else {
-                imageSource.removeAttribute("href");
-                imageSource.textContent = imgData.source;
-            }
+            imageSource.removeAttribute("href");
+            imageSource.textContent = imgData.source;
         }
 
         function handleImgError(img) {
             img.onerror = null;
-            img.src = "https://via.placeholder.com/600x400/d8d8d8/000000?text=Image+Load+Error";
+            img.src = "https://via.placeholder.com/1600x900/d8d8d8/000000?text=Image+Load+Error";
         }
 
         document.getElementById("prev-img-btn").addEventListener("click", () => {
