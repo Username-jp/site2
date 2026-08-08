@@ -249,8 +249,8 @@
             </div>
 
             <div class="credit-info">
-                <div><span id="image-counter">1 / 100</span>: <strong id="image-caption">-</strong></div>
-                <div>提供: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">Unsplash (Anime Layout References)</a></div>
+                <div>カテゴリ: <strong id="image-caption">-</strong></div>
+                <div>提供: <span id="image-source">Unsplash</span></div>
             </div>
         </div>
 
@@ -320,40 +320,37 @@
     </footer>
 
     <script>
-        /* アニメLO（レイアウト）の構図作成に役立つ「風景写真」カテゴリー100選 */
+        /* 指定カテゴリ：建築、自然、夏、映画、山、空、海 */
         const sampleImages = [];
-        const animeLayoutCategories = [
-            { name: "一点透視・奥行き（道路/線路/橋）", keyword: "straight-road,railway,perspective,highway" },
-            { name: "地平線・アイレベル（広大な広場/平野/海）", keyword: "horizon,desert,flat-field,ocean-horizon" },
-            { name: "三景（近景・中景・遠景のレイヤー構成）", keyword: "mountain-range,misty-forest,valley,landscape-layers" },
-            { name: "フレーム構図（木々や門越しに見る風景）", keyword: "framed-landscape,trees-frame,arch-view" },
-            { name: "街並み・坂道（立体感とパース）", keyword: "sloping-street,alley,cityscape,rooftops" },
-            { name: "夕景・逆光（明暗シルエッティン）", keyword: "sunset-silhouette,backlight-landscape,dusk-sky" }
+        const layoutCategories = [
+            { name: "建築", keyword: "architecture,building,structure,perspective" },
+            { name: "自然", keyword: "nature,forest,landscape,depth" },
+            { name: "夏", keyword: "summer,sunshine,green,cloudy-sky" },
+            { name: "映画", keyword: "cinematic,cinematic-landscape,dramatic-lighting" },
+            { name: "山", keyword: "mountain,peaks,mountain-range" },
+            { name: "空", keyword: "sky,clouds,horizon,sunset-sky" },
+            { name: "海", keyword: "ocean,sea,coastline,beach" }
         ];
 
         for (let i = 1; i <= 100; i++) {
-            const cat = animeLayoutCategories[i % animeLayoutCategories.length];
+            const cat = layoutCategories[i % layoutCategories.length];
             sampleImages.push({
-                title: `LO参考風景 #${i} - ${cat.name}`,
-                url: `https://source.unsplash.com/1600x900/?${cat.keyword}&sig=${i + 500}`,
-                fallbackUrl: `https://picsum.photos/1600/900?random=${i + 500}`,
-                source: "Unsplash / Anime LO Composition Landscapes"
+                categoryName: cat.name,
+                url: `https://source.unsplash.com/1600x900/?${cat.keyword}&sig=${i + 700}`,
+                fallbackUrl: `https://picsum.photos/1600/900?random=${i + 700}`,
+                source: "Unsplash"
             });
         }
 
         let currentImageIndex = 0;
         const refImage = document.getElementById("ref-image");
         const imageCaption = document.getElementById("image-caption");
-        const imageCounter = document.getElementById("image-counter");
         const imageSource = document.getElementById("image-source");
 
         function updateImage() {
             const imgData = sampleImages[currentImageIndex];
             refImage.src = imgData.url;
-            imageCaption.textContent = imgData.title;
-            imageCounter.textContent = `${currentImageIndex + 1} / ${sampleImages.length}`;
-
-            imageSource.removeAttribute("href");
+            imageCaption.textContent = imgData.categoryName;
             imageSource.textContent = imgData.source;
         }
 
