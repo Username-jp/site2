@@ -249,8 +249,8 @@
             </div>
 
             <div class="credit-info">
-                <div><span id="image-counter">1 / 6</span>: <strong id="image-caption">-</strong></div>
-                <div>提供: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">-</a></div>
+                <div><span id="image-counter">1 / 100</span>: <strong id="image-caption">-</strong></div>
+                <div>提供: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">Unsplash (Free Photos)</a></div>
             </div>
         </div>
 
@@ -320,39 +320,28 @@
     </footer>
 
     <script>
-        /* 1. フリー素材画像リスト (Unsplash - 1600x900風景・グラデーション素材) */
-        const sampleImages = [
-            {
-                title: "霧の森林風景",
-                url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&h=900&q=80",
-                source: "Unsplash (Photo by Bailey Zindel)"
-            },
-            {
-                title: "夕焼けの山並み",
-                url: "https://images.unsplash.com/photo-1511497584788-8767611136f0?auto=format&fit=crop&w=1600&h=900&q=80",
-                source: "Unsplash (Photo by Dawid Zawiła)"
-            },
-            {
-                title: "深緑の湖畔",
-                url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1600&h=900&q=80",
-                source: "Unsplash (Photo by Sergei A)"
-            },
-            {
-                title: "幻想的な海岸の夕日",
-                url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&h=900&q=80",
-                source: "Unsplash (Photo by Sean Oulashin)"
-            },
-            {
-                title: "新緑の草原と空",
-                url: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&h=900&q=80",
-                source: "Unsplash (Photo by Federico Respini)"
-            },
-            {
-                title: "静かな夜空と星々",
-                url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&h=900&q=80",
-                source: "Unsplash (Photo by Benjamin Voros)"
-            }
+        /* 1. 植物・料理・自然のクローズアップ等を含む100枚の参照画像リスト */
+        const sampleImages = [];
+        const categories = [
+            { name: "植物・花（接写）", keyword: "flower,close-up" },
+            { name: "料理・スイーツ", keyword: "food,dish,close-up" },
+            { name: "フレッシュフルーツ", keyword: "fruit,macro" },
+            { name: "新緑・葉（接写）", keyword: "leaf,nature,macro" },
+            { name: "風景・自然", keyword: "landscape,nature" },
+            { name: "テクスチャ・素材", keyword: "texture,color" }
         ];
+
+        for (let i = 1; i <= 100; i++) {
+            const cat = categories[i % categories.length];
+            sampleImages.push({
+                title: `参照画像 #${i} - ${cat.name}`,
+                // Source Unsplash API からキーワード・IDごとに1600x900の画像を取得
+                url: `https://source.unsplash.com/1600x900/?${cat.keyword}&sig=${i}`,
+                // バックアップ用（Source Unsplash停止時の汎用フォールバック）
+                fallbackUrl: `https://picsum.photos/1600/900?random=${i}`,
+                source: "Unsplash / Free Photography"
+            });
+        }
 
         let currentImageIndex = 0;
         const refImage = document.getElementById("ref-image");
@@ -371,8 +360,13 @@
         }
 
         function handleImgError(img) {
-            img.onerror = null;
-            img.src = "https://via.placeholder.com/1600x900/d8d8d8/000000?text=Image+Load+Error";
+            const imgData = sampleImages[currentImageIndex];
+            if (img.src !== imgData.fallbackUrl) {
+                img.src = imgData.fallbackUrl; // フォールバック画像へ切り替え
+            } else {
+                img.onerror = null;
+                img.src = "https://via.placeholder.com/1600x900/d8d8d8/000000?text=Image+Load+Error";
+            }
         }
 
         document.getElementById("prev-img-btn").addEventListener("click", () => {
