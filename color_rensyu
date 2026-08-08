@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chanmana.com - 色の考察練習</title>
+    <style>
+        /* 全体設定 */
+        body {
+            background-color: #5bb3f0;
+            color: #000000;
+            font-family: "Times New Roman", Times, "Yu Mincho", serif;
+            margin: 0;
+            padding: 10px;
+            position: relative;
+        }
+
+        a {
+            color: #0000ee;
+            text-decoration: underline;
+        }
+
+        /* ヘッダー */
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+        header img {
+            height: 35px;
+            width: auto;
+        }
+
+        /* 外枠フレーム（中央寄せ） */
+        .site-container {
+            display: flex;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            min-height: 550px;
+            max-width: 1000px;
+            margin: 0 auto;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+        }
+
+        /* 👈 左側エリア（フリー画像参照） */
+        .sidebar {
+            width: 45%;
+            padding: 15px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            border-right: 2px solid #000000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .window-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0 0 8px 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 2px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 画像表示エリア */
+        .photo-container {
+            background: #e0e0e0;
+            border: 1px solid #000000;
+            width: 100%;
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .photo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .image-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .image-controls button {
+            flex: 1;
+            padding: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: 1px solid #000;
+        }
+        .image-controls button:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* 👉 右側メインエリア（4*4グリッド ＆ パレット） */
+        .main-content {
+            flex: 1;
+            padding: 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* 4×4 グリッド */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 4px;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto;
+            border: 2px solid #000000;
+            background-color: #000000;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+        .grid-cell {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: transform 0.1s;
+            position: relative;
+        }
+
+        .grid-cell:hover {
+            outline: 2px solid #000080;
+            z-index: 10;
+        }
+
+        .grid-cell.selected {
+            outline: 3px solid #ff0000;
+            z-index: 20;
+        }
+
+        /* 🎨 HSL, RGB カラーパレット表示エリア */
+        .palette-panel {
+            border: 1px solid #000000;
+            background-color: #f5f5f5;
+            padding: 10px 15px;
+            font-family: sans-serif;
+            font-size: 13px;
+        }
+
+        .palette-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        /* ネイティブカラーピッカー（カラーサークル/パレット機能付き） */
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: 1px solid #000;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+        }
+
+        .color-values {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        /* フッター */
+        footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <header>
+        <img src="header_left.gif" alt="" onerror="this.style.display='none'">
+        <h1>chanmana.com</h1>
+        <img src="header_right.gif" alt="" onerror="this.style.display='none'">
+    </header>
+
+    <!-- メインフレーム構造 -->
+    <div class="site-container">
+
+        <!-- 👈 左側：フリー画像参照エリア -->
+        <div class="sidebar">
+            <div class="window-title">
+                <span>参照画像 (フリー素材/パブリックドメイン)</span>
+            </div>
+            
+            <div class="photo-container">
+                <img id="ref-image" src="" alt="参照画像">
+            </div>
+
+            <div class="image-controls">
+                <button id="prev-img-btn">← 前の画像</button>
+                <button id="next-img-btn">次の画像 →</button>
+            </div>
+            <div style="font-size: 11px; color: #555; text-align: center;">
+                作品名: <span id="image-caption">-</span>
+            </div>
+        </div>
+
+        <!-- 👉 右側：4×4グリッド ＆ カラー考察パレット -->
+        <div class="main-content">
+            <div class="window-title">
+                <span>4×4 色彩単純化グリッド</span>
+            </div>
+
+            <!-- 4×4 グリッド -->
+            <div class="grid-container" id="gridContainer">
+                <!-- JavaScriptで16個のセルを動的に生成します -->
+            </div>
+
+            <!-- HSL / RGB カラーパレット領域 -->
+            <div class="palette-panel">
+                <div style="font-weight: bold; margin-bottom: 5px;">カラーピッカー & 色彩情報 (RGB / HSL)</div>
+                <div style="font-size: 11px; color: #666;">マスをクリックして色を選択してください。</div>
+                
+                <div class="palette-controls">
+                    <input type="color" id="colorPicker" value="#ffffff">
+                    
+                    <div class="color-values">
+                        <div><strong>HEX:</strong> <span id="val-hex">#FFFFFF</span></div>
+                        <div><strong>RGB:</strong> <span id="val-rgb">rgb(255, 255, 255)</span></div>
+                        <div><strong>HSL:</strong> <span id="val-hsl">hsl(0, 0%, 100%)</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- フッター -->
+    <footer>
+        <p>© chanmana.com All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        /* 1. 著作権クリア（パブリックドメイン・CC0）の画像サンプルリスト */
+        /* ※Wikimedia CommonsやUnsplashの公開画像URLを使用しています */
+        const sampleImages = [
+            {
+                title: "クロード・モネ『印象・日の出』(印象派)",
+                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/800px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg"
+            },
+            {
+                title: "ゴッホ『星月夜』(印象派/ポスト印象派)",
+                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/The_Starry_Night_by_Vincent_van_Gogh_-_MoMA_Google_Art_Project.jpg/800px-The_Starry_Night_by_Vincent_van_Gogh_-_MoMA_Google_Art_Project.jpg"
+            },
+            {
+                title: "自然・風景写真 (森林と光)",
+                url: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&auto=format&fit=crop"
+            },
+            {
+                title: "都市・ビル群 (夕焼けの街並み)",
+                url: "https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?w=800&auto=format&fit=crop"
+            }
+        ];
+
+        let currentImageIndex = 0;
+        const refImage = document.getElementById("ref-image");
+        const imageCaption = document.getElementById("image-caption");
+
+        function updateImage() {
+            const imgData = sampleImages[currentImageIndex];
+            refImage.src = imgData.url;
+            imageCaption.textContent = imgData.title;
+        }
+
+        document.getElementById("prev-img-btn").addEventListener("click", () => {
+            currentImageIndex = (currentImageIndex - 1 + sampleImages.length) % sampleImages.length;
+            updateImage();
+        });
+
+        document.getElementById("next-img-btn").addEventListener("click", () => {
+            currentImageIndex = (currentImageIndex + 1) % sampleImages.length;
+            updateImage();
+        });
+
+        /* 2. 4×4 グリッドの生成とセル選択機能 */
+        const gridContainer = document.getElementById("gridContainer");
+        const colorPicker = document.getElementById("colorPicker");
+        let selectedCell = null;
+
+        // 16マス生成
+        for (let i = 0; i < 16; i++) {
+            const cell = document.createElement("div");
+            cell.classList.add("grid-cell");
+            cell.dataset.color = "#ffffff";
+            
+            cell.addEventListener("click", () => {
+                // 選択状態の解除・設定
+                if (selectedCell) selectedCell.classList.remove("selected");
+                selectedCell = cell;
+                selectedCell.classList.add("selected");
+
+                // 現在のセルの色をピッカーに適用
+                const currentColor = cell.dataset.color || "#ffffff";
+                colorPicker.value = currentColor;
+                updateColorDisplay(currentColor);
+
+                // ピッカーを自動で開く（ブラウザ依存）
+                colorPicker.click();
+            });
+
+            gridContainer.appendChild(cell);
+        }
+
+        /* 3. カラーピッカー変更時の処理 & RGB / HSL 相互変換 */
+        colorPicker.addEventListener("input", (e) => {
+            const hex = e.target.value;
+            if (selectedCell) {
+                selectedCell.style.backgroundColor = hex;
+                selectedCell.dataset.color = hex;
+            }
+            updateColorDisplay(hex);
+        });
+
+        function updateColorDisplay(hex) {
+            document.getElementById("val-hex").textContent = hex.toUpperCase();
+            
+            const rgb = hexToRgb(hex);
+            document.getElementById("val-rgb").textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            
+            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+            document.getElementById("val-hsl").textContent = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+        }
+
+        /* --- 色変換ヘルパー関数 --- */
+        function hexToRgb(hex) {
+            const bigint = parseInt(hex.slice(1), 16);
+            return {
+                r: (bigint >> 16) & 255,
+                g: (bigint >> 8) & 255,
+                b: bigint & 255
+            };
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0; // アクロマティック（無彩色）
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100)
+            };
+        }
+
+        // 初期画像表示
+        updateImage();
+    </script>
+</body>
+</html>
