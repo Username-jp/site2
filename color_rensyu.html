@@ -7,12 +7,11 @@
     <style>
         /* 全体設定 */
         body {
-            background-color: #5bb3f0;
+            background-color: #e5e5e5;
             color: #000000;
             font-family: "Times New Roman", Times, "Yu Mincho", serif;
             margin: 0;
             padding: 10px;
-            position: relative;
         }
 
         a {
@@ -24,10 +23,6 @@
         header {
             text-align: center;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
         }
         header h1 {
             font-size: 28px;
@@ -35,13 +30,13 @@
             margin: 0;
         }
 
-        /* 外枠フレーム（背景を彩度0のライトグレー） */
+        /* 外枠フレーム */
         .site-container {
             display: flex;
             background-color: #e5e5e5;
             border: 2px solid #000000;
             min-height: 550px;
-            max-width: 1050px;
+            max-width: 1250px;
             margin: 0 auto;
             box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
         }
@@ -55,7 +50,7 @@
             border-right: 2px solid #000000;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .window-title {
@@ -71,7 +66,7 @@
             background: #cccccc;
             border: 1px solid #000000;
             width: 100%;
-            height: 380px;
+            height: 440px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -102,6 +97,14 @@
             background-color: #bfbfbf;
         }
 
+        .credit-info {
+            font-size: 11px;
+            color: #333;
+            text-align: center;
+            line-height: 1.4;
+            word-break: break-all;
+        }
+
         /* 👉 右側メインエリア */
         .main-content {
             flex: 1;
@@ -112,36 +115,30 @@
             gap: 15px;
         }
 
-        /* 作業エリア：左にグリッド、右にカラーパレット類 */
         .workspace {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: flex-start;
         }
 
-        /* 4×4 グリッド（線幅0・外枠なし・選択枠なし） */
+        /* 4×4 グリッド */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(4, 1fr);
-            gap: 0px;
-            width: 280px;
-            height: 280px;
-            border: 0px;
-            padding: 0px;
-            box-sizing: border-box;
+            width: 420px;
+            height: 420px;
             background-color: #d8d8d8;
             flex-shrink: 0;
         }
 
         .grid-cell {
             background-color: #d8d8d8;
-            border: 0px;
             cursor: pointer;
             outline: none !important;
         }
 
-        /* 🎨 右側のカラーパレットエリア */
+        /* 🎨 カラーパレットエリア */
         .palette-panel {
             border: 1px solid #000000;
             background-color: #d8d8d8;
@@ -153,7 +150,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .picker-container {
@@ -167,18 +164,24 @@
             display: block;
         }
 
-        /* RGBバー（スライダー）スタイル */
-        .rgb-sliders {
+        .sliders-section {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
+        }
+
+        .slider-group-title {
+            font-weight: bold;
+            font-size: 11px;
+            border-bottom: 1px solid #aaa;
+            padding-bottom: 2px;
         }
 
         .slider-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-size: 11px;
             font-weight: bold;
         }
@@ -189,20 +192,19 @@
 
         .slider-row input[type="range"] {
             flex: 1;
-            height: 12px;
+            height: 10px;
             cursor: pointer;
         }
 
         .slider-row span {
-            width: 28px;
+            width: 32px;
             text-align: right;
             font-family: monospace;
         }
 
-        /* 色数値表示 */
         .color-values {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             width: 100%;
             font-family: monospace;
             font-size: 11px;
@@ -214,23 +216,20 @@
             margin-top: 15px;
             text-align: center;
             font-size: 12px;
-            color: #000000;
         }
     </style>
 </head>
 <body>
 
-    <!-- ヘッダー -->
     <header>
         <h1>chanmana.com</h1>
     </header>
 
-    <!-- メインフレーム構造 -->
     <div class="site-container">
 
-        <!-- 👈 左側：参照画像エリア -->
+        <!-- 👈 左側：参照画像エリア（ジブリ作品 ＋ 名画） -->
         <div class="sidebar">
-            <div class="window-title">参照画像 (名画コレクション)</div>
+            <div class="window-title">参照画像</div>
             
             <div class="photo-container">
                 <img id="ref-image" src="" alt="参照画像" onerror="handleImgError(this)">
@@ -240,8 +239,10 @@
                 <button id="prev-img-btn">← 前の画像</button>
                 <button id="next-img-btn">次の画像 →</button>
             </div>
-            <div style="font-size: 11px; color: #333; text-align: center; margin-top: 2px;">
-                <span id="image-counter">1 / 8</span>: <span id="image-caption">-</span>
+
+            <div class="credit-info">
+                <div><span id="image-counter">1 / 23</span>: <strong id="image-caption">-</strong></div>
+                <div>引用元: <a id="image-source" href="#" target="_blank" rel="noopener noreferrer">-</a></div>
             </div>
         </div>
 
@@ -250,20 +251,17 @@
             <div class="window-title" style="width: 100%;">4×4 色彩単純化グリッド</div>
 
             <div class="workspace">
-                <!-- 左：4×4 グリッド -->
                 <div class="grid-container" id="gridContainer"></div>
 
-                <!-- 右：カラーパレット類（サークル ＋ RGBバー ＋ 数値） -->
                 <div class="palette-panel">
                     <div style="font-weight: bold; font-size: 11px;">カラーパレット</div>
                     
-                    <!-- カラーサークル -->
                     <div class="picker-container">
                         <canvas id="pickerCanvas" width="180" height="180"></canvas>
                     </div>
 
-                    <!-- RGB スライダーバー -->
-                    <div class="rgb-sliders">
+                    <div class="sliders-section">
+                        <div class="slider-group-title">RGB (赤・緑・青)</div>
                         <div class="slider-row" style="color: #c00000;">
                             <label>R</label>
                             <input type="range" id="sliderR" min="0" max="255" value="216">
@@ -279,12 +277,27 @@
                             <input type="range" id="sliderB" min="0" max="255" value="216">
                             <span id="textB">216</span>
                         </div>
+
+                        <div class="slider-group-title">HSB (色相・彩度・明度)</div>
+                        <div class="slider-row" style="color: #555;">
+                            <label>H</label>
+                            <input type="range" id="sliderH" min="0" max="360" value="0">
+                            <span id="textH">0°</span>
+                        </div>
+                        <div class="slider-row" style="color: #555;">
+                            <label>S</label>
+                            <input type="range" id="sliderS" min="0" max="100" value="0">
+                            <span id="textS">0%</span>
+                        </div>
+                        <div class="slider-row" style="color: #555;">
+                            <label>B</label>
+                            <input type="range" id="sliderVal" min="0" max="100" value="85">
+                            <span id="textVal">85%</span>
+                        </div>
                     </div>
 
-                    <!-- 数値表示 -->
                     <div class="color-values">
                         <div><strong>HEX:</strong> <span id="val-hex">#D8D8D8</span></div>
-                        <div><strong>HSB:</strong> <span id="val-hsb">0°,0%,85%</span></div>
                     </div>
                 </div>
             </div>
@@ -292,45 +305,74 @@
 
     </div>
 
-    <!-- フッター -->
     <footer>
         <p>© chanmana.com All Rights Reserved.</p>
     </footer>
 
     <script>
-        /* 1. 名画コレクション */
+        /* 1. 参照画像データ（ジブリ作品場面写真 ＋ パブリックドメイン名画） */
         const sampleImages = [
+            // スタジオジブリ作品
+            {
+                title: "『思い出のマーニー』",
+                url: "https://www.ghibli.jp/images/marnie018.jpg",
+                source: "https://www.ghibli.jp/works/marnie/#frame"
+            },
+            {
+                title: "『かぐや姫の物語』",
+                url: "https://www.ghibli.jp/images/kaguyahime024.jpg",
+                source: "https://www.ghibli.jp/works/kaguyahime/#frame"
+            },
+            {
+                title: "『風立ちぬ』",
+                url: "https://www.ghibli.jp/images/kazetachinu024.jpg",
+                source: "https://www.ghibli.jp/works/kazetachinu/#frame"
+            },
+            {
+                title: "『コクリコ坂から』",
+                url: "https://www.ghibli.jp/images/kokurikozaka022.jpg",
+                source: "https://www.ghibli.jp/works/kokurikozaka/#frame"
+            },
+            {
+                title: "『借りぐらしのアリエッティ』",
+                url: "https://www.ghibli.jp/images/karigurashi022.jpg",
+                source: "https://www.ghibli.jp/works/karigurashi/#frame"
+            },
+            {
+                title: "『崖の上のポニョ』",
+                url: "https://www.ghibli.jp/images/ponyo012.jpg",
+                source: "https://www.ghibli.jp/works/ponyo/#frame"
+            },
+            {
+                title: "『ゲド戦記』",
+                url: "https://www.ghibli.jp/images/ged009.jpg",
+                source: "https://www.ghibli.jp/works/ged/#frame"
+            },
+            {
+                title: "『千と千尋の神隠し』",
+                url: "https://www.ghibli.jp/images/chihiro043.jpg",
+                source: "https://www.ghibli.jp/works/chihiro/#frame"
+            },
+            // 名画リスト
             {
                 title: "クロード・モネ『印象・日の出』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/800px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg"
+                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/800px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg",
+                source: "Wikimedia Commons (Public Domain)"
             },
             {
                 title: "フィンセント・ファン・ゴッホ『星月夜』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/VanGogh-starry_night.jpg/800px-VanGogh-starry_night.jpg"
+                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/VanGogh-starry_night.jpg/800px-VanGogh-starry_night.jpg",
+                source: "Wikimedia Commons (Public Domain)"
             },
             {
                 title: "葛飾北斎『神奈川沖浪裏』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tsunami_by_hokusai_19th_century.jpg/800px-Tsunami_by_hokusai_19th_century.jpg"
+                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tsunami_by_hokusai_19th_century.jpg/800px-Tsunami_by_hokusai_19th_century.jpg",
+                source: "Wikimedia Commons (Public Domain)"
             },
             {
-                title: "ヨハネス・フェルマーク『真珠の耳飾りの少女』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg"
-            },
-            {
-                title: "グスタフ・クリムト『接吻』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg/800px-The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg"
-            },
-            {
-                title: "ピエール＝オーギュスト・ルノワール『ムーラン・ド・ラ・ギャレットの舞踏会』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Pierre-Auguste_Renoir%2C_Bal_du_moulin_de_la_Galette.jpg/800px-Pierre-Auguste_Renoir%2C_Bal_du_moulin_de_la_Galette.jpg"
-            },
-            {
-                title: "クロード・モネ『睡蓮の池』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg/800px-Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg"
-            },
-            {
-                title: "フィンセント・ファン_ゴッホ『夜のカフェテラス』",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Vincent_Van_Gogh_-_Caf%C3%A9_Terrace_at_Night_%281888%29.jpg/800px-Vincent_Van_Gogh_-_Caf%C3%A9_Terrace_at_Night_%281888%29.jpg"
+                title: "ヨハネス・フェルメール『真珠の耳飾りの少女』",
+                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg",
+                source: "Wikimedia Commons (Public Domain)"
             }
         ];
 
@@ -338,12 +380,21 @@
         const refImage = document.getElementById("ref-image");
         const imageCaption = document.getElementById("image-caption");
         const imageCounter = document.getElementById("image-counter");
+        const imageSource = document.getElementById("image-source");
 
         function updateImage() {
             const imgData = sampleImages[currentImageIndex];
             refImage.src = imgData.url;
             imageCaption.textContent = imgData.title;
             imageCounter.textContent = `${currentImageIndex + 1} / ${sampleImages.length}`;
+
+            if (imgData.source.startsWith("http")) {
+                imageSource.href = imgData.source;
+                imageSource.textContent = imgData.source;
+            } else {
+                imageSource.removeAttribute("href");
+                imageSource.textContent = imgData.source;
+            }
         }
 
         function handleImgError(img) {
@@ -361,7 +412,7 @@
             updateImage();
         });
 
-        /* 2. 4×4 グリッド生成 */
+        /* 2. グリッド生成 & パレットロジック */
         const gridContainer = document.getElementById("gridContainer");
         let selectedCell = null;
 
@@ -369,43 +420,27 @@
             const cell = document.createElement("div");
             cell.classList.add("grid-cell");
             cell.dataset.color = "#d8d8d8";
-            
-            cell.addEventListener("click", () => {
-                selectedCell = cell;
-            });
-
+            cell.addEventListener("click", () => { selectedCell = cell; });
             gridContainer.appendChild(cell);
         }
         selectedCell = gridContainer.children[0];
 
-        /* 3. カラーサークル ＆ RGBスライダー連携 */
         const canvas = document.getElementById("pickerCanvas");
         const ctx = canvas.getContext("2d");
-        const size = canvas.width;
-        const center = size / 2;
-        const outerRadius = 85;
-        const innerRadius = 68;
-        const boxSize = 80;
+        const size = canvas.width, center = size / 2, outerRadius = 85, innerRadius = 68, boxSize = 80;
 
-        let currentHue = 0;        // 0 ~ 360
-        let currentSat = 0;        // 0 ~ 100
-        let currentVal = 85;       // 0 ~ 100
-        let activeTarget = null;   // 'ring' or 'box'
+        let currentHue = 0, currentSat = 0, currentVal = 85, activeTarget = null;
 
-        const sliderR = document.getElementById("sliderR");
-        const sliderG = document.getElementById("sliderG");
-        const sliderB = document.getElementById("sliderB");
-        const textR = document.getElementById("textR");
-        const textG = document.getElementById("textG");
-        const textB = document.getElementById("textB");
+        const sliderR = document.getElementById("sliderR"), sliderG = document.getElementById("sliderG"), sliderB = document.getElementById("sliderB");
+        const textR = document.getElementById("textR"), textG = document.getElementById("textG"), textB = document.getElementById("textB");
+        const sliderH = document.getElementById("sliderH"), sliderS = document.getElementById("sliderS"), sliderVal = document.getElementById("sliderVal");
+        const textH = document.getElementById("textH"), textS = document.getElementById("textS"), textVal = document.getElementById("textVal");
 
         function renderPicker() {
             ctx.clearRect(0, 0, size, size);
 
-            // 外側：Hue(色相)リング
             for (let angle = 0; angle < 360; angle += 0.5) {
-                const startAngle = (angle - 0.6) * Math.PI / 180;
-                const endAngle = (angle + 0.6) * Math.PI / 180;
+                const startAngle = (angle - 0.6) * Math.PI / 180, endAngle = (angle + 0.6) * Math.PI / 180;
                 ctx.beginPath();
                 ctx.arc(center, center, (outerRadius + innerRadius) / 2, startAngle, endAngle);
                 ctx.strokeStyle = `hsl(${angle}, 100%, 50%)`;
@@ -413,10 +448,7 @@
                 ctx.stroke();
             }
 
-            // 内側：SV(彩度・明度)四角形
-            const x0 = center - boxSize / 2;
-            const y0 = center - boxSize / 2;
-
+            const x0 = center - boxSize / 2, y0 = center - boxSize / 2;
             ctx.fillStyle = `hsl(${currentHue}, 100%, 50%)`;
             ctx.fillRect(x0, y0, boxSize, boxSize);
 
@@ -436,44 +468,23 @@
             ctx.lineWidth = 1;
             ctx.strokeRect(x0, y0, boxSize, boxSize);
 
-            // ポインター描画
-            const ringAngle = currentHue * Math.PI / 180;
-            const ringR = (outerRadius + innerRadius) / 2;
-            const rx = center + ringR * Math.cos(ringAngle);
-            const ry = center + ringR * Math.sin(ringAngle);
+            const ringAngle = currentHue * Math.PI / 180, ringR = (outerRadius + innerRadius) / 2;
             ctx.beginPath();
-            ctx.arc(rx, ry, 4, 0, Math.PI * 2);
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 1;
-            ctx.stroke();
+            ctx.arc(center + ringR * Math.cos(ringAngle), center + ringR * Math.sin(ringAngle), 4, 0, Math.PI * 2);
+            ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.stroke();
+            ctx.strokeStyle = "#000000"; ctx.lineWidth = 1; ctx.stroke();
 
-            const bx = x0 + (currentSat / 100) * boxSize;
-            const by = y0 + (1 - currentVal / 100) * boxSize;
             ctx.beginPath();
-            ctx.arc(bx, by, 4, 0, Math.PI * 2);
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 1;
-            ctx.stroke();
+            ctx.arc(x0 + (currentSat / 100) * boxSize, y0 + (1 - currentVal / 100) * boxSize, 4, 0, Math.PI * 2);
+            ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.stroke();
+            ctx.strokeStyle = "#000000"; ctx.lineWidth = 1; ctx.stroke();
         }
 
-        /* カラーサークルの操作ハンドラ */
         function handlePointer(e) {
             const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            const dx = x - center;
-            const dy = y - center;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            const x0 = center - boxSize / 2;
-            const y0 = center - boxSize / 2;
+            const x = e.clientX - rect.left, y = e.clientY - rect.top;
+            const dx = x - center, dy = y - center, dist = Math.sqrt(dx * dx + dy * dy);
+            const x0 = center - boxSize / 2, y0 = center - boxSize / 2;
 
             if (activeTarget === 'ring' || (!activeTarget && dist >= innerRadius && dist <= outerRadius)) {
                 activeTarget = 'ring';
@@ -482,77 +493,61 @@
                 currentHue = angle;
             } else if (activeTarget === 'box' || (!activeTarget && x >= x0 && x <= x0 + boxSize && y >= y0 && y <= y0 + boxSize)) {
                 activeTarget = 'box';
-                let sat = ((x - x0) / boxSize) * 100;
-                let val = (1 - (y - y0) / boxSize) * 100;
-                currentSat = Math.max(0, Math.min(100, sat));
-                currentVal = Math.max(0, Math.min(100, val));
+                currentSat = Math.max(0, Math.min(100, ((x - x0) / boxSize) * 100));
+                currentVal = Math.max(0, Math.min(100, (1 - (y - y0) / boxSize) * 100));
             }
-
             renderPicker();
-            updateFromPicker();
+            updateFromHSV();
         }
 
         canvas.addEventListener("mousedown", (e) => { activeTarget = null; handlePointer(e); });
         canvas.addEventListener("mousemove", (e) => { if (e.buttons === 1) handlePointer(e); });
         document.addEventListener("mouseup", () => { activeTarget = null; });
 
-        /* サークル操作からの更新 */
-        function updateFromPicker() {
+        function updateFromHSV() {
             const rgb = hsvToRgb(currentHue, currentSat, currentVal);
-            
-            sliderR.value = rgb.r;
-            sliderG.value = rgb.g;
-            sliderB.value = rgb.b;
-
+            sliderR.value = rgb.r; sliderG.value = rgb.g; sliderB.value = rgb.b;
+            sliderH.value = Math.round(currentHue); sliderS.value = Math.round(currentSat); sliderVal.value = Math.round(currentVal);
             applyColorToUI(rgb.r, rgb.g, rgb.b);
         }
 
-        /* RGBスライダー操作からの更新 */
-        function updateFromSliders() {
-            const r = parseInt(sliderR.value);
-            const g = parseInt(sliderG.value);
-            const b = parseInt(sliderB.value);
-
+        function updateFromSlidersRGB() {
+            const r = parseInt(sliderR.value), g = parseInt(sliderG.value), b = parseInt(sliderB.value);
             const hsv = rgbToHsv(r, g, b);
-            currentHue = hsv.h;
-            currentSat = hsv.s;
-            currentVal = hsv.v;
-
+            currentHue = hsv.h; currentSat = hsv.s; currentVal = hsv.v;
+            sliderH.value = Math.round(currentHue); sliderS.value = Math.round(currentSat); sliderVal.value = Math.round(currentVal);
             renderPicker();
             applyColorToUI(r, g, b);
         }
 
-        sliderR.addEventListener("input", updateFromSliders);
-        sliderG.addEventListener("input", updateFromSliders);
-        sliderB.addEventListener("input", updateFromSliders);
-
-        /* UI全体に色を適用する共通関数 */
-        function applyColorToUI(r, g, b) {
-            textR.textContent = r;
-            textG.textContent = g;
-            textB.textContent = b;
-
-            const hex = rgbToHex(r, g, b);
-
-            if (selectedCell) {
-                selectedCell.style.backgroundColor = hex;
-                selectedCell.dataset.color = hex;
-            }
-
-            document.getElementById("val-hex").textContent = hex.toUpperCase();
-            document.getElementById("val-hsb").textContent = `${Math.round(currentHue)}°,${Math.round(currentSat)}%,${Math.round(currentVal)}%`;
+        function updateFromSlidersHSB() {
+            currentHue = parseFloat(sliderH.value); currentSat = parseFloat(sliderS.value); currentVal = parseFloat(sliderVal.value);
+            const rgb = hsvToRgb(currentHue, currentSat, currentVal);
+            sliderR.value = rgb.r; sliderG.value = rgb.g; sliderB.value = rgb.b;
+            renderPicker();
+            applyColorToUI(rgb.r, rgb.g, rgb.b);
         }
 
-        /* 色変換ユーティリティ */
+        sliderR.addEventListener("input", updateFromSlidersRGB);
+        sliderG.addEventListener("input", updateFromSlidersRGB);
+        sliderB.addEventListener("input", updateFromSlidersRGB);
+        sliderH.addEventListener("input", updateFromSlidersHSB);
+        sliderS.addEventListener("input", updateFromSlidersHSB);
+        sliderVal.addEventListener("input", updateFromSlidersHSB);
+
+        function applyColorToUI(r, g, b) {
+            textR.textContent = r; textG.textContent = g; textB.textContent = b;
+            textH.textContent = `${Math.round(currentHue)}°`; textS.textContent = `${Math.round(currentSat)}%`; textVal.textContent = `${Math.round(currentVal)}%`;
+            const hex = rgbToHex(r, g, b);
+            if (selectedCell) { selectedCell.style.backgroundColor = hex; selectedCell.dataset.color = hex; }
+            document.getElementById("val-hex").textContent = hex.toUpperCase();
+        }
+
         function hsvToRgb(h, s, v) {
             s /= 100; v /= 100;
+            let i = Math.floor(h / 60) % 6, f = h / 60 - Math.floor(h / 60);
+            let p = v * (1 - s), q = v * (1 - f * s), t = v * (1 - (1 - f) * s);
             let r, g, b;
-            let i = Math.floor(h / 60) % 6;
-            let f = h / 60 - Math.floor(h / 60);
-            let p = v * (1 - s);
-            let q = v * (1 - f * s);
-            let t = v * (1 - (1 - f) * s);
-
             switch (i) {
                 case 0: r = v; g = t; b = p; break;
                 case 1: r = q; g = v; b = p; break;
@@ -566,14 +561,9 @@
 
         function rgbToHsv(r, g, b) {
             r /= 255; g /= 255; b /= 255;
-            let max = Math.max(r, g, b), min = Math.min(r, g, b);
-            let h, s, v = max;
-            let d = max - min;
-            s = max === 0 ? 0 : d / max;
-
-            if (max === min) {
-                h = 0;
-            } else {
+            let max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, h, s = max === 0 ? 0 : d / max, v = max;
+            if (max === min) h = 0;
+            else {
                 switch (max) {
                     case r: h = (g - b) / d + (g < b ? 6 : 0); break;
                     case g: h = (b - r) / d + 2; break;
@@ -588,10 +578,9 @@
             return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
         }
 
-        // 初期化実行
         updateImage();
         renderPicker();
-        updateFromPicker();
+        updateFromHSV();
     </script>
 </body>
 </html>
