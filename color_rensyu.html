@@ -34,10 +34,6 @@
             font-weight: bold;
             margin: 0;
         }
-        header img {
-            height: 35px;
-            width: auto;
-        }
 
         /* 外枠フレーム（中央寄せ） */
         .site-container {
@@ -50,7 +46,7 @@
             box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
         }
 
-        /* 👈 左側エリア（フリー画像参照） */
+        /* 👈 左側エリア（参照画像） */
         .sidebar {
             width: 45%;
             padding: 15px;
@@ -68,9 +64,6 @@
             margin: 0 0 8px 0;
             border-bottom: 2px solid #000;
             padding-bottom: 2px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         /* 画像表示エリア */
@@ -86,8 +79,8 @@
         }
 
         .photo-container img {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
             display: block;
         }
@@ -109,7 +102,7 @@
             background-color: #e0e0e0;
         }
 
-        /* 👉 右側メインエリア（4*4グリッド ＆ パレット） */
+        /* 👉 右側メインエリア */
         .main-content {
             flex: 1;
             padding: 15px;
@@ -117,85 +110,64 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            align-items: center;
         }
 
-        /* 4×4 グリッド */
+        /* 4×4 グリッド（枠線0・隙間0・選択枠なし） */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(4, 1fr);
-            gap: 4px;
+            gap: 0px;
             width: 320px;
             height: 320px;
-            margin: 0 auto;
-            border: 2px solid #000000;
-            background-color: #000000;
-            padding: 4px;
+            border: 0px;
+            padding: 0px;
             box-sizing: border-box;
         }
 
         .grid-cell {
             background-color: #ffffff;
-            border: 1px solid #ccc;
+            border: 0px;
             cursor: pointer;
-            transition: transform 0.1s;
-            position: relative;
+            outline: none !important;
         }
 
-        .grid-cell:hover {
-            outline: 2px solid #000080;
-            z-index: 10;
-        }
-
-        .grid-cell.selected {
-            outline: 3px solid #ff0000;
-            z-index: 20;
-        }
-
-        /* 🎨 HSL, RGB カラーパレット表示エリア */
+        /* 🎨 カラーサークルパレット (外枠リング + 内側スクエア) */
         .palette-panel {
             border: 1px solid #000000;
             background-color: #f5f5f5;
-            padding: 10px 15px;
+            padding: 10px;
             font-family: sans-serif;
-            font-size: 13px;
-        }
-
-        .palette-controls {
+            font-size: 12px;
+            width: 100%;
+            max-width: 320px;
+            box-sizing: border-box;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 15px;
-            margin-top: 8px;
         }
 
-        /* ネイティブカラーピッカー（カラーサークル/パレット機能付き） */
-        input[type="color"] {
-            -webkit-appearance: none;
-            border: 1px solid #000;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            background: none;
-            padding: 0;
+        .picker-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 5px 0;
+            cursor: crosshair;
         }
 
-        input[type="color"]::-webkit-color-swatch-wrapper {
-            padding: 0;
-        }
-
-        input[type="color"]::-webkit-color-swatch {
-            border: none;
+        #pickerCanvas {
+            display: block;
         }
 
         .color-values {
             display: flex;
-            flex-direction: column;
-            gap: 3px;
+            gap: 10px;
             font-family: monospace;
-            font-size: 12px;
+            font-size: 11px;
+            margin-top: 5px;
         }
 
-        /* フッター */
         footer {
             margin-top: 15px;
             text-align: center;
@@ -208,22 +180,18 @@
 
     <!-- ヘッダー -->
     <header>
-        <img src="header_left.gif" alt="" onerror="this.style.display='none'">
         <h1>chanmana.com</h1>
-        <img src="header_right.gif" alt="" onerror="this.style.display='none'">
     </header>
 
     <!-- メインフレーム構造 -->
     <div class="site-container">
 
-        <!-- 👈 左側：フリー画像参照エリア -->
+        <!-- 👈 左側：参照画像エリア -->
         <div class="sidebar">
-            <div class="window-title">
-                <span>参照画像 (フリー素材/パブリックドメイン)</span>
-            </div>
+            <div class="window-title">参照画像 (風景・絵画)</div>
             
             <div class="photo-container">
-                <img id="ref-image" src="" alt="参照画像">
+                <img id="ref-image" src="" alt="参照画像" onerror="handleImgError(this)">
             </div>
 
             <div class="image-controls">
@@ -235,30 +203,25 @@
             </div>
         </div>
 
-        <!-- 👉 右側：4×4グリッド ＆ カラー考察パレット -->
+        <!-- 👉 右側：4×4グリッド ＆ カラーサークル -->
         <div class="main-content">
-            <div class="window-title">
-                <span>4×4 色彩単純化グリッド</span>
-            </div>
+            <div class="window-title" style="width: 100%;">4×4 色彩単純化グリッド</div>
 
             <!-- 4×4 グリッド -->
-            <div class="grid-container" id="gridContainer">
-                <!-- JavaScriptで16個のセルを動的に生成します -->
-            </div>
+            <div class="grid-container" id="gridContainer"></div>
 
-            <!-- HSL / RGB カラーパレット領域 -->
+            <!-- カラーサークルパレット (リング + 正方形) -->
             <div class="palette-panel">
-                <div style="font-weight: bold; margin-bottom: 5px;">カラーピッカー & 色彩情報 (RGB / HSL)</div>
-                <div style="font-size: 11px; color: #666;">マスをクリックして色を選択してください。</div>
+                <div style="font-weight: bold;">カラーサークル (HSB/HSV)</div>
                 
-                <div class="palette-controls">
-                    <input type="color" id="colorPicker" value="#ffffff">
-                    
-                    <div class="color-values">
-                        <div><strong>HEX:</strong> <span id="val-hex">#FFFFFF</span></div>
-                        <div><strong>RGB:</strong> <span id="val-rgb">rgb(255, 255, 255)</span></div>
-                        <div><strong>HSL:</strong> <span id="val-hsl">hsl(0, 0%, 100%)</span></div>
-                    </div>
+                <div class="picker-container">
+                    <canvas id="pickerCanvas" width="220" height="220"></canvas>
+                </div>
+
+                <div class="color-values">
+                    <div><strong>HEX:</strong> <span id="val-hex">#FFFFFF</span></div>
+                    <div><strong>RGB:</strong> <span id="val-rgb">255,255,255</span></div>
+                    <div><strong>HSB:</strong> <span id="val-hsb">0°,0%,100%</span></div>
                 </div>
             </div>
         </div>
@@ -271,24 +234,23 @@
     </footer>
 
     <script>
-        /* 1. 著作権クリア（パブリックドメイン・CC0）の画像サンプルリスト */
-        /* ※Wikimedia CommonsやUnsplashの公開画像URLを使用しています */
+        /* 1. 参照画像設定 */
         const sampleImages = [
             {
-                title: "クロード・モネ『印象・日の出』(印象派)",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/800px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg"
+                title: "クロード・モネ『印象・日の出』",
+                url: "https://picsum.photos/id/1015/600/400"
             },
             {
-                title: "ゴッホ『星月夜』(印象派/ポスト印象派)",
-                url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/The_Starry_Night_by_Vincent_van_Gogh_-_MoMA_Google_Art_Project.jpg/800px-The_Starry_Night_by_Vincent_van_Gogh_-_MoMA_Google_Art_Project.jpg"
+                title: "ゴッホ『星月夜』風グラデーション",
+                url: "https://picsum.photos/id/1043/600/400"
             },
             {
-                title: "自然・風景写真 (森林と光)",
-                url: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&auto=format&fit=crop"
+                title: "山脈と湖畔の風景",
+                url: "https://picsum.photos/id/1018/600/400"
             },
             {
-                title: "都市・ビル群 (夕焼けの街並み)",
-                url: "https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?w=800&auto=format&fit=crop"
+                title: "夕暮れのビル群と都市",
+                url: "https://picsum.photos/id/1031/600/400"
             }
         ];
 
@@ -302,6 +264,11 @@
             imageCaption.textContent = imgData.title;
         }
 
+        function handleImgError(img) {
+            img.onerror = null;
+            img.src = "https://via.placeholder.com/600x400/5bb3f0/ffffff?text=Sample+Landscape";
+        }
+
         document.getElementById("prev-img-btn").addEventListener("click", () => {
             currentImageIndex = (currentImageIndex - 1 + sampleImages.length) % sampleImages.length;
             updateImage();
@@ -312,92 +279,193 @@
             updateImage();
         });
 
-        /* 2. 4×4 グリッドの生成とセル選択機能 */
+        /* 2. 4×4 グリッド生成 */
         const gridContainer = document.getElementById("gridContainer");
-        const colorPicker = document.getElementById("colorPicker");
         let selectedCell = null;
 
-        // 16マス生成
         for (let i = 0; i < 16; i++) {
             const cell = document.createElement("div");
             cell.classList.add("grid-cell");
             cell.dataset.color = "#ffffff";
             
             cell.addEventListener("click", () => {
-                // 選択状態の解除・設定
-                if (selectedCell) selectedCell.classList.remove("selected");
                 selectedCell = cell;
-                selectedCell.classList.add("selected");
-
-                // 現在のセルの色をピッカーに適用
-                const currentColor = cell.dataset.color || "#ffffff";
-                colorPicker.value = currentColor;
-                updateColorDisplay(currentColor);
-
-                // ピッカーを自動で開く（ブラウザ依存）
-                colorPicker.click();
             });
 
             gridContainer.appendChild(cell);
         }
+        selectedCell = gridContainer.children[0];
 
-        /* 3. カラーピッカー変更時の処理 & RGB / HSL 相互変換 */
-        colorPicker.addEventListener("input", (e) => {
-            const hex = e.target.value;
+        /* 3. リング + 四角形 カラーサークル（Canvas描画） */
+        const canvas = document.getElementById("pickerCanvas");
+        const ctx = canvas.getContext("2d");
+        const size = canvas.width;
+        const center = size / 2;
+        const outerRadius = 105;
+        const innerRadius = 85;
+        const boxSize = 100; // 内側の彩度・明度ボックスサイズ
+
+        let currentHue = 0;        // 0 ~ 360
+        let currentSat = 0;        // 0 ~ 100
+        let currentVal = 100;      // 0 ~ 100
+        let activeTarget = null;   // 'ring' or 'box'
+
+        function renderPicker() {
+            ctx.clearRect(0, 0, size, size);
+
+            // A. 外側：Hue(色相)リングの描画
+            for (let angle = 0; angle < 360; angle += 0.5) {
+                const startAngle = (angle - 0.6) * Math.PI / 180;
+                const endAngle = (angle + 0.6) * Math.PI / 180;
+                ctx.beginPath();
+                ctx.arc(center, center, (outerRadius + innerRadius) / 2, startAngle, endAngle);
+                ctx.strokeStyle = `hsl(${angle}, 100%, 50%)`;
+                ctx.lineWidth = outerRadius - innerRadius;
+                ctx.stroke();
+            }
+
+            // B. 内側：SV(彩度・明度)四角形の描画
+            const x0 = center - boxSize / 2;
+            const y0 = center - boxSize / 2;
+
+            // ベースの色（選択されたHue 100%）
+            ctx.fillStyle = `hsl(${currentHue}, 100%, 50%)`;
+            ctx.fillRect(x0, y0, boxSize, boxSize);
+
+            // 水平方向：白（彩度 0%）グラデーション
+            const gradWhite = ctx.createLinearGradient(x0, y0, x0 + boxSize, y0);
+            gradWhite.addColorStop(0, 'rgba(255,255,255,1)');
+            gradWhite.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = gradWhite;
+            ctx.fillRect(x0, y0, boxSize, boxSize);
+
+            // 垂直方向：黒（明度 0%）グラデーション
+            const gradBlack = ctx.createLinearGradient(x0, y0, x0, y0 + boxSize);
+            gradBlack.addColorStop(0, 'rgba(0,0,0,0)');
+            gradBlack.addColorStop(1, 'rgba(0,0,0,1)');
+            ctx.fillStyle = gradBlack;
+            ctx.fillRect(x0, y0, boxSize, boxSize);
+
+            // 枠線
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x0, y0, boxSize, boxSize);
+
+            // C. 選択カーソルの描画
+            // 色相リング上のポインター
+            const ringAngle = currentHue * Math.PI / 180;
+            const ringR = (outerRadius + innerRadius) / 2;
+            const rx = center + ringR * Math.cos(ringAngle);
+            const ry = center + ringR * Math.sin(ringAngle);
+            ctx.beginPath();
+            ctx.arc(rx, ry, 4, 0, Math.PI * 2);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // SVボックス上のポインター
+            const bx = x0 + (currentSat / 100) * boxSize;
+            const by = y0 + (1 - currentVal / 100) * boxSize;
+            ctx.beginPath();
+            ctx.arc(bx, by, 5, 0, Math.PI * 2);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        /* ピッカーのクリック・ドラッグ判定 */
+        function handlePointer(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const dx = x - center;
+            const dy = y - center;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            const x0 = center - boxSize / 2;
+            const y0 = center - boxSize / 2;
+
+            if (activeTarget === 'ring' || (!activeTarget && dist >= innerRadius && dist <= outerRadius)) {
+                activeTarget = 'ring';
+                let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                if (angle < 0) angle += 360;
+                currentHue = angle;
+            } else if (activeTarget === 'box' || (!activeTarget && x >= x0 && x <= x0 + boxSize && y >= y0 && y <= y0 + boxSize)) {
+                activeTarget = 'box';
+                let sat = ((x - x0) / boxSize) * 100;
+                let val = (1 - (y - y0) / boxSize) * 100;
+                currentSat = Math.max(0, Math.min(100, sat));
+                currentVal = Math.max(0, Math.min(100, val));
+            }
+
+            renderPicker();
+            updateSelectedColor();
+        }
+
+        canvas.addEventListener("mousedown", (e) => {
+            activeTarget = null;
+            handlePointer(e);
+        });
+        canvas.addEventListener("mousemove", (e) => {
+            if (e.buttons === 1) handlePointer(e);
+        });
+        document.addEventListener("mouseup", () => { activeTarget = null; });
+
+        /* 選択中の色を更新 */
+        function updateSelectedColor() {
+            const rgb = hsvToRgb(currentHue, currentSat, currentVal);
+            const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+
             if (selectedCell) {
                 selectedCell.style.backgroundColor = hex;
                 selectedCell.dataset.color = hex;
             }
-            updateColorDisplay(hex);
-        });
 
-        function updateColorDisplay(hex) {
             document.getElementById("val-hex").textContent = hex.toUpperCase();
-            
-            const rgb = hexToRgb(hex);
-            document.getElementById("val-rgb").textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-            
-            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-            document.getElementById("val-hsl").textContent = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+            document.getElementById("val-rgb").textContent = `${rgb.r},${rgb.g},${rgb.b}`;
+            document.getElementById("val-hsb").textContent = `${Math.round(currentHue)}°,${Math.round(currentSat)}%,${Math.round(currentVal)}%`;
         }
 
-        /* --- 色変換ヘルパー関数 --- */
-        function hexToRgb(hex) {
-            const bigint = parseInt(hex.slice(1), 16);
-            return {
-                r: (bigint >> 16) & 255,
-                g: (bigint >> 8) & 255,
-                b: bigint & 255
-            };
-        }
+        /* HSV(HSB) -> RGB 変換 */
+        function hsvToRgb(h, s, v) {
+            s /= 100; v /= 100;
+            let r, g, b;
+            let i = Math.floor(h / 60) % 6;
+            let f = h / 60 - Math.floor(h / 60);
+            let p = v * (1 - s);
+            let q = v * (1 - f * s);
+            let t = v * (1 - (1 - f) * s);
 
-        function rgbToHsl(r, g, b) {
-            r /= 255; g /= 255; b /= 255;
-            const max = Math.max(r, g, b), min = Math.min(r, g, b);
-            let h, s, l = (max + min) / 2;
-
-            if (max === min) {
-                h = s = 0; // アクロマティック（無彩色）
-            } else {
-                const d = max - min;
-                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                switch (max) {
-                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                    case g: h = (b - r) / d + 2; break;
-                    case b: h = (r - g) / d + 4; break;
-                }
-                h /= 6;
+            switch (i) {
+                case 0: r = v; g = t; b = p; break;
+                case 1: r = q; g = v; b = p; break;
+                case 2: r = p; g = v; b = t; break;
+                case 3: r = p; g = q; b = v; break;
+                case 4: r = t; g = p; b = v; break;
+                case 5: r = v; g = p; b = q; break;
             }
-
             return {
-                h: Math.round(h * 360),
-                s: Math.round(s * 100),
-                l: Math.round(l * 100)
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
             };
         }
 
-        // 初期画像表示
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+        }
+
+        // 初期描画
         updateImage();
+        renderPicker();
+        updateSelectedColor();
     </script>
 </body>
 </html>
