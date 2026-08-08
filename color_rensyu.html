@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>chanmana.com - 色の考察練習</title>
+    <title>色の考察練習</title>
     <style>
         /* 全体設定 */
         body {
@@ -17,17 +17,6 @@
         a {
             color: #0000ee;
             text-decoration: underline;
-        }
-
-        /* ヘッダー */
-        header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        header h1 {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 0;
         }
 
         /* 外枠フレーム */
@@ -66,7 +55,7 @@
             background: #cccccc;
             border: 1px solid #000000;
             width: 100%;
-            height: 450px;
+            height: 480px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -80,29 +69,13 @@
             display: block;
         }
 
-        .image-controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .image-controls button {
-            flex: 1;
-            padding: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            background-color: #d8d8d8;
-            border: 1px solid #000;
-        }
-        .image-controls button:hover {
-            background-color: #bfbfbf;
-        }
-
         .credit-info {
             font-size: 11px;
             color: #333;
             text-align: center;
             line-height: 1.4;
             word-break: break-all;
+            margin-top: 4px;
         }
 
         /* 👉 右側メインエリア */
@@ -219,19 +192,9 @@
             border-top: 1px solid #aaaaaa;
             padding-top: 6px;
         }
-
-        footer {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>chanmana.com</h1>
-    </header>
 
     <div class="site-container">
 
@@ -243,14 +206,8 @@
                 <img id="ref-image" src="" alt="参照画像" onerror="handleImgError(this)">
             </div>
 
-            <div class="image-controls">
-                <button id="prev-img-btn">← 前の画像</button>
-                <button id="next-img-btn">次の画像 →</button>
-            </div>
-
             <div class="credit-info">
-                <div>カテゴリ: <strong id="image-caption">-</strong></div>
-                <div>提供: <span id="image-source">Unsplash</span></div>
+                <div>画像引用: <span id="image-source">Courtesy of Unsplash / Photo by Unsplash Contributors</span></div>
             </div>
         </div>
 
@@ -315,66 +272,39 @@
 
     </div>
 
-    <footer>
-        <p>© chanmana.com All Rights Reserved.</p>
-    </footer>
-
     <script>
-        /* 指定カテゴリ：建築、自然、夏、映画、山、空、海 */
-        const sampleImages = [];
+        /* 建築、自然、夏、映画、山、空、海のキーワードに基づいた画像取得 */
         const layoutCategories = [
-            { name: "建築", keyword: "architecture,building,structure,perspective" },
-            { name: "自然", keyword: "nature,forest,landscape,depth" },
-            { name: "夏", keyword: "summer,sunshine,green,cloudy-sky" },
-            { name: "映画", keyword: "cinematic,cinematic-landscape,dramatic-lighting" },
-            { name: "山", keyword: "mountain,peaks,mountain-range" },
-            { name: "空", keyword: "sky,clouds,horizon,sunset-sky" },
-            { name: "海", keyword: "ocean,sea,coastline,beach" }
+            "architecture,building,structure,perspective",
+            "nature,forest,landscape,depth",
+            "summer,sunshine,green,cloudy-sky",
+            "cinematic,cinematic-landscape,dramatic-lighting",
+            "mountain,peaks,mountain-range",
+            "sky,clouds,horizon,sunset-sky",
+            "ocean,sea,coastline,beach"
         ];
 
-        for (let i = 1; i <= 100; i++) {
-            const cat = layoutCategories[i % layoutCategories.length];
-            sampleImages.push({
-                categoryName: cat.name,
-                url: `https://source.unsplash.com/1600x900/?${cat.keyword}&sig=${i + 700}`,
-                fallbackUrl: `https://picsum.photos/1600/900?random=${i + 700}`,
-                source: "Unsplash"
-            });
-        }
+        // ランダムなキーワードで画像読み込み
+        const randomIndex = Math.floor(Math.random() * layoutCategories.length);
+        const selectedKeyword = layoutCategories[randomIndex];
+        const randomSig = Math.floor(Math.random() * 1000) + 1;
 
-        let currentImageIndex = 0;
+        const imgUrl = `https://source.unsplash.com/1600x900/?${selectedKeyword}&sig=${randomSig}`;
+        const fallbackUrl = `https://picsum.photos/1600/900?random=${randomSig}`;
+
         const refImage = document.getElementById("ref-image");
-        const imageCaption = document.getElementById("image-caption");
-        const imageSource = document.getElementById("image-source");
-
-        function updateImage() {
-            const imgData = sampleImages[currentImageIndex];
-            refImage.src = imgData.url;
-            imageCaption.textContent = imgData.categoryName;
-            imageSource.textContent = imgData.source;
-        }
+        refImage.src = imgUrl;
 
         function handleImgError(img) {
-            const imgData = sampleImages[currentImageIndex];
-            if (img.src !== imgData.fallbackUrl) {
-                img.src = imgData.fallbackUrl;
+            if (img.src !== fallbackUrl) {
+                img.src = fallbackUrl;
             } else {
                 img.onerror = null;
                 img.src = "https://via.placeholder.com/1600x900/d8d8d8/000000?text=Image+Load+Error";
             }
         }
 
-        document.getElementById("prev-img-btn").addEventListener("click", () => {
-            currentImageIndex = (currentImageIndex - 1 + sampleImages.length) % sampleImages.length;
-            updateImage();
-        });
-
-        document.getElementById("next-img-btn").addEventListener("click", () => {
-            currentImageIndex = (currentImageIndex + 1) % sampleImages.length;
-            updateImage();
-        });
-
-        /* 2. 6×4 (計24マス) グリッド生成 */
+        /* 6×4 (計24マス) グリッド生成 */
         const gridContainer = document.getElementById("gridContainer");
         let selectedCell = null;
 
@@ -392,7 +322,7 @@
         selectedCell = gridContainer.children[0];
         selectedCell.classList.add("selected");
 
-        /* 3. カラーパレット制御 */
+        /* カラーパレット制御 */
         const canvas = document.getElementById("pickerCanvas");
         const ctx = canvas.getContext("2d");
         const size = canvas.width, center = size / 2, outerRadius = 85, innerRadius = 68, boxSize = 80;
@@ -546,7 +476,6 @@
             return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
         }
 
-        updateImage();
         renderPicker();
         updateFromHSV();
     </script>
