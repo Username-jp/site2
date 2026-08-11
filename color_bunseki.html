@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高精度・色彩分析ジェネレーター</title>
+    <title>色彩空間全表示アナライザー</title>
     <!-- Three.js (3D描画用ライブラリ) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -35,13 +35,27 @@
             font-weight: bold;
         }
 
-        .analysis-container {
+        .analysis-section {
+            background: #a9a9a9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #222;
+            border-bottom: 2px solid #666;
+            padding-bottom: 5px;
+        }
+
+        .grid-container {
             display: grid;
             grid-template-columns: 320px 320px 320px;
             gap: 20px;
             align-items: center;
-            background: #bcbcbc;
-            padding: 20px;
         }
 
         .preview-box img {
@@ -65,7 +79,7 @@
             display: block;
         }
 
-        #threedCanvas {
+        .threed-canvas {
             width: 320px;
             height: 320px;
         }
@@ -79,87 +93,96 @@
             <input type="file" id="imageInput" accept="image/*">
         </div>
         <div class="control-group">
-            <label>色彩空間:</label>
-            <select id="colorSpaceSelect">
-                <option value="hsv">HSV (色相・彩度・明度)</option>
-                <option value="lab">CIELAB (知覚均一色彩空間)</option>
-            </select>
-        </div>
-        <div class="control-group">
             <label>クラスタ数 (色数):</label>
             <input type="range" id="kClusterRange" min="10" max="60" value="35">
             <span id="kClusterVal">35</span>
         </div>
     </div>
 
-    <div class="analysis-container">
-        <!-- 1. アップロード画像プレビュー -->
-        <div class="preview-box">
-            <img id="imgPreview" src="" alt="画像プレビュー" style="display:none;">
-        </div>
-
-        <!-- 2. 2D 色相・彩度マップ -->
-        <div class="canvas-wrapper">
-            <canvas id="wheelCanvas" width="320" height="320"></canvas>
-        </div>
-
-        <!-- 3. 3D 色彩空間ビジュアル -->
-        <div class="canvas-wrapper">
-            <canvas id="threedCanvas"></canvas>
+    <!-- 1. HSV 色彩空間表示 -->
+    <div class="analysis-section">
+        <div class="section-title">■ HSV 色彩空間 (色相・彩度・明度)</div>
+        <div class="grid-container">
+            <div class="preview-box">
+                <img class="imgPreview" src="" alt="画像プレビュー" style="display:none;">
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="wheelCanvasHsv" width="320" height="320"></canvas>
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
+            </div>
         </div>
     </div>
 
-    <!-- 非表示解析用キャンバス -->
+    <!-- 2. CIELAB 色彩空間表示 -->
+    <div class="analysis-section">
+        <div class="section-title">■ CIELAB 色彩空間 (知覚均一空間)</div>
+        <div class="grid-container">
+            <div class="preview-box">
+                <img class="imgPreview" src="" alt="画像プレビュー" style="display:none;">
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="wheelCanvasLab" width="320" height="320"></canvas>
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
         const imageInput = document.getElementById('imageInput');
-        const imgPreview = document.getElementById('imgPreview');
+        const imgPreviews = document.querySelectorAll('.imgPreview');
         const hiddenCanvas = document.getElementById('hiddenCanvas');
         const hCtx = hiddenCanvas.getContext('2d');
 
-        const wheelCanvas = document.getElementById('wheelCanvas');
-        const wCtx = wheelCanvas.getContext('2d');
-
-        const colorSpaceSelect = document.getElementById('colorSpaceSelect');
         const kClusterRange = document.getElementById('kClusterRange');
         const kClusterVal = document.getElementById('kClusterVal');
 
         let currentImage = null;
 
-        // --- Three.js 3D セットアップ ---
-        const threedCanvas = document.getElementById('threedCanvas');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xbcbcbc);
+        // --- Three.js インスタンス初期化関数 ---
+        function create3DScene(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xbcbcbc);
 
-        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-        camera.position.set(0, 160, 260);
+            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+            camera.position.set(0, 160, 260);
 
-        const renderer = new THREE.WebGLRenderer({ canvas: threedCanvas, antialias: true });
-        renderer.setSize(320, 320);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(320, 320);
 
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
 
-        let pointsGroup = new THREE.Group();
-        let bgGuideGroup = new THREE.Group();
-        scene.add(pointsGroup);
-        scene.add(bgGuideGroup);
+            let pointsGroup = new THREE.Group();
+            let bgGuideGroup = new THREE.Group();
+            scene.add(pointsGroup);
+            scene.add(bgGuideGroup);
+
+            return { scene, camera, renderer, controls, pointsGroup, bgGuideGroup };
+        }
+
+        const hsv3D = create3DScene('threedCanvasHsv');
+        const lab3D = create3DScene('threedCanvasLab');
 
         function animate() {
             requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
+            hsv3D.controls.update();
+            hsv3D.renderer.render(hsv3D.scene, hsv3D.camera);
+
+            lab3D.controls.update();
+            lab3D.renderer.render(lab3D.scene, lab3D.camera);
         }
         animate();
 
-        // --- イベントリスナー ---
+        // --- イベント設定 ---
         kClusterRange.addEventListener('input', (e) => {
             kClusterVal.textContent = e.target.value;
-            if (currentImage) runAnalysis();
-        });
-
-        colorSpaceSelect.addEventListener('change', () => {
             if (currentImage) runAnalysis();
         });
 
@@ -169,8 +192,10 @@
 
             const reader = new FileReader();
             reader.onload = (event) => {
-                imgPreview.src = event.target.result;
-                imgPreview.style.display = 'block';
+                imgPreviews.forEach(img => {
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                });
 
                 const img = new Image();
                 img.onload = () => {
@@ -185,7 +210,6 @@
         function runAnalysis() {
             if (!currentImage) return;
 
-            // 解析用縮小描画（速度維持）
             const sampleWidth = 100;
             const sampleHeight = Math.round((currentImage.height / currentImage.width) * sampleWidth);
             hiddenCanvas.width = sampleWidth;
@@ -194,7 +218,6 @@
             hCtx.drawImage(currentImage, 0, 0, sampleWidth, sampleHeight);
             const imgData = hCtx.getImageData(0, 0, sampleWidth, sampleHeight).data;
 
-            // 1. ピクセルデータの抽出
             const pixels = [];
             for (let i = 0; i < imgData.length; i += 4) {
                 if (imgData[i + 3] > 128) {
@@ -202,19 +225,19 @@
                 }
             }
 
-            // 2. k-means クラスタリングの実行
             const k = parseInt(kClusterRange.value, 10);
             const clusters = kMeans(pixels, k, 8);
 
-            // 3. 描画
-            const mode = colorSpaceSelect.value;
-            draw2DWheel(clusters, mode);
-            draw3DSpace(clusters, mode);
+            // 各空間の一括描画
+            draw2DWheel(clusters, 'hsv', 'wheelCanvasHsv');
+            draw3DSpace(clusters, 'hsv', hsv3D);
+
+            draw2DWheel(clusters, 'lab', 'wheelCanvasLab');
+            draw3DSpace(clusters, 'lab', lab3D);
         }
 
-        // --- k-means アルゴリズム ---
+        // --- k-means ---
         function kMeans(pixels, k, maxIter = 8) {
-            // 初期化: ランダムにk個選択
             let centroids = [];
             for (let i = 0; i < k; i++) {
                 centroids.push(pixels[Math.floor(Math.random() * pixels.length)]);
@@ -226,7 +249,6 @@
             for (let iter = 0; iter < maxIter; iter++) {
                 clusterCounts.fill(0);
 
-                // 各ピクセルを最も近いセントロイドに割り当て
                 for (let i = 0; i < pixels.length; i++) {
                     const p = pixels[i];
                     let minDist = Infinity;
@@ -243,7 +265,6 @@
                     clusterCounts[closest]++;
                 }
 
-                // セントロイドの再計算
                 const newCentroids = Array.from({ length: k }, () => [0, 0, 0]);
                 const counts = new Array(k).fill(0);
 
@@ -266,63 +287,56 @@
                 }
             }
 
-            // 結果のまとめ（RGB、出現割合、各空間の座標）
             return centroids.map((c, idx) => {
-                const ratio = clusterCounts[idx] / pixels.length;
-                const hsv = rgbToHsv(c[0], c[1], c[2]);
-                const lab = rgbToLab(c[0], c[1], c[2]);
                 return {
                     rgb: c,
-                    ratio: ratio,
-                    hsv: hsv,
-                    lab: lab
+                    ratio: clusterCounts[idx] / pixels.length,
+                    hsv: rgbToHsv(c[0], c[1], c[2]),
+                    lab: rgbToLab(c[0], c[1], c[2])
                 };
             }).filter(item => item.ratio > 0);
         }
 
-        // --- 2D 色相環・座標グラフ描画 ---
-        function draw2DWheel(clusters, mode) {
-            const width = wheelCanvas.width;
-            const height = wheelCanvas.height;
+        // --- 2D 描画 ---
+        function draw2DWheel(clusters, mode, canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
             const centerX = width / 2;
             const centerY = height / 2;
             const maxRadius = width / 2 - 25;
 
-            wCtx.clearRect(0, 0, width, height);
+            ctx.clearRect(0, 0, width, height);
 
-            // 背景ガイド（参考画像スタイルの目盛り・軸線）
-            wCtx.strokeStyle = "rgba(0, 0, 0, 0.25)";
-            wCtx.lineWidth = 1;
+            ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+            ctx.lineWidth = 1;
 
-            // 放射状の軸線 (8方向)
             for (let a = 0; a < 360; a += 45) {
                 const rad = a * Math.PI / 180;
-                wCtx.beginPath();
-                wCtx.moveTo(centerX, centerY);
-                wCtx.lineTo(centerX + maxRadius * Math.cos(rad), centerY + maxRadius * Math.sin(rad));
-                wCtx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(centerX + maxRadius * Math.cos(rad), centerY + maxRadius * Math.sin(rad));
+                ctx.stroke();
             }
 
-            // 同心円ガイド (3重)
             for (let r = 0.33; r <= 1.0; r += 0.33) {
-                wCtx.beginPath();
-                wCtx.arc(centerX, centerY, maxRadius * r, 0, Math.PI * 2);
-                wCtx.stroke();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, maxRadius * r, 0, Math.PI * 2);
+                ctx.stroke();
             }
 
-            // 外周カラードットガイド
             for (let a = 0; a < 360; a += 15) {
                 const rad = a * Math.PI / 180;
                 const gx = centerX + (maxRadius + 10) * Math.cos(rad);
                 const gy = centerY + (maxRadius + 10) * Math.sin(rad);
                 const hsvRgb = hsvToRgb(a, 100, 100);
-                wCtx.beginPath();
-                wCtx.arc(gx, gy, 2, 0, Math.PI * 2);
-                wCtx.fillStyle = `rgb(${hsvRgb[0]}, ${hsvRgb[1]}, ${hsvRgb[2]})`;
-                wCtx.fill();
+                ctx.beginPath();
+                ctx.arc(gx, gy, 2, 0, Math.PI * 2);
+                ctx.fillStyle = `rgb(${hsvRgb[0]}, ${hsvRgb[1]}, ${hsvRgb[2]})`;
+                ctx.fill();
             }
 
-            // クラスタプロットの描画（大きい順に描画して重なりを綺麗に表現）
             const sorted = [...clusters].sort((a, b) => b.ratio - a.ratio);
 
             sorted.forEach(item => {
@@ -333,59 +347,52 @@
                     x = centerX + radius * Math.cos(angle);
                     y = centerY + radius * Math.sin(angle);
                 } else {
-                    // LAB モード (a* = X軸, b* = Y軸)
                     x = centerX + (item.lab.a / 128) * maxRadius;
                     y = centerY - (item.lab.b / 128) * maxRadius;
                 }
 
-                // **3倍サイズ化**: 出現割合に応じて半径 12px 〜 36px 程度にスケール
                 const radiusPx = 12 + Math.sqrt(item.ratio) * 45;
 
-                wCtx.beginPath();
-                wCtx.arc(x, y, radiusPx, 0, Math.PI * 2);
-                wCtx.fillStyle = `rgba(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]}, 0.85)`;
-                wCtx.fill();
+                ctx.beginPath();
+                ctx.arc(x, y, radiusPx, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]}, 0.85)`;
+                ctx.fill();
             });
         }
 
-        // --- 3D 空間ビジュアル描画 ---
-        function draw3DSpace(clusters, mode) {
-            scene.remove(pointsGroup);
-            scene.remove(bgGuideGroup);
+        // --- 3D 描画 ---
+        function draw3DSpace(clusters, mode, obj3D) {
+            obj3D.scene.remove(obj3D.pointsGroup);
+            obj3D.scene.remove(obj3D.bgGuideGroup);
 
-            pointsGroup = new THREE.Group();
-            bgGuideGroup = new THREE.Group();
+            obj3D.pointsGroup = new THREE.Group();
+            obj3D.bgGuideGroup = new THREE.Group();
 
             const maxRadius = 90;
             const heightScale = 140;
 
-            // 3D背景ガイド（中央明度軸＋ドット）
             const axisGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, -heightScale/2 - 10, 0),
                 new THREE.Vector3(0, heightScale/2 + 10, 0)
             ]);
-            const axisMat = new THREE.LineBasicMaterial({ color: 0x444444, linewidth: 1 });
-            bgGuideGroup.add(new THREE.Line(axisGeo, axisMat));
+            const axisMat = new THREE.LineBasicMaterial({ color: 0x444444 });
+            obj3D.bgGuideGroup.add(new THREE.Line(axisGeo, axisMat));
 
-            // 3D空間内のグリッド点ガイド
             for (let yDeg = -60; yDeg <= 60; yDeg += 30) {
                 for (let a = 0; a < 360; a += 30) {
                     const rad = a * Math.PI / 180;
-                    const gx = maxRadius * Math.cos(rad);
-                    const gz = maxRadius * Math.sin(rad);
-                    const pGeo = new THREE.SphereGeometry(0.8, 4, 4);
-                    const pMat = new THREE.MeshBasicMaterial({ color: 0x666666 });
-                    const pMesh = new THREE.Mesh(pGeo, pMat);
-                    pMesh.position.set(gx, yDeg, gz);
-                    bgGuideGroup.add(pMesh);
+                    const pMesh = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.8, 4, 4),
+                        new THREE.MeshBasicMaterial({ color: 0x666666 })
+                    );
+                    pMesh.position.set(maxRadius * Math.cos(rad), yDeg, maxRadius * Math.sin(rad));
+                    obj3D.bgGuideGroup.add(pMesh);
                 }
             }
-            scene.add(bgGuideGroup);
+            obj3D.scene.add(obj3D.bgGuideGroup);
 
-            // 各クラスタの3Dプロット
             clusters.forEach(item => {
                 let x, y, z;
-
                 if (mode === 'hsv') {
                     const angle = item.hsv.h * (Math.PI / 180);
                     const radius = (item.hsv.s / 100) * maxRadius;
@@ -393,31 +400,28 @@
                     z = radius * Math.sin(angle);
                     y = (item.hsv.v / 100) * heightScale - (heightScale / 2);
                 } else {
-                    // LAB モード
                     x = (item.lab.a / 128) * maxRadius;
                     z = (item.lab.b / 128) * maxRadius;
                     y = (item.lab.L / 100) * heightScale - (heightScale / 2);
                 }
 
-                // **3倍サイズ化**: 球体半径を大幅拡大 (6px 〜 22px 程度)
                 const sphereRadius = 6 + Math.sqrt(item.ratio) * 28;
-
-                const geometry = new THREE.SphereGeometry(sphereRadius, 24, 24);
-                const material = new THREE.MeshBasicMaterial({
-                    color: new THREE.Color(`rgb(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]})`),
-                    transparent: true,
-                    opacity: 0.9
-                });
-
-                const sphere = new THREE.Mesh(geometry, material);
+                const sphere = new THREE.Mesh(
+                    new THREE.SphereGeometry(sphereRadius, 24, 24),
+                    new THREE.MeshBasicMaterial({
+                        color: new THREE.Color(`rgb(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]})`),
+                        transparent: true,
+                        opacity: 0.9
+                    })
+                );
                 sphere.position.set(x, y, z);
-                pointsGroup.add(sphere);
+                obj3D.pointsGroup.add(sphere);
             });
 
-            scene.add(pointsGroup);
+            obj3D.scene.add(obj3D.pointsGroup);
         }
 
-        // --- 色彩変換関数 (RGB <-> HSV / LAB) ---
+        // --- 色彩変換関数 ---
         function rgbToHsv(r, g, b) {
             r /= 255; g /= 255; b /= 255;
             const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -456,7 +460,6 @@
         }
 
         function rgbToLab(r, g, b) {
-            // RGB -> XYZ
             let rL = r / 255, gL = g / 255, bL = b / 255;
             rL = (rL > 0.04045) ? Math.pow((rL + 0.055) / 1.055, 2.4) : rL / 12.92;
             gL = (gL > 0.04045) ? Math.pow((gL + 0.055) / 1.055, 2.4) : gL / 12.92;
