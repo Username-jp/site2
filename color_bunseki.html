@@ -7,6 +7,8 @@
     <!-- Three.js (3D描画用ライブラリ) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- html2canvas (PNGキャプチャ保存用ライブラリ) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: sans-serif;
@@ -19,9 +21,9 @@
         /* 操作パネル */
         .controls-panel {
             background: #ffffff;
-            padding: 15px 20px;
+            padding: 12px 20px;
             border-radius: 6px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             gap: 30px;
             align-items: center;
@@ -38,78 +40,97 @@
         }
 
         .control-group input[type="range"] {
-            width: 150px;
+            width: 140px;
         }
 
-        /* 統合メイン表示エリア */
+        .save-btn {
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.2s;
+            margin-left: auto;
+        }
+
+        .save-btn:hover {
+            background-color: #555555;
+        }
+
+        /* 統合メイン表示エリア（保存対象の大コンテナ） */
         .integrated-container {
             background: #a9a9a9;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #777;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #777777;
+            box-sizing: border-box;
         }
 
-        /* セクションヘッダー（タイトル + 簡潔説明文） */
-        .section-header {
-            display: flex;
-            align-items: baseline;
-            gap: 15px;
-            border-bottom: 2px solid #555555;
-            padding-bottom: 6px;
-        }
-
-        .section-title {
-            font-size: 17px;
-            font-weight: bold;
-            color: #000000;
-            white-space: nowrap;
-        }
-
-        .section-desc {
-            font-size: 12px;
-            color: #000000;
-            line-height: 1.3;
-        }
-
-        /* 5列レイアウト (画像1枚 + HSV 2D/3D + CIELAB 2D/3D) */
+        /* 5列レイアウト (左: 元画像 1枚 / 右: HSV & LAB グラフ群) */
         .main-layout {
             display: grid;
-            grid-template-columns: 280px 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 360px 1fr;
+            gap: 25px;
             align-items: start;
         }
 
         .image-col {
-            width: 280px;
+            width: 360px;
         }
 
         .image-col img {
             width: 100%;
             height: auto;
-            border: 1px solid #444;
+            border: 1px solid #333333;
             display: block;
-            background: #ccc;
+            background: #cccccc;
         }
 
         .charts-block {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
+        }
+
+        /* セクションヘッダー（タイトル + 説明文） */
+        .section-header {
+            border-bottom: 1px solid #333333;
+            padding-bottom: 4px;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .section-desc {
+            font-size: 11px;
+            color: #000000;
+            line-height: 1.25;
+            margin-top: 2px;
         }
 
         .charts-row {
             display: grid;
-            grid-template-columns: 280px 280px;
-            gap: 15px;
+            grid-template-columns: 240px 240px;
+            gap: 20px;
+        }
+
+        .chart-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .canvas-wrapper {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 240px;
+            height: 240px;
             background: #bcbcbc;
             display: flex;
             justify-content: center;
@@ -121,8 +142,16 @@
         }
 
         .threed-canvas {
-            width: 280px;
-            height: 280px;
+            width: 240px;
+            height: 240px;
+        }
+
+        /* 下部モデル名ラベル */
+        .model-label {
+            font-size: 11px;
+            color: #000000;
+            margin-top: 6px;
+            text-align: center;
         }
     </style>
 </head>
@@ -139,19 +168,21 @@
             <input type="range" id="kClusterRange" min="10" max="60" value="34">
             <span id="kClusterVal">34</span>
         </div>
+        <!-- PNG書き出し用ボタン -->
+        <button class="save-btn" id="saveBtn">PNG保存 / Save PNG</button>
     </div>
 
-    <!-- 統合コンテナ -->
-    <div class="integrated-container">
-
+    <!-- 大コンテナ（書き出し対象） -->
+    <div class="integrated-container" id="captureContainer">
         <div class="main-layout">
-            <!-- 左端：参照画像 1枚のみ -->
+            
+            <!-- 左側：参照画像 1枚のみ -->
             <div class="image-col">
                 <img id="imgPreview" src="" alt="画像プレビュー / Image Preview" style="display:none;">
             </div>
 
-            <!-- 右側：HSVおよびCIELABの各グラフと説明 -->
-            <div class="charts-block" style="grid-column: span 2;">
+            <!-- 右側：HSVおよびCIELABの分析グラフ -->
+            <div class="charts-block">
                 
                 <!-- 1. HSV エリア -->
                 <div>
@@ -162,18 +193,24 @@
                             An intuitive color representation based on hue circle and brightness, close to human selection perception.
                         </div>
                     </div>
-                    <div class="charts-row" style="margin-top: 10px;">
-                        <div class="canvas-wrapper">
-                            <canvas id="wheelCanvasHsv" width="280" height="280"></canvas>
+                    <div class="charts-row">
+                        <div class="chart-box">
+                            <div class="canvas-wrapper">
+                                <canvas id="wheelCanvasHsv" width="240" height="240"></canvas>
+                            </div>
+                            <div class="model-label">モデル名 / Model Name</div>
                         </div>
-                        <div class="canvas-wrapper">
-                            <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
+                        <div class="chart-box">
+                            <div class="canvas-wrapper">
+                                <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
+                            </div>
+                            <div class="model-label">モデル名 / Model Name</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 2. CIELAB エリア -->
-                <div style="margin-top: 10px;">
+                <div>
                     <div class="section-header">
                         <div class="section-title">■ CIELAB 色彩空間 (知覚均一空間) / CIELAB Color Space (Perceptually Uniform)</div>
                         <div class="section-desc">
@@ -181,19 +218,24 @@
                             A space adjusted to match human visual perception, where spatial distance directly corresponds to perceived color difference.
                         </div>
                     </div>
-                    <div class="charts-row" style="margin-top: 10px;">
-                        <div class="canvas-wrapper">
-                            <canvas id="wheelCanvasLab" width="280" height="280"></canvas>
+                    <div class="charts-row">
+                        <div class="chart-box">
+                            <div class="canvas-wrapper">
+                                <canvas id="wheelCanvasLab" width="240" height="240"></canvas>
+                            </div>
+                            <div class="model-label">モデル名 / Model Name</div>
                         </div>
-                        <div class="canvas-wrapper">
-                            <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
+                        <div class="chart-box">
+                            <div class="canvas-wrapper">
+                                <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
+                            </div>
+                            <div class="model-label">モデル名 / Model Name</div>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-
     </div>
 
     <!-- 解析用非表示キャンバス -->
@@ -207,6 +249,7 @@
 
         const kClusterRange = document.getElementById('kClusterRange');
         const kClusterVal = document.getElementById('kClusterVal');
+        const saveBtn = document.getElementById('saveBtn');
 
         let currentImage = null;
 
@@ -219,8 +262,9 @@
             const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
             camera.position.set(0, 160, 260);
 
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            renderer.setSize(280, 280);
+            // Three.js保存時に黒画面化するのを防ぐため preserveDrawingBuffer を有効化
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, preserveDrawingBuffer: true });
+            renderer.setSize(240, 240);
 
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
@@ -269,6 +313,23 @@
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
+        });
+
+        // --- PNG保存ボタンの動作 ---
+        saveBtn.addEventListener('click', () => {
+            const target = document.getElementById('captureContainer');
+            
+            // html2canvasで大コンテナをレンダリングしてPNG化
+            html2canvas(target, {
+                useCORS: true,
+                scale: 2, // 高解像度出力
+                backgroundColor: null
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'color-analysis-result.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
         });
 
         function runAnalysis() {
@@ -369,7 +430,7 @@
             const height = canvas.height;
             const centerX = width / 2;
             const centerY = height / 2;
-            const maxRadius = width / 2 - 20;
+            const maxRadius = width / 2 - 18;
 
             ctx.clearRect(0, 0, width, height);
 
@@ -392,8 +453,8 @@
 
             for (let a = 0; a < 360; a += 15) {
                 const rad = a * Math.PI / 180;
-                const gx = centerX + (maxRadius + 8) * Math.cos(rad);
-                const gy = centerY + (maxRadius + 8) * Math.sin(rad);
+                const gx = centerX + (maxRadius + 7) * Math.cos(rad);
+                const gy = centerY + (maxRadius + 7) * Math.sin(rad);
                 const hsvRgb = hsvToRgb(a, 100, 100);
                 ctx.beginPath();
                 ctx.arc(gx, gy, 2, 0, Math.PI * 2);
@@ -415,7 +476,7 @@
                     y = centerY - (item.lab.b / 128) * maxRadius;
                 }
 
-                const radiusPx = 10 + Math.sqrt(item.ratio) * 40;
+                const radiusPx = 8 + Math.sqrt(item.ratio) * 35;
 
                 ctx.beginPath();
                 ctx.arc(x, y, radiusPx, 0, Math.PI * 2);
@@ -432,8 +493,8 @@
             obj3D.pointsGroup = new THREE.Group();
             obj3D.bgGuideGroup = new THREE.Group();
 
-            const maxRadius = 80;
-            const heightScale = 130;
+            const maxRadius = 75;
+            const heightScale = 120;
 
             const axisGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, -heightScale/2 - 10, 0),
@@ -469,7 +530,7 @@
                     y = (item.lab.L / 100) * heightScale - (heightScale / 2);
                 }
 
-                const sphereRadius = 5 + Math.sqrt(item.ratio) * 24;
+                const sphereRadius = 4 + Math.sqrt(item.ratio) * 22;
                 const sphere = new THREE.Mesh(
                     new THREE.SphereGeometry(sphereRadius, 24, 24),
                     new THREE.MeshBasicMaterial({
