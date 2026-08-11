@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>色彩空間全表示アナライザー</title>
+    <title>色彩空間統合アナライザー / Integrated Color Space Analyzer</title>
     <!-- Three.js (3D描画用ライブラリ) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -11,18 +11,19 @@
         body {
             font-family: sans-serif;
             background-color: #bcbcbc;
-            color: #111;
+            color: #000000;
             margin: 0;
             padding: 20px;
         }
 
+        /* 操作パネル */
         .controls-panel {
             background: #ffffff;
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 6px;
             margin-bottom: 20px;
             display: flex;
-            gap: 20px;
+            gap: 30px;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -30,45 +31,85 @@
         .control-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 14px;
             font-weight: bold;
+            color: #000000;
         }
 
-        .analysis-section {
+        .control-group input[type="range"] {
+            width: 150px;
+        }
+
+        /* 統合メイン表示エリア */
+        .integrated-container {
             background: #a9a9a9;
             padding: 20px;
             border-radius: 8px;
-            margin-bottom: 25px;
+            border: 1px solid #777;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* セクションヘッダー（タイトル + 簡潔説明文） */
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+            border-bottom: 2px solid #555555;
+            padding-bottom: 6px;
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
-            margin-bottom: 15px;
-            color: #222;
-            border-bottom: 2px solid #666;
-            padding-bottom: 5px;
+            color: #000000;
+            white-space: nowrap;
         }
 
-        .grid-container {
+        .section-desc {
+            font-size: 12px;
+            color: #000000;
+            line-height: 1.3;
+        }
+
+        /* 5列レイアウト (画像1枚 + HSV 2D/3D + CIELAB 2D/3D) */
+        .main-layout {
             display: grid;
-            grid-template-columns: 320px 320px 320px;
+            grid-template-columns: 280px 1fr 1fr;
             gap: 20px;
-            align-items: center;
+            align-items: start;
         }
 
-        .preview-box img {
+        .image-col {
+            width: 280px;
+        }
+
+        .image-col img {
             width: 100%;
             height: auto;
-            border: 1px solid #777;
+            border: 1px solid #444;
             display: block;
+            background: #ccc;
+        }
+
+        .charts-block {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: 280px 280px;
+            gap: 15px;
         }
 
         .canvas-wrapper {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 280px;
+            height: 280px;
             background: #bcbcbc;
             display: flex;
             justify-content: center;
@@ -80,62 +121,87 @@
         }
 
         .threed-canvas {
-            width: 320px;
-            height: 320px;
+            width: 280px;
+            height: 280px;
         }
     </style>
 </head>
 <body>
 
+    <!-- 操作パネル -->
     <div class="controls-panel">
         <div class="control-group">
-            <label>画像選択:</label>
+            <label>画像選択 / Select Image:</label>
             <input type="file" id="imageInput" accept="image/*">
         </div>
         <div class="control-group">
-            <label>クラスタ数 (色数):</label>
-            <input type="range" id="kClusterRange" min="10" max="60" value="35">
-            <span id="kClusterVal">35</span>
+            <label>クラスタ数 (色数) / Clusters:</label>
+            <input type="range" id="kClusterRange" min="10" max="60" value="34">
+            <span id="kClusterVal">34</span>
         </div>
     </div>
 
-    <!-- 1. HSV 色彩空間表示 -->
-    <div class="analysis-section">
-        <div class="section-title">■ HSV 色彩空間 (色相・彩度・明度)</div>
-        <div class="grid-container">
-            <div class="preview-box">
-                <img class="imgPreview" src="" alt="画像プレビュー" style="display:none;">
+    <!-- 統合コンテナ -->
+    <div class="integrated-container">
+
+        <div class="main-layout">
+            <!-- 左端：参照画像 1枚のみ -->
+            <div class="image-col">
+                <img id="imgPreview" src="" alt="画像プレビュー / Image Preview" style="display:none;">
             </div>
-            <div class="canvas-wrapper">
-                <canvas id="wheelCanvasHsv" width="320" height="320"></canvas>
-            </div>
-            <div class="canvas-wrapper">
-                <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
+
+            <!-- 右側：HSVおよびCIELABの各グラフと説明 -->
+            <div class="charts-block" style="grid-column: span 2;">
+                
+                <!-- 1. HSV エリア -->
+                <div>
+                    <div class="section-header">
+                        <div class="section-title">■ HSV 色彩空間 (色相・彩度・明度) / HSV Color Space (Hue, Saturation, Value)</div>
+                        <div class="section-desc">
+                            直感的な色相環と明度で構成された色表現。人間が色を選ぶ感覚に近いモデル。<br>
+                            An intuitive color representation based on hue circle and brightness, close to human selection perception.
+                        </div>
+                    </div>
+                    <div class="charts-row" style="margin-top: 10px;">
+                        <div class="canvas-wrapper">
+                            <canvas id="wheelCanvasHsv" width="280" height="280"></canvas>
+                        </div>
+                        <div class="canvas-wrapper">
+                            <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. CIELAB エリア -->
+                <div style="margin-top: 10px;">
+                    <div class="section-header">
+                        <div class="section-title">■ CIELAB 色彩空間 (知覚均一空間) / CIELAB Color Space (Perceptually Uniform)</div>
+                        <div class="section-desc">
+                            人の目の視覚特性に合わせて補正された空間。距離の離れ具合がそのまま見た目の色差に対応。<br>
+                            A space adjusted to match human visual perception, where spatial distance directly corresponds to perceived color difference.
+                        </div>
+                    </div>
+                    <div class="charts-row" style="margin-top: 10px;">
+                        <div class="canvas-wrapper">
+                            <canvas id="wheelCanvasLab" width="280" height="280"></canvas>
+                        </div>
+                        <div class="canvas-wrapper">
+                            <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
+
     </div>
 
-    <!-- 2. CIELAB 色彩空間表示 -->
-    <div class="analysis-section">
-        <div class="section-title">■ CIELAB 色彩空間 (知覚均一空間)</div>
-        <div class="grid-container">
-            <div class="preview-box">
-                <img class="imgPreview" src="" alt="画像プレビュー" style="display:none;">
-            </div>
-            <div class="canvas-wrapper">
-                <canvas id="wheelCanvasLab" width="320" height="320"></canvas>
-            </div>
-            <div class="canvas-wrapper">
-                <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
-            </div>
-        </div>
-    </div>
-
+    <!-- 解析用非表示キャンバス -->
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
         const imageInput = document.getElementById('imageInput');
-        const imgPreviews = document.querySelectorAll('.imgPreview');
+        const imgPreview = document.getElementById('imgPreview');
         const hiddenCanvas = document.getElementById('hiddenCanvas');
         const hCtx = hiddenCanvas.getContext('2d');
 
@@ -144,7 +210,7 @@
 
         let currentImage = null;
 
-        // --- Three.js インスタンス初期化関数 ---
+        // --- Three.js インスタンス初期化 ---
         function create3DScene(canvasId) {
             const canvas = document.getElementById(canvasId);
             const scene = new THREE.Scene();
@@ -154,7 +220,7 @@
             camera.position.set(0, 160, 260);
 
             const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            renderer.setSize(320, 320);
+            renderer.setSize(280, 280);
 
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
@@ -192,10 +258,8 @@
 
             const reader = new FileReader();
             reader.onload = (event) => {
-                imgPreviews.forEach(img => {
-                    img.src = event.target.result;
-                    img.style.display = 'block';
-                });
+                imgPreview.src = event.target.result;
+                imgPreview.style.display = 'block';
 
                 const img = new Image();
                 img.onload = () => {
@@ -228,7 +292,7 @@
             const k = parseInt(kClusterRange.value, 10);
             const clusters = kMeans(pixels, k, 8);
 
-            // 各空間の一括描画
+            // 描画実行
             draw2DWheel(clusters, 'hsv', 'wheelCanvasHsv');
             draw3DSpace(clusters, 'hsv', hsv3D);
 
@@ -305,7 +369,7 @@
             const height = canvas.height;
             const centerX = width / 2;
             const centerY = height / 2;
-            const maxRadius = width / 2 - 25;
+            const maxRadius = width / 2 - 20;
 
             ctx.clearRect(0, 0, width, height);
 
@@ -328,8 +392,8 @@
 
             for (let a = 0; a < 360; a += 15) {
                 const rad = a * Math.PI / 180;
-                const gx = centerX + (maxRadius + 10) * Math.cos(rad);
-                const gy = centerY + (maxRadius + 10) * Math.sin(rad);
+                const gx = centerX + (maxRadius + 8) * Math.cos(rad);
+                const gy = centerY + (maxRadius + 8) * Math.sin(rad);
                 const hsvRgb = hsvToRgb(a, 100, 100);
                 ctx.beginPath();
                 ctx.arc(gx, gy, 2, 0, Math.PI * 2);
@@ -351,7 +415,7 @@
                     y = centerY - (item.lab.b / 128) * maxRadius;
                 }
 
-                const radiusPx = 12 + Math.sqrt(item.ratio) * 45;
+                const radiusPx = 10 + Math.sqrt(item.ratio) * 40;
 
                 ctx.beginPath();
                 ctx.arc(x, y, radiusPx, 0, Math.PI * 2);
@@ -368,8 +432,8 @@
             obj3D.pointsGroup = new THREE.Group();
             obj3D.bgGuideGroup = new THREE.Group();
 
-            const maxRadius = 90;
-            const heightScale = 140;
+            const maxRadius = 80;
+            const heightScale = 130;
 
             const axisGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, -heightScale/2 - 10, 0),
@@ -405,7 +469,7 @@
                     y = (item.lab.L / 100) * heightScale - (heightScale / 2);
                 }
 
-                const sphereRadius = 6 + Math.sqrt(item.ratio) * 28;
+                const sphereRadius = 5 + Math.sqrt(item.ratio) * 24;
                 const sphere = new THREE.Mesh(
                     new THREE.SphereGeometry(sphereRadius, 24, 24),
                     new THREE.MeshBasicMaterial({
