@@ -16,7 +16,6 @@
             color: #000000;
             margin: 0;
             padding: 20px;
-            /* 大コンテナを中心に配置するための設定 */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -33,7 +32,7 @@
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 1500px;
+            max-width: 1350px;
             box-sizing: border-box;
         }
 
@@ -67,7 +66,7 @@
             background-color: #41556b;
         }
 
-        /* 大コンテナ（書き出し対象・中心合わせ） */
+        /* 大コンテナ */
         .integrated-container {
             background: #a9a9a9;
             padding: 25px;
@@ -75,20 +74,20 @@
             border: 1px solid #777777;
             box-sizing: border-box;
             display: block;
-            margin: 0 auto; /* 中央寄せ */
+            margin: 0 auto;
         }
 
-        /* 全体レイアウト (左: 参照画像180% / 中央: 2x2グラフ / 右: 説明文) */
+        /* 全体レイアウト */
         .main-layout {
             display: grid;
-            grid-template-columns: 756px auto 260px; /* 画像幅を 420px -> 756px (180%) に変更 */
+            grid-template-columns: 588px auto 260px;
             gap: 20px;
             align-items: center;
         }
 
-        /* 左側：元画像 (180%サイズ：756px) */
+        /* 左側：元画像 */
         .image-col {
-            width: 756px;
+            width: 588px;
         }
 
         .image-col img {
@@ -190,7 +189,7 @@
     <div class="integrated-container" id="captureContainer">
         <div class="main-layout">
             
-            <!-- 左端：参照画像 (180%サイズ) -->
+            <!-- 左端：参照画像 (140%サイズ) -->
             <div class="image-col">
                 <img id="imgPreview" src="" alt="画像プレビュー / Image Preview" style="display:none;">
             </div>
@@ -202,15 +201,15 @@
                     <div class="canvas-wrapper">
                         <canvas id="wheelCanvasHsv" width="220" height="220"></canvas>
                     </div>
-                    <div class="chart-label">HSV</div>
+                    <div class="chart-label">HSV 2D</div>
                 </div>
 
-                <!-- 上段右：HSV 3D (A) -->
+                <!-- 上段右：HSV 3D -->
                 <div class="chart-box">
                     <div class="canvas-wrapper">
                         <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
                     </div>
-                    <div class="chart-label">A</div>
+                    <div class="chart-label">HSV 3D</div>
                 </div>
 
                 <!-- 下段左：CIELAB 2D -->
@@ -218,20 +217,20 @@
                     <div class="canvas-wrapper">
                         <canvas id="wheelCanvasLab" width="220" height="220"></canvas>
                     </div>
-                    <div class="chart-label">CIELAB</div>
+                    <div class="chart-label">CIELAB 2D</div>
                 </div>
 
-                <!-- 下段右：CIELAB 3D (B) -->
+                <!-- 下段右：CIELAB 3D -->
                 <div class="chart-box">
                     <div class="canvas-wrapper">
                         <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
                     </div>
-                    <div class="chart-label">B</div>
+                    <div class="chart-label">CIELAB 3D</div>
                 </div>
             </div>
 
             <!-- 右端：説明文ブロック -->
-            <div class="descriptions-col">
+            <div class="descriptions-col" id="descCol">
                 <!-- HSV 説明 -->
                 <div>
                     <div class="section-header">
@@ -270,23 +269,51 @@
         const kClusterRange = document.getElementById('kClusterRange');
         const kClusterVal = document.getElementById('kClusterVal');
         const saveBtn = document.getElementById('saveBtn');
+        const descCol = document.getElementById('descCol');
 
         let currentImage = null;
 
-        // --- Three.js 初期化 ---
+        // --- 軸ラベル用テキストスプライト生成 ---
+        function createTextSprite(text, color) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = color;
+            ctx.font = 'Bold 44px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 32, 32);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.scale.set(20, 20, 1);
+            return sprite;
+        }
+
+        // --- Three.js 初期化（ライティング・ガイド強化） ---
         function create3DScene(canvasId) {
             const canvas = document.getElementById(canvasId);
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xbcbcbc);
+            scene.background = new THREE.Color(0xb0b0b0);
 
             const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-            camera.position.set(0, 160, 260);
+            camera.position.set(130, 140, 200);
 
             const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, preserveDrawingBuffer: true });
             renderer.setSize(220, 220);
 
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
+
+            // 光源（立体感付与）
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            dirLight.position.set(100, 200, 150);
+            scene.add(dirLight);
 
             let pointsGroup = new THREE.Group();
             let bgGuideGroup = new THREE.Group();
@@ -334,15 +361,17 @@
             reader.readAsDataURL(file);
         });
 
-        // --- PNG別ウィンドウ出力 ---
+        // --- PNG出力 ---
         saveBtn.addEventListener('click', () => {
             const target = document.getElementById('captureContainer');
-            
+            descCol.style.display = 'none';
+
             html2canvas(target, {
                 useCORS: true,
                 scale: 2,
                 backgroundColor: null
             }).then(canvas => {
+                descCol.style.display = 'flex';
                 const dataUrl = canvas.toDataURL('image/png');
                 const win = window.open();
                 if (win) {
@@ -350,6 +379,9 @@
                 } else {
                     alert('ポップアップがブロックされました。ブラウザのポップアップを許可してください。');
                 }
+            }).catch(err => {
+                descCol.style.display = 'flex';
+                console.error(err);
             });
         });
 
@@ -505,7 +537,7 @@
             });
         }
 
-        // --- 3D 描画 ---
+        // --- 3D 描画（視認性向上版） ---
         function draw3DSpace(clusters, mode, obj3D) {
             obj3D.scene.remove(obj3D.pointsGroup);
             obj3D.scene.remove(obj3D.bgGuideGroup);
@@ -516,26 +548,54 @@
             const maxRadius = 70;
             const heightScale = 110;
 
-            const axisGeo = new THREE.BufferGeometry().setFromPoints([
-                new THREE.Vector3(0, -heightScale/2 - 10, 0),
-                new THREE.Vector3(0, heightScale/2 + 10, 0)
-            ]);
-            const axisMat = new THREE.LineBasicMaterial({ color: 0x444444 });
-            obj3D.bgGuideGroup.add(new THREE.Line(axisGeo, axisMat));
+            // 1. 底面グリッド (XZ平面)
+            const gridHelper = new THREE.GridHelper(maxRadius * 2, 8, 0x444444, 0x666666);
+            gridHelper.position.y = -heightScale / 2;
+            obj3D.bgGuideGroup.add(gridHelper);
 
-            for (let yDeg = -60; yDeg <= 60; yDeg += 30) {
-                for (let a = 0; a < 360; a += 30) {
+            // 2. 軸線 (X:赤, Y:緑, Z:青)
+            const axisLen = maxRadius + 15;
+            const createAxisLine = (endPos, colorHex) => {
+                const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, -heightScale/2, 0), endPos]);
+                const mat = new THREE.LineBasicMaterial({ color: colorHex, linewidth: 2 });
+                return new THREE.Line(geo, mat);
+            };
+
+            obj3D.bgGuideGroup.add(createAxisLine(new THREE.Vector3(axisLen, -heightScale/2, 0), 0xd93838)); // X軸
+            obj3D.bgGuideGroup.add(createAxisLine(new THREE.Vector3(0, heightScale/2 + 15, 0), 0x2ba84a)); // Y軸
+            obj3D.bgGuideGroup.add(createAxisLine(new THREE.Vector3(0, -heightScale/2, axisLen), 0x2b78d9)); // Z軸
+
+            // 軸ラベル
+            const labelX = createTextSprite('X', '#d93838');
+            labelX.position.set(axisLen + 10, -heightScale/2, 0);
+            obj3D.bgGuideGroup.add(labelX);
+
+            const labelY = createTextSprite('Y', '#2ba84a');
+            labelY.position.set(0, heightScale/2 + 25, 0);
+            obj3D.bgGuideGroup.add(labelY);
+
+            const labelZ = createTextSprite('Z', '#2b78d9');
+            labelZ.position.set(0, -heightScale/2, axisLen + 10);
+            obj3D.bgGuideGroup.add(labelZ);
+
+            // 3. 円形ガイドフレーム
+            for (let yLevel of [-heightScale/2, 0, heightScale/2]) {
+                const ringGeo = new THREE.BufferGeometry();
+                const pts = [];
+                for (let a = 0; a <= 360; a += 10) {
                     const rad = a * Math.PI / 180;
-                    const pMesh = new THREE.Mesh(
-                        new THREE.SphereGeometry(0.8, 4, 4),
-                        new THREE.MeshBasicMaterial({ color: 0x666666 })
-                    );
-                    pMesh.position.set(maxRadius * Math.cos(rad), yDeg, maxRadius * Math.sin(rad));
-                    obj3D.bgGuideGroup.add(pMesh);
+                    pts.push(new THREE.Vector3(maxRadius * Math.cos(rad), yLevel, maxRadius * Math.sin(rad)));
                 }
+                ringGeo.setFromPoints(pts);
+                const ringMat = new THREE.LineDashedMaterial({ color: 0x777777, dashSize: 4, gapSize: 4 });
+                const ring = new THREE.Line(ringGeo, ringMat);
+                ring.computeLineDistances();
+                obj3D.bgGuideGroup.add(ring);
             }
+
             obj3D.scene.add(obj3D.bgGuideGroup);
 
+            // 4. クラスタ球体 (ライティング＋エッジで立体感表現)
             clusters.forEach(item => {
                 let x, y, z;
                 if (mode === 'hsv') {
@@ -551,15 +611,26 @@
                 }
 
                 const sphereRadius = 4 + Math.sqrt(item.ratio) * 20;
-                const sphere = new THREE.Mesh(
-                    new THREE.SphereGeometry(sphereRadius, 24, 24),
-                    new THREE.MeshBasicMaterial({
-                        color: new THREE.Color(`rgb(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]})`),
-                        transparent: true,
-                        opacity: 0.9
-                    })
-                );
+
+                // 光源反応マテリアル
+                const sphereGeo = new THREE.SphereGeometry(sphereRadius, 24, 24);
+                const sphereMat = new THREE.MeshStandardMaterial({
+                    color: new THREE.Color(`rgb(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]})`),
+                    roughness: 0.3,
+                    metalness: 0.1,
+                    transparent: true,
+                    opacity: 0.95
+                });
+
+                const sphere = new THREE.Mesh(sphereGeo, sphereMat);
                 sphere.position.set(x, y, z);
+
+                // アウトライン（輪郭線）を追加して前後の輪郭を鮮明化
+                const edges = new THREE.EdgesGeometry(sphereGeo);
+                const lineMat = new THREE.LineBasicMaterial({ color: 0x222222, linewidth: 1 });
+                const wireframe = new THREE.LineSegments(edges, lineMat);
+                sphere.add(wireframe);
+
                 obj3D.pointsGroup.add(sphere);
             });
 
