@@ -3,94 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>レイアウト調整サンプル</title>
+    <title>chanmana.com</title>
     <style>
+        /* 全体設定 */
         body {
-            font-family: sans-serif;
-            padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #5bb3f0;
+            color: #000000;
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 10px;
+            position: relative;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        a {
+            color: #0000ee;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #551a8b;
         }
 
-        .content-box {
-            background: #ffffff;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        /* コンテンツ1内のバナー画像スタイル */
-        .banner-img {
-            width: 200px;
-            height: 40px;
-            object-fit: cover;
-            display: block;
-            margin-top: 10px;
-            border: 1px solid #ccc;
-        }
-
-        /* コンテンツ2の下に置くランダム画像エリア */
-        .random-image-area {
-            background: #ffffff;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
+        /* ヘッダー */
+        header {
             text-align: center;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+        header img {
+            height: 40px;
+            width: auto;
         }
 
-        .random-img {
+        /* 外枠フレーム（中央寄せ） */
+        .site-container {
+            display: flex;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            min-height: 500px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 👈 左側サイドバー */
+        .sidebar {
+            width: 220px;
+            padding: 10px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            border-right: 2px solid #000000;
+        }
+
+        .sidebar-window {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-window h3 {
+            font-size: 14px;
+            margin: 0 0 8px 0;
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+        }
+
+        /* 👉 右側メインエリア */
+        .main-content {
+            flex: 1;
+            padding: 15px 20px;
+            box-sizing: border-box;
+        }
+
+        /* ランダム画像エリア */
+        .random-box {
+            background: #ffffff;
+            border: 1px solid #808080;
+            padding: 2px;
+            margin-top: 6px;
+            text-align: center;
+            overflow: hidden;
+            max-height: 200px;
+            width: 100%;
+        }
+
+        .random-box img {
+            width: auto;
             max-width: 100%;
             height: auto;
-            border-radius: 4px;
-            margin-top: 10px;
+            max-height: 200px;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain;
+            border: none;
+        }
+
+        /* フッター */
+        footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #000000;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- コンテンツ 1 -->
-        <div class="content-box" id="content1">
-            <h2>コンテンツ 1</h2>
-            <p>ここがコンテンツ1のエリアです。</p>
+    <!-- ヘッダー -->
+    <header>
+        <img src="header_left.gif" alt="" onerror="this.style.display='none'">
+        <h1>chanmana.com</h1>
+        <img src="header_right.gif" alt="" onerror="this.style.display='none'">
+    </header>
+
+    <!-- メインフレーム構造 -->
+    <div class="site-container">
+
+        <!-- 👈 左側サイドバー -->
+        <div class="sidebar">
+            <div class="sidebar-window">
+                <h3>Contents 1</h3>
+                <div class="window-body">
+                    <p>本日のランダムgif：</p>
+                    <div class="random-box">
+                        <img id="random-gif" src="" alt="ランダムGIF">
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-window">
+                <h3>Contents 2</h3>
+                <div class="window-body">
+                    <ul>
+                        <li><a href="https://x.com/____mana">Twitter</a></li>
+                        <li><a href="https://www.instagram.com/cha_n_ma_na">Instagram</a></li>
+                        <br>
+                        <li><a href="color_rensyu.html">色の考察練習</a></li>
+                        <li><a href="color_bunseki.html">色の分析</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 👉 右側メインコンテンツ -->
+        <div class="main-content">
+            <h2>The Main Menu</h2>
+            <p>Welcome to chanmana.com</p>
             
-            <!-- 幅200px × 高さ40px のバナー画像 -->
-            <!-- src属性は実際のバナー画像のURLに変更してください -->
-            <img src="https://picsum.photos/200/40" alt="nekonome.png" class="banner-img">
+            <div class="sidebar-window" style="margin-top: 20px;">
+                <h3>Contents 3</h3>
+                <div class="window-body">
+                    <p>仕事
+                    <li><a href="https://harsh-hoverfly-c37.notion.site/COLOR-for-TVseries-Movie-290e5e2365cd80598c28cf53d796baa1">色彩設計　TVシリーズ・映画</a>　　Color Design: TV Series & Films</li>
+                    <li><a href="https://harsh-hoverfly-c37.notion.site/COLOR-for-MV-PV-3909dcbb61b9444a9b063763fbcb84f9">色彩設計　MV・PV</a>　　Color Design: Music Videos & Promotional Videos</li>
+                    <li><a href="https://harsh-hoverfly-c37.notion.site/2D-WORKS-for-ANIME-24fe5e2365cd80a9b112e34e65098bcb?pvs=74">2Dワークス</a>　　2D Works</li>
+                    <li><a href="https://harsh-hoverfly-c37.notion.site/blender-e57fc4c4e8c2403f9229d05fe29e29f2">blender関係</a>　　Blender-related Work</li>
+                        <li><a href="https://harsh-hoverfly-c37.notion.site/Cloth-and-fashion-things-390a36d213144d209482442d6279e251">洋裁関係</a>　　Dressmaking-related</li>
+                        <br>
+                        <br>趣味
+                    <li><a href="https://harsh-hoverfly-c37.notion.site/FA-blender-164e5e2365cd80e2a5bbc89242e73e2e">FA blender</a></li>
+                        <li><a href="https://harsh-hoverfly-c37.notion.site/Picture-9179bfb10aa6468981f24580557e928a?pvs=74">FA 絵</a></li>
+                        <li><a href="https://harsh-hoverfly-c37.notion.site/Picture-OC-369e5e2365cd800c81f6deed16857eb9">OC</a></li>
+                        <li><a href=""></a></li>
+                        <li><a href=""></a></li>
+                        <li><a href=""></a></li>
+                        <br>
+                    （ ´∀｀）ｵﾏｴﾓﾅｰ<br>
+                    
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <!-- コンテンツ 2 -->
-        <div class="content-box" id="content2">
-            <h2>コンテンツ 2</h2>
-            <p>ここがコンテンツ2のエリアです。</p>
-        </div>
-
-        <!-- コンテンツ2の下：ランダム画像配置エリア -->
-        <div class="random-image-area" id="randomImageContainer">
-            <h3>ランダム画像エリア</h3>
-            <img id="randomImg" src="" alt="ランダム画像" class="random-img">
-        </div>
     </div>
 
+    <!-- フッター -->
+    <footer>
+        <p> </p>
+    </footer>
+
     <script>
-        // ランダム画像を生成してコンテンツ2の下のエリアに読み込む処理
-        function loadRandomImage() {
-            const imgElement = document.getElementById('randomImg');
-            // 呼び出すたびにキャッシュを回避してランダム画像を取得
-            const randomId = Math.floor(Math.random() * 1000);
-            imgElement.src = `https://picsum.photos/400/200?random=${randomId}`;
-        }
-
-        // ページ読み込み時に実行
-        window.addEventListener('DOMContentLoaded', loadRandomImage);
+        /* ランダム画像処理 */
+        const images = [
+            "7sel3_1.gif",
+            "7sel3_2.gif",
+            "7sel3_3.gif"
+        ];
+        const randomIndex = Math.floor(Math.random() * images.length);
+        document.getElementById("random-gif").src = images[randomIndex];
     </script>
-
 </body>
 </html>
