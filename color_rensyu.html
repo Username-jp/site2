@@ -208,6 +208,22 @@
             border-top: 1px solid #aaaaaa;
             padding-top: 6px;
         }
+
+        /* 💾 Saveボタン用スタイル */
+        .save-btn {
+            width: 100%;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #e5e5e5;
+            border: 1px solid #000000;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+            margin-top: 4px;
+        }
+        .save-btn:hover {
+            background-color: #bfbfbf;
+        }
     </style>
 </head>
 <body>
@@ -287,6 +303,9 @@
                     <div class="color-values">
                         <div><strong>HEX:</strong> <span id="val-hex">#D8D8D8</span></div>
                     </div>
+
+                    <!-- 💾 Saveボタン -->
+                    <button class="save-btn" id="saveBtn">PNG保存 (別タブで開く)</button>
                 </div>
             </div>
         </div>
@@ -461,7 +480,7 @@
             const rgb = hsvToRgb(currentHue, currentSat, currentVal);
             sliderR.value = rgb.r; sliderG.value = rgb.g; sliderB.value = rgb.b;
             renderPicker();
-            applyColorToUI(rgb.r, rgb.g, rgb.b); /* 👈 グリッドへカラー反映を行う記述を追加 */
+            applyColorToUI(rgb.r, rgb.g, rgb.b);
         }
 
         sliderR.addEventListener("input", updateFromSlidersRGB);
@@ -513,6 +532,83 @@
         function rgbToHex(r, g, b) {
             return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
         }
+
+        /* 🖼️ PNG保存機能 (グリッド＋日付の書き出し＆別窓表示) */
+        document.getElementById("saveBtn").addEventListener("click", () => {
+            const cols = 6;
+            const rows = 4;
+            const cellWidth = 200;
+            const cellHeight = 112.5; // 16:9比率相当
+            const paddingBottom = 60;  // 日付描画用の下部スペース
+
+            const exportCanvas = document.createElement("canvas");
+            exportCanvas.width = cols * cellWidth;
+            exportCanvas.height = (rows * cellHeight) + paddingBottom;
+            const expCtx = exportCanvas.getContext("2d");
+
+            // 背景描画
+            expCtx.fillStyle = "#ffffff";
+            expCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+            // グリッドセルの描画
+            const cells = gridContainer.children;
+            for (let i = 0; i < cells.length; i++) {
+                const c = i % cols;
+                const r = Math.floor(i / cols);
+                const x = c * cellWidth;
+                const y = r * cellHeight;
+
+                expCtx.fillStyle = cells[i].dataset.color || "#d8d8d8";
+                expCtx.fillRect(x, y, cellWidth, cellHeight);
+
+                expCtx.strokeStyle = "rgba(0, 0, 0, 0.15)";
+                expCtx.lineWidth = 1;
+                expCtx.strokeRect(x, y, cellWidth, cellHeight);
+            }
+
+            // 外枠を描画
+            expCtx.strokeStyle = "#000000";
+            expCtx.lineWidth = 2;
+            expCtx.strokeRect(0, 0, cols * cellWidth, rows * cellHeight);
+
+            // 日付文字列を取得 (YYYY/MM/DD)
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const dateStr = `${year}/${month}/${day}`;
+
+            // 日付テキストの描画 (右下配置)
+            expCtx.fillStyle = "#000000";
+            expCtx.font = "bold 24px 'Times New Roman', serif";
+            expCtx.textAlign = "right";
+            expCtx.textBaseline = "middle";
+            expCtx.fillText(dateStr, exportCanvas.width - 20, (rows * cellHeight) + (paddingBottom / 2));
+
+            // PNGデータURLを生成し、別タブで開く
+            const dataUrl = exportCanvas.toDataURL("image/png");
+            const newWindow = window.open();
+            if (newWindow) {
+                newWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Color Grid - ${dateStr}</title>
+                        <style>
+                            body { margin: 0; background-color: #222; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+                            img { max-width: 95%; height: auto; box-shadow: 0 0 20px rgba(0,0,0,0.5); background: #fff; }
+                        </style>
+                    </head>
+                    <body>
+                        <img src="${dataUrl}" alt="Color Grid Output">
+                    </body>
+                    </html>
+                `);
+                newWindow.document.close();
+            } else {
+                alert("ポップアップがブロックされました。ブラウザの設定でポップアップを許可してください。");
+            }
+        });
 
         updateImage();
         renderPicker();
