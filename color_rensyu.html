@@ -110,6 +110,12 @@
             align-items: flex-start;
         }
 
+        .grid-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         /* 6×4 グリッド (1600×900比率・表示サイズ 533px × 300px・計24マス) */
         .grid-container {
             display: grid;
@@ -124,7 +130,7 @@
 
         .grid-cell {
             background-color: #d8d8d8;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.075); /* 濃さを従来の半分(0.075)に調整 */
             box-sizing: border-box;
             cursor: pointer;
             outline: none !important;
@@ -133,6 +139,21 @@
         .grid-cell.selected {
             outline: 2px solid #000000 !important;
             z-index: 2;
+        }
+
+        /* 💾 Saveボタン (グリッドの下に配置) */
+        .save-btn {
+            width: 533px;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #d8d8d8;
+            border: 1px solid #000000;
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+        }
+        .save-btn:hover {
+            background-color: #bfbfbf;
         }
 
         /* 🎨 カラーパレットエリア */
@@ -208,22 +229,6 @@
             border-top: 1px solid #aaaaaa;
             padding-top: 6px;
         }
-
-        /* 💾 Saveボタン用スタイル */
-        .save-btn {
-            width: 100%;
-            padding: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #e5e5e5;
-            border: 1px solid #000000;
-            box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
-            margin-top: 4px;
-        }
-        .save-btn:hover {
-            background-color: #bfbfbf;
-        }
     </style>
 </head>
 <body>
@@ -253,8 +258,13 @@
             <div class="window-title" style="width: 100%;">6×4 色彩単純化グリッド (横長: W1600×H900px比率 / 計24マス)</div>
 
             <div class="workspace">
-                <!-- 6×4 グリッド (計24マス) -->
-                <div class="grid-container" id="gridContainer"></div>
+                <!-- 左：グリッド ＋ グリッド直下のSaveボタン -->
+                <div class="grid-area">
+                    <!-- 6×4 グリッド (計24マス) -->
+                    <div class="grid-container" id="gridContainer"></div>
+                    <!-- 💾 Saveボタン -->
+                    <button class="save-btn" id="saveBtn">PNG保存 (1600×900px / 別タブで開く)</button>
+                </div>
 
                 <!-- 右：カラーパレット類 -->
                 <div class="palette-panel">
@@ -303,9 +313,6 @@
                     <div class="color-values">
                         <div><strong>HEX:</strong> <span id="val-hex">#D8D8D8</span></div>
                     </div>
-
-                    <!-- 💾 Saveボタン -->
-                    <button class="save-btn" id="saveBtn">PNG保存 (別タブで開く)</button>
                 </div>
             </div>
         </div>
@@ -533,22 +540,26 @@
             return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
         }
 
-        /* 🖼️ PNG保存機能 (グリッド＋日付の書き出し＆別窓表示) */
+        /* 🖼️ PNG保存機能 (W1600 × H900px 固定解像度) */
         document.getElementById("saveBtn").addEventListener("click", () => {
+            const canvasWidth = 1600;
+            const canvasHeight = 900;
+            const footerHeight = 70; // 下部の日付描画エリア
+            const gridHeight = canvasHeight - footerHeight; // 830px
+
             const cols = 6;
             const rows = 4;
-            const cellWidth = 200;
-            const cellHeight = 112.5; // 16:9比率相当
-            const paddingBottom = 60;  // 日付描画用の下部スペース
+            const cellWidth = canvasWidth / cols;   // 266.66...px
+            const cellHeight = gridHeight / rows;   // 207.5px
 
             const exportCanvas = document.createElement("canvas");
-            exportCanvas.width = cols * cellWidth;
-            exportCanvas.height = (rows * cellHeight) + paddingBottom;
+            exportCanvas.width = canvasWidth;
+            exportCanvas.height = canvasHeight;
             const expCtx = exportCanvas.getContext("2d");
 
-            // 背景描画
+            // 全体背景描画
             expCtx.fillStyle = "#ffffff";
-            expCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+            expCtx.fillRect(0, 0, canvasWidth, canvasHeight);
 
             // グリッドセルの描画
             const cells = gridContainer.children;
@@ -561,15 +572,16 @@
                 expCtx.fillStyle = cells[i].dataset.color || "#d8d8d8";
                 expCtx.fillRect(x, y, cellWidth, cellHeight);
 
-                expCtx.strokeStyle = "rgba(0, 0, 0, 0.15)";
+                // 内側のグリッド枠線 (不透明度0.075: 半分の濃さ)
+                expCtx.strokeStyle = "rgba(0, 0, 0, 0.075)";
                 expCtx.lineWidth = 1;
                 expCtx.strokeRect(x, y, cellWidth, cellHeight);
             }
 
-            // 外枠を描画
+            // グリッド全体のนี่外枠描画
             expCtx.strokeStyle = "#000000";
             expCtx.lineWidth = 2;
-            expCtx.strokeRect(0, 0, cols * cellWidth, rows * cellHeight);
+            expCtx.strokeRect(0, 0, canvasWidth, gridHeight);
 
             // 日付文字列を取得 (YYYY/MM/DD)
             const now = new Date();
@@ -580,12 +592,12 @@
 
             // 日付テキストの描画 (右下配置)
             expCtx.fillStyle = "#000000";
-            expCtx.font = "bold 24px 'Times New Roman', serif";
+            expCtx.font = "bold 28px 'Times New Roman', serif";
             expCtx.textAlign = "right";
             expCtx.textBaseline = "middle";
-            expCtx.fillText(dateStr, exportCanvas.width - 20, (rows * cellHeight) + (paddingBottom / 2));
+            expCtx.fillText(dateStr, canvasWidth - 30, gridHeight + (footerHeight / 2));
 
-            // PNGデータURLを生成し、別タブで開く
+            // PNGデータURLを生成し、別タブで表示
             const dataUrl = exportCanvas.toDataURL("image/png");
             const newWindow = window.open();
             if (newWindow) {
