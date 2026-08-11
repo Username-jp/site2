@@ -176,7 +176,7 @@
             <input type="range" id="kClusterRange" min="10" max="60" value="34">
             <span id="kClusterVal">34</span>
         </div>
-        <button class="save-btn" id="saveBtn">PNG保存 / Save PNG</button>
+        <button class="save-btn" id="saveBtn">PNG保存 / Save</button>
     </div>
 
     <!-- 大コンテナ -->
@@ -195,7 +195,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="wheelCanvasHsv" width="220" height="220"></canvas>
                     </div>
-                    <div class="chart-label">HSV</div>
+                    <div class="chart-label">HSV 2D</div>
                 </div>
 
                 <!-- 上段右：HSV 3D (A) -->
@@ -203,7 +203,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
                     </div>
-                    <div class="chart-label">A</div>
+                    <div class="chart-label">HSV 3D</div>
                 </div>
 
                 <!-- 下段左：CIELAB 2D -->
@@ -211,7 +211,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="wheelCanvasLab" width="220" height="220"></canvas>
                     </div>
-                    <div class="chart-label">CIELAB</div>
+                    <div class="chart-label">CIELAB 2D</div>
                 </div>
 
                 <!-- 下段右：CIELAB 3D (B) -->
@@ -219,7 +219,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
                     </div>
-                    <div class="chart-label">B</div>
+                    <div class="chart-label">CIELAB 3D</div>
                 </div>
             </div>
 
@@ -228,7 +228,7 @@
                 <!-- HSV 説明 -->
                 <div>
                     <div class="section-header">
-                        <div class="section-title">■ HSV 色彩空間 (色相・彩度・明度) / HSV Color Space (Hue, Saturation, Value)</div>
+                        <div class="section-title">■ HSV (色相・彩度・明度) / Hue, Saturation, Value</div>
                     </div>
                     <div class="section-desc">
                         直感的な色相環と明度で構成された色表現。人間が色を選ぶ感覚に近いモデル。<br>
@@ -239,7 +239,7 @@
                 <!-- CIELAB 説明 -->
                 <div>
                     <div class="section-header">
-                        <div class="section-title">■ CIELAB 色彩空間 (知覚均一空間) / CIELAB Color Space (Perceptually Uniform)</div>
+                        <div class="section-title">■ CIELAB 知覚均一空) / Perceptually Uniform</div>
                     </div>
                     <div class="section-desc">
                         人の目の視覚特性に合わせて補正された空間。距離の離れ具合がそのまま見た目の色差に対応。<br>
