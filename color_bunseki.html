@@ -293,7 +293,7 @@
             return sprite;
         }
 
-        // --- Three.js 初期化 (デフォルトを2D合わせの真上視点に変更) ---
+        // --- Three.js 初期化 ---
         function create3DScene(canvasId) {
             const canvas = document.getElementById(canvasId);
             const scene = new THREE.Scene();
@@ -309,10 +309,9 @@
             const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, preserveDrawingBuffer: true });
             renderer.setSize(220, 220);
 
+            // OrbitControlsの初期化（初期注視点targetの追加設定なし）
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.target.set(0, 0, 0);
             controls.enableDamping = true;
-            controls.update();
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
