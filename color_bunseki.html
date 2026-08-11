@@ -16,6 +16,10 @@
             color: #000000;
             margin: 0;
             padding: 20px;
+            /* 大コンテナを中心に配置するための設定 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         /* 操作パネル */
@@ -28,6 +32,9 @@
             gap: 30px;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1500px;
+            box-sizing: border-box;
         }
 
         .control-group {
@@ -60,28 +67,28 @@
             background-color: #41556b;
         }
 
-        /* 大コンテナ（書き出し対象） */
+        /* 大コンテナ（書き出し対象・中心合わせ） */
         .integrated-container {
             background: #a9a9a9;
             padding: 25px;
             border-radius: 12px;
             border: 1px solid #777777;
             box-sizing: border-box;
-            display: inline-block;
-            min-width: 1100px;
+            display: block;
+            margin: 0 auto; /* 中央寄せ */
         }
 
-        /* 全体レイアウト (左: 巨大元画像 / 中央: 2x2グラフ / 右: 説明文) */
+        /* 全体レイアウト (左: 参照画像180% / 中央: 2x2グラフ / 右: 説明文) */
         .main-layout {
             display: grid;
-            grid-template-columns: 420px auto 260px;
+            grid-template-columns: 756px auto 260px; /* 画像幅を 420px -> 756px (180%) に変更 */
             gap: 20px;
             align-items: center;
         }
 
-        /* 左側：元画像 */
+        /* 左側：元画像 (180%サイズ：756px) */
         .image-col {
-            width: 420px;
+            width: 756px;
         }
 
         .image-col img {
@@ -125,7 +132,7 @@
             height: 220px;
         }
 
-        /* 各グラフ下の指定ラベル (HSV 2D / HSV 3D / CIELAB 2D / CIELAB 3D) */
+        /* 各グラフ下の指定ラベル */
         .chart-label {
             font-size: 20px;
             font-weight: bold;
@@ -176,14 +183,14 @@
             <input type="range" id="kClusterRange" min="10" max="60" value="34">
             <span id="kClusterVal">34</span>
         </div>
-        <button class="save-btn" id="saveBtn">PNG保存 / Save</button>
+        <button class="save-btn" id="saveBtn">PNG保存 / Save PNG</button>
     </div>
 
     <!-- 大コンテナ -->
     <div class="integrated-container" id="captureContainer">
         <div class="main-layout">
             
-            <!-- 左端：参照画像 (拡大サイズ) -->
+            <!-- 左端：参照画像 (180%サイズ) -->
             <div class="image-col">
                 <img id="imgPreview" src="" alt="画像プレビュー / Image Preview" style="display:none;">
             </div>
@@ -195,7 +202,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="wheelCanvasHsv" width="220" height="220"></canvas>
                     </div>
-                    <div class="chart-label">HSV 2D</div>
+                    <div class="chart-label">HSV</div>
                 </div>
 
                 <!-- 上段右：HSV 3D (A) -->
@@ -203,7 +210,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="threedCanvasHsv" class="threed-canvas"></canvas>
                     </div>
-                    <div class="chart-label">HSV 3D</div>
+                    <div class="chart-label">A</div>
                 </div>
 
                 <!-- 下段左：CIELAB 2D -->
@@ -211,7 +218,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="wheelCanvasLab" width="220" height="220"></canvas>
                     </div>
-                    <div class="chart-label">CIELAB 2D</div>
+                    <div class="chart-label">CIELAB</div>
                 </div>
 
                 <!-- 下段右：CIELAB 3D (B) -->
@@ -219,7 +226,7 @@
                     <div class="canvas-wrapper">
                         <canvas id="threedCanvasLab" class="threed-canvas"></canvas>
                     </div>
-                    <div class="chart-label">CIELAB 3D</div>
+                    <div class="chart-label">B</div>
                 </div>
             </div>
 
@@ -228,7 +235,7 @@
                 <!-- HSV 説明 -->
                 <div>
                     <div class="section-header">
-                        <div class="section-title">■ HSV (色相・彩度・明度) / Hue, Saturation, Value</div>
+                        <div class="section-title">■ HSV 色彩空間 (色相・彩度・明度) / HSV Color Space (Hue, Saturation, Value)</div>
                     </div>
                     <div class="section-desc">
                         直感的な色相環と明度で構成された色表現。人間が色を選ぶ感覚に近いモデル。<br>
@@ -239,7 +246,7 @@
                 <!-- CIELAB 説明 -->
                 <div>
                     <div class="section-header">
-                        <div class="section-title">■ CIELAB 知覚均一空) / Perceptually Uniform</div>
+                        <div class="section-title">■ CIELAB 色彩空間 (知覚均一空間) / CIELAB Color Space (Perceptually Uniform)</div>
                     </div>
                     <div class="section-desc">
                         人の目の視覚特性に合わせて補正された空間。距離の離れ具合がそのまま見た目の色差に対応。<br>
