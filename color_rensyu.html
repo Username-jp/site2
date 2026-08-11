@@ -116,7 +116,7 @@
             gap: 10px;
         }
 
-        /* 6×4 グリッド (1600×900比率・表示サイズ 533px × 300px・計24マス) */
+        /* 6×4 グリッド (画面表示サイズ: 横 533px × 縦 300px) */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -130,7 +130,7 @@
 
         .grid-cell {
             background-color: #d8d8d8;
-            border: 1px solid rgba(0, 0, 0, 0.075); /* 濃さを従来の半分(0.075)に調整 */
+            border: 1px solid rgba(0, 0, 0, 0.075);
             box-sizing: border-box;
             cursor: pointer;
             outline: none !important;
@@ -141,7 +141,7 @@
             z-index: 2;
         }
 
-        /* 💾 Saveボタン (グリッドの下に配置) */
+        /* 💾 Saveボタン (グリッドの直下) */
         .save-btn {
             width: 533px;
             padding: 8px;
@@ -263,7 +263,7 @@
                     <!-- 6×4 グリッド (計24マス) -->
                     <div class="grid-container" id="gridContainer"></div>
                     <!-- 💾 Saveボタン -->
-                    <button class="save-btn" id="saveBtn">PNG保存 (1600×900px / 別タブで開く)</button>
+                    <button class="save-btn" id="saveBtn">PNG保存 (別タブで開く)</button>
                 </div>
 
                 <!-- 右：カラーパレット類 -->
@@ -540,26 +540,25 @@
             return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
         }
 
-        /* 🖼️ PNG保存機能 (W1600 × H900px 固定解像度) */
+        /* 🖼️ PNG保存機能 (color_rensyu.html画面サイズに完全準拠: 533px × 300px + フッター35px) */
         document.getElementById("saveBtn").addEventListener("click", () => {
-            const canvasWidth = 1600;
-            const canvasHeight = 900;
-            const footerHeight = 70; // 下部の日付描画エリア
-            const gridHeight = canvasHeight - footerHeight; // 830px
-
-            const cols = 6;
-            const rows = 4;
-            const cellWidth = canvasWidth / cols;   // 266.66...px
-            const cellHeight = gridHeight / rows;   // 207.5px
+            const gridWidth = 533;
+            const gridHeight = 300;
+            const footerHeight = 35; // 下部の日付領域
 
             const exportCanvas = document.createElement("canvas");
-            exportCanvas.width = canvasWidth;
-            exportCanvas.height = canvasHeight;
+            exportCanvas.width = gridWidth;
+            exportCanvas.height = gridHeight + footerHeight;
             const expCtx = exportCanvas.getContext("2d");
 
             // 全体背景描画
             expCtx.fillStyle = "#ffffff";
-            expCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+            expCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+            const cols = 6;
+            const rows = 4;
+            const cellWidth = gridWidth / cols;
+            const cellHeight = gridHeight / rows;
 
             // グリッドセルの描画
             const cells = gridContainer.children;
@@ -572,16 +571,16 @@
                 expCtx.fillStyle = cells[i].dataset.color || "#d8d8d8";
                 expCtx.fillRect(x, y, cellWidth, cellHeight);
 
-                // 内側のグリッド枠線 (不透明度0.075: 半分の濃さ)
+                // 内側のグリッド枠線 (不透明度 0.075)
                 expCtx.strokeStyle = "rgba(0, 0, 0, 0.075)";
                 expCtx.lineWidth = 1;
                 expCtx.strokeRect(x, y, cellWidth, cellHeight);
             }
 
-            // グリッド全体のนี่外枠描画
+            // グリッドの外枠描画
             expCtx.strokeStyle = "#000000";
-            expCtx.lineWidth = 2;
-            expCtx.strokeRect(0, 0, canvasWidth, gridHeight);
+            expCtx.lineWidth = 1;
+            expCtx.strokeRect(0, 0, gridWidth, gridHeight);
 
             // 日付文字列を取得 (YYYY/MM/DD)
             const now = new Date();
@@ -592,10 +591,10 @@
 
             // 日付テキストの描画 (右下配置)
             expCtx.fillStyle = "#000000";
-            expCtx.font = "bold 28px 'Times New Roman', serif";
+            expCtx.font = "bold 14px 'Times New Roman', serif";
             expCtx.textAlign = "right";
             expCtx.textBaseline = "middle";
-            expCtx.fillText(dateStr, canvasWidth - 30, gridHeight + (footerHeight / 2));
+            expCtx.fillText(dateStr, gridWidth - 10, gridHeight + (footerHeight / 2));
 
             // PNGデータURLを生成し、別タブで表示
             const dataUrl = exportCanvas.toDataURL("image/png");
