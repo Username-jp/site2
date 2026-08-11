@@ -461,7 +461,7 @@
             const rgb = hsvToRgb(currentHue, currentSat, currentVal);
             sliderR.value = rgb.r; sliderG.value = rgb.g; sliderB.value = rgb.b;
             renderPicker();
-            applyColorToUI(r, g, b);
+            applyColorToUI(rgb.r, rgb.g, rgb.b); /* 👈 グリッドへカラー反映を行う記述を追加 */
         }
 
         sliderR.addEventListener("input", updateFromSlidersRGB);
