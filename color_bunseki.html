@@ -73,7 +73,7 @@
             border-radius: 12px;
             border: 1px solid #777777;
             box-sizing: border-box;
-            display: block;
+            display: inline-block; /* 余白自動フィッティング用 */
             margin: 0 auto;
         }
 
@@ -187,7 +187,7 @@
 
     <!-- 大コンテナ -->
     <div class="integrated-container" id="captureContainer">
-        <div class="main-layout">
+        <div class="main-layout" id="mainLayout">
             
             <!-- 左端：参照画像 (140%サイズ) -->
             <div class="image-col">
@@ -270,6 +270,7 @@
         const kClusterVal = document.getElementById('kClusterVal');
         const saveBtn = document.getElementById('saveBtn');
         const descCol = document.getElementById('descCol');
+        const mainLayout = document.getElementById('mainLayout');
 
         let currentImage = null;
 
@@ -292,7 +293,7 @@
             return sprite;
         }
 
-        // --- Three.js 初期化（ライティング・ガイド強化） ---
+        // --- Three.js 初期化 ---
         function create3DScene(canvasId) {
             const canvas = document.getElementById(canvasId);
             const scene = new THREE.Scene();
@@ -307,7 +308,6 @@
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
 
-            // 光源（立体感付与）
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
 
@@ -361,17 +361,24 @@
             reader.readAsDataURL(file);
         });
 
-        // --- PNG出力 ---
+        // --- PNG出力（説明文・右側余白を除外） ---
         saveBtn.addEventListener('click', () => {
             const target = document.getElementById('captureContainer');
+            
+            // 1. 右側説明文を一時非表示
             descCol.style.display = 'none';
+            // 2. レイアウトのグリッド列定義を2列（588px auto）に変更して余白を詰める
+            mainLayout.style.gridTemplateColumns = '588px auto';
 
             html2canvas(target, {
                 useCORS: true,
                 scale: 2,
                 backgroundColor: null
             }).then(canvas => {
+                // キャプチャ完了後、元のレイアウト・表示に戻す
                 descCol.style.display = 'flex';
+                mainLayout.style.gridTemplateColumns = '588px auto 260px';
+
                 const dataUrl = canvas.toDataURL('image/png');
                 const win = window.open();
                 if (win) {
@@ -381,6 +388,7 @@
                 }
             }).catch(err => {
                 descCol.style.display = 'flex';
+                mainLayout.style.gridTemplateColumns = '588px auto 260px';
                 console.error(err);
             });
         });
@@ -537,7 +545,7 @@
             });
         }
 
-        // --- 3D 描画（視認性向上版） ---
+        // --- 3D 描画 ---
         function draw3DSpace(clusters, mode, obj3D) {
             obj3D.scene.remove(obj3D.pointsGroup);
             obj3D.scene.remove(obj3D.bgGuideGroup);
@@ -595,7 +603,7 @@
 
             obj3D.scene.add(obj3D.bgGuideGroup);
 
-            // 4. クラスタ球体 (ライティング＋エッジで立体感表現)
+            // 4. クラスタ球体 (輪郭線を非表示化して色を見やすく調整)
             clusters.forEach(item => {
                 let x, y, z;
                 if (mode === 'hsv') {
@@ -612,24 +620,17 @@
 
                 const sphereRadius = 4 + Math.sqrt(item.ratio) * 20;
 
-                // 光源反応マテリアル
                 const sphereGeo = new THREE.SphereGeometry(sphereRadius, 24, 24);
                 const sphereMat = new THREE.MeshStandardMaterial({
                     color: new THREE.Color(`rgb(${item.rgb[0]}, ${item.rgb[1]}, ${item.rgb[2]})`),
-                    roughness: 0.3,
-                    metalness: 0.1,
+                    roughness: 0.2,
+                    metalness: 0.05,
                     transparent: true,
                     opacity: 0.95
                 });
 
                 const sphere = new THREE.Mesh(sphereGeo, sphereMat);
                 sphere.position.set(x, y, z);
-
-                // アウトライン（輪郭線）を追加して前後の輪郭を鮮明化
-                const edges = new THREE.EdgesGeometry(sphereGeo);
-                const lineMat = new THREE.LineBasicMaterial({ color: 0x222222, linewidth: 1 });
-                const wireframe = new THREE.LineSegments(edges, lineMat);
-                sphere.add(wireframe);
 
                 obj3D.pointsGroup.add(sphere);
             });
